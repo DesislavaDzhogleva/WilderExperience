@@ -3,12 +3,11 @@
     using System;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Mvc;
     using WilderExperience.Data.Common.Repositories;
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Data;
     using WilderExperience.Web.ViewModels.Settings;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class SettingsController : BaseController
     {

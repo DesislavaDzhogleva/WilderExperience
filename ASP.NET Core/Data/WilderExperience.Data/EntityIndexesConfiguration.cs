@@ -2,9 +2,8 @@
 {
     using System.Linq;
 
-    using WilderExperience.Data.Common.Models;
-
     using Microsoft.EntityFrameworkCore;
+    using WilderExperience.Data.Common.Models;
 
     internal static class EntityIndexesConfiguration
     {

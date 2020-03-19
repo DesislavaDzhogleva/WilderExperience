@@ -6,11 +6,10 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using WilderExperience.Data.Common.Models;
-    using WilderExperience.Data.Models;
-
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using WilderExperience.Data.Common.Models;
+    using WilderExperience.Data.Models;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -25,6 +24,16 @@
         }
 
         public DbSet<Setting> Settings { get; set; }
+
+        public DbSet<Location> Locations { get; set; }
+
+        public DbSet<WildLocation> WildLocations { get; set; }
+
+        public DbSet<Experience> Experiences { get; set; }
+
+        public DbSet<Rating> Ratings { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

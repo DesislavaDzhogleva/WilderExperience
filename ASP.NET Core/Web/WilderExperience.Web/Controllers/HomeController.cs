@@ -2,9 +2,8 @@
 {
     using System.Diagnostics;
 
-    using WilderExperience.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
+    using WilderExperience.Web.ViewModels;
 
     public class HomeController : BaseController
     {

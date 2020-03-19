@@ -1,8 +1,8 @@
 ﻿namespace WilderExperience.Data.Configurations
 {
-    using WilderExperience.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using WilderExperience.Data.Models;
 
     public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
