@@ -54,3 +54,32 @@ body {
     height: 60px;
     line-height: 60px; /* Vertically center the text there */
 }
+
+.home-search {
+    background: url("../img/bg.jpg") center center;
+    background-size: cover;
+    background-attachment: fixed;
+    padding-top: 12rem;
+    padding-bottom: 12rem;
+}
+
+.fixed-top {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+.navbar {
+    opacity: 1;
+    transition: opacity .3s;
+}
+
+.nav-scrolled {
+    opacity: 0.8;
+    transition: opacity .3s;
+}
+.nav-scrolled:hover {
+    opacity: 1;
+    transition: opacity .3s;
+}

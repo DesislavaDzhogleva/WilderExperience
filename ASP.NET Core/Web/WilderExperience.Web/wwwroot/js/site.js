@@ -2,3 +2,16 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+$(function () {
+    let nav = $(".navbar");
+    $(window).scroll(function () {
+        var scroll = $(window).scrollTop();
+
+        if (scroll >= nav.height()) {
+            nav.addClass('nav-scrolled');
+        } else {
+            nav.removeClass('nav-scrolled');
+        }
+    });
+});
