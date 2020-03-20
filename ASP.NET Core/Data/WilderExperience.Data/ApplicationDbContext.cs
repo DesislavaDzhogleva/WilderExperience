@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore;
     using WilderExperience.Data.Common.Models;
     using WilderExperience.Data.Models;
+    using WilderExperience.Data.Seeding;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -81,6 +82,7 @@
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
