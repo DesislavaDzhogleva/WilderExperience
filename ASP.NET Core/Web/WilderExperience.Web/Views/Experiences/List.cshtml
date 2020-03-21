@@ -1,0 +1,23 @@
+﻿@model IEnumerable<WilderExperience.Web.ViewModels.Experiences.ExperiencesListViewModel>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<a class="btn btn-primary" asp-action="Create" asp-route-locationName="@this.ViewData["locationName"]">Add Experience</a>
+
+<div class="row row-cols-1 row-cols-md-2">
+    @foreach (var item in Model)
+    {
+        <div class="col mb-4">
+            <div class="card">
+                <img src="bg-second_3349.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                    <p class="card-text">@item.Description</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+   

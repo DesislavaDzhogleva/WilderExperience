@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\WilderExperience.Data.Common\WilderExperience.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\WilderExperience.Data.Models\WilderExperience.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Web\WilderExperience.Web.ViewModels\WilderExperience.Web.ViewModels.csproj" />
     <ProjectReference Include="..\WilderExperience.Services.Mapping\WilderExperience.Services.Mapping.csproj" />
   </ItemGroup>
 

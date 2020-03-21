@@ -9,9 +9,9 @@ $(function () {
         var scroll = $(window).scrollTop();
 
         if (scroll >= nav.height()) {
-            nav.addClass('nav-scrolled');
+            nav.addClass('nav-scrolled').addClass('fixed-top');
         } else {
-            nav.removeClass('nav-scrolled');
+            nav.removeClass('nav-scrolled').removeClass('fixed-top');
         }
     });
 });

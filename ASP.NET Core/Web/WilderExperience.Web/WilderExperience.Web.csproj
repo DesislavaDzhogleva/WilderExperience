@@ -43,4 +43,19 @@
     <ProjectReference Include="..\WilderExperience.Web.Infrastructure\WilderExperience.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\WilderExperience.Web.ViewModels\WilderExperience.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\uploads\experiences\bg-second_3349.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\uploads\experiences\bg_0814.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\uploads\experiences\IMG_20200306_141821_a54d.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\uploads\experiences\IMG_20200306_141821_ffbc.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

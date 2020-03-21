@@ -11,7 +11,7 @@
     public class Experience : BaseDeletableModel<int>
     {
         [Required]
-        public int AuthorId { get; set; }
+        public string AuthorId { get; set; }
 
         public ApplicationUser Author { get; set; }
 
@@ -25,13 +25,13 @@
 
         public Intensity Intensity { get; set; }
 
-        public DateTime? DateOfVisit { get; set; }
+        public DateTime DateOfVisit { get; set; }
 
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
 
         public Location Location { get; set; }
 
-        public int WildLocationId { get; set; }
+        public int? WildLocationId { get; set; }
 
         public WildLocation WildLocation { get; set; }
 

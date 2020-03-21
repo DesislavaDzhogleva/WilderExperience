@@ -1,0 +1,56 @@
+﻿@model WilderExperience.Web.ViewModels.Experiences.ExperienceCreateViewModel
+@using WilderExperience.Data.Models.Enums
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ExperienceCreateViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <input type="hidden" name="locationName" value="@this.ViewData["locationName"]" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Guide" class="control-label"></label>
+                <input asp-for="Guide" class="form-control" />
+                <span asp-validation-for="Guide" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Intensity" class="control-label"></label>
+                <select asp-for="Intensity" asp-items="Html.GetEnumSelectList<Intensity>()" class="form-control"></select>
+                <span asp-validation-for="Intensity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfVisit" class="control-label"></label>
+                <input asp-for="DateOfVisit" type="date" class="form-control" />
+                <span asp-validation-for="DateOfVisit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Images" class="control-label"></label>
+                <input asp-for="Images" class="d-block" />
+                <span asp-validation-for="Images" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="List" asp-route-locationName="@this.ViewData["locationName"]">Back to List</a>
+</div>
+

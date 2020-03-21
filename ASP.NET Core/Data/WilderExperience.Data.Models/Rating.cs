@@ -11,5 +11,7 @@
         public int ExperienceId { get; set; }
 
         public Experience Experience { get; set; }
+
+        public int RatingNumber { get; set; }
     }
 }
