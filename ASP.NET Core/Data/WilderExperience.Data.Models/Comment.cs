@@ -8,11 +8,11 @@
     {
         public int UserId { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         public int ExperienceId { get; set; }
 
-        public Experience Experience { get; set; }
+        public virtual Experience Experience { get; set; }
 
         [Required]
         public string Content { get; set; }

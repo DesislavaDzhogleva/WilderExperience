@@ -1,10 +1,11 @@
-﻿namespace WilderExperience.Web.ViewModels.Experiences
-{
-    using AutoMapper;
-    using System.Linq;
-    using WilderExperience.Data.Models;
-    using WilderExperience.Services.Mapping;
+﻿using AutoMapper;
+using System.Linq;
 
+using WilderExperience.Data.Models;
+using WilderExperience.Services.Mapping;
+
+namespace WilderExperience.Web.ViewModels.Experiences
+{
     public class ExperiencesListViewModel : IMapFrom<Experience>, IHaveCustomMappings
     {
         public int Id { get; set; }
@@ -13,7 +14,7 @@
 
         public string Description { get; set; }
 
-        public string Image { get; set; }
+        public ExperienceImage Image { get; set; }
 
         public int Rating { get; set; }
 
@@ -24,7 +25,7 @@
                 x => x.Image,
                 e => e.MapFrom(y => y.Images.FirstOrDefault()))
                 .ForMember(
-                x => x.Image,
+                x => x.Rating,
                 e => e.MapFrom(y => y.Ratings.Sum(x => x.RatingNumber)));
         }
     }

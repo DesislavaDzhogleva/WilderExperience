@@ -10,6 +10,11 @@
 
     public class Experience : BaseDeletableModel<int>
     {
+        public Experience()
+        {
+            this.Images = new HashSet<ExperienceImage>();
+        }
+
         [Required]
         public string AuthorId { get; set; }
 
@@ -35,8 +40,7 @@
 
         public WildLocation WildLocation { get; set; }
 
-        [NotMapped]
-        public ICollection<string> Images { get; set; }
+        public ICollection<ExperienceImage> Images { get; set; }
 
         public ICollection<Rating> Ratings { get; set; }
 

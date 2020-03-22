@@ -11,9 +11,16 @@
     {
         <div class="col mb-4">
             <div class="card">
-                <img src="bg-second_3349.jpg" class="card-img-top" alt="...">
+                @if (item.Image == null)
+                {
+                    <img src="~/uploads/experiences/notAvailable.jpg" class="card-img-top" alt="...">
+                }
+                else
+                {
+                    <img src="~/uploads/experiences/@item.Image.Name" class="card-img-top" alt="...">
+                }
                 <div class="card-body">
-                    <h5 class="card-title">@item.Title</h5>
+                    <h5 class="card-title"><a asp-action="Details">@item.Title</a></h5>
                     <p class="card-text">@item.Description</p>
                 </div>
             </div>

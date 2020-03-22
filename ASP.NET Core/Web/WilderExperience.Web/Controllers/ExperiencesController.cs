@@ -56,23 +56,23 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
             var locationId = this.locationService.GetIdByName(input.LocationName);
-            var fileNames = new HashSet<string>();
+            var images = new HashSet<string>();
 
             foreach (var image in input.Images)
             {
                 if (image != null)
                 {
                     var uniqueFileName = this.GetUniqueFileName(image.FileName);
-                    fileNames.Add(uniqueFileName);
+                    images.Add(uniqueFileName);
                     var uploads = Path.Combine(this.environment.WebRootPath, "uploads", "experiences");
                     var filePath = Path.Combine(uploads, uniqueFileName);
                     image.CopyTo(new FileStream(filePath, FileMode.Create));
                 }
             }
 
-            await this.experiencesService.CreateAsync(input, user.Id, locationId, fileNames);
+            await this.experiencesService.CreateAsync(input, user.Id, locationId, images);
 
-            return this.RedirectToAction($"/List?locationName={input.LocationName}");
+            return this.RedirectToAction(@$"/List?locationName={input.LocationName}");
         }
 
         private string GetUniqueFileName(string fileName)

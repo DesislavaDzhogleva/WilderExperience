@@ -17,7 +17,6 @@ namespace WilderExperience.Services.Data
             this.experienceRepository = experienceRepository;
         }
 
-
         public async Task<int> CreateAsync(ExperienceCreateViewModel input, string userId, int locationId, HashSet<string> fileNames)
         {
             var experience = new Experience()
@@ -29,11 +28,19 @@ namespace WilderExperience.Services.Data
                 Intensity = input.Intensity,
                 DateOfVisit = input.DateOfVisit,
                 LocationId = locationId,
-                Images = fileNames,
             };
+
+            foreach (var file in fileNames)
+            {
+                experience.Images.Add(new ExperienceImage
+                {
+                    Name = file,
+                });
+            }
 
             await this.experienceRepository.AddAsync(experience);
             await this.experienceRepository.SaveChangesAsync();
+
 
             return experience.Id;
         }

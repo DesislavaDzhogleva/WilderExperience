@@ -345,6 +345,41 @@ namespace WilderExperience.Data.Migrations
                     b.ToTable("Experiences");
                 });
 
+            modelBuilder.Entity("WilderExperience.Data.Models.ExperienceImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ExperienceId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExperienceId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("ExperienceImages");
+                });
+
             modelBuilder.Entity("WilderExperience.Data.Models.Location", b =>
                 {
                     b.Property<int>("Id")
@@ -587,6 +622,15 @@ namespace WilderExperience.Data.Migrations
                     b.HasOne("WilderExperience.Data.Models.WildLocation", "WildLocation")
                         .WithMany()
                         .HasForeignKey("WildLocationId");
+                });
+
+            modelBuilder.Entity("WilderExperience.Data.Models.ExperienceImage", b =>
+                {
+                    b.HasOne("WilderExperience.Data.Models.Experience", "Experience")
+                        .WithMany("Images")
+                        .HasForeignKey("ExperienceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WilderExperience.Data.Models.Rating", b =>
