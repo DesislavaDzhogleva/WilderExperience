@@ -45,6 +45,37 @@ namespace WilderExperience.Services.Data
             return experience.Id;
         }
 
+        public async Task<int> EditAsync(ExperienceEditViewModel input, HashSet<string> fileNames)
+        {
+            var experience = this.experienceRepository.All()
+                .Where(x => x.Id == input.Id)
+                .FirstOrDefault();
+
+            if (experience == null)
+            {
+                return -1;
+            }
+
+            experience.DateOfVisit = input.DateOfVisit;
+            experience.Title = input.Title;
+            experience.Description = input.Description;
+            experience.Guide = input.Guide;
+            experience.Intensity = input.Intensity;
+
+            foreach (var file in fileNames)
+            {
+                experience.Images.Add(new ExperienceImage
+                {
+                    Name = file,
+                });
+            }
+
+            this.experienceRepository.Update(experience);
+            await this.experienceRepository.SaveChangesAsync();
+
+            return experience.Id;
+        }
+
         public IEnumerable<T> GetAllByLocationId<T>(int locationId)
         {
             var experiences = this.experienceRepository.All()

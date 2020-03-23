@@ -12,5 +12,7 @@
         Task<int> CreateAsync(ExperienceCreateViewModel input, string userId, int locationId, HashSet<string> filesPath);
 
         T GetById<T>(int id);
+
+        Task<int> EditAsync(ExperienceEditViewModel input, HashSet<string> fileNames);
     }
 }

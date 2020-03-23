@@ -31,11 +31,11 @@
                             <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
                         </h3>
                         <p class="card-description">
-                            @item.Description
+                            @item.ShortDescription
                         </p>
                         <br>
-                        <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-outline-default btn-round">Read More</button></a>
-</div>
+                        <a class="btn btn-outline-default btn-round" asp-action="Details" asp-route-id="@item.Id">Read More</a>
+                    </div>
                 </div>
             </div>
         }

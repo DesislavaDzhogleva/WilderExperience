@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using WilderExperience.Data.Models;
@@ -56,27 +57,21 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
             var locationId = this.locationService.GetIdByName(input.LocationName);
-            var images = new HashSet<string>();
 
-            foreach (var image in input.Images)
-            {
-                if (image != null)
-                {
-                    var uniqueFileName = this.GetUniqueFileName(image.FileName);
-                    images.Add(uniqueFileName);
-                    var uploads = Path.Combine(this.environment.WebRootPath, "uploads", "experiences");
-                    var filePath = Path.Combine(uploads, uniqueFileName);
-                    image.CopyTo(new FileStream(filePath, FileMode.Create));
-                }
-            }
+            var images = this.UploadImages(input.Images);
 
             await this.experiencesService.CreateAsync(input, user.Id, locationId, images);
 
-            return this.RedirectToAction(@$"/List?locationName={input.LocationName}");
+            return this.Redirect($"/Experiences/List?locationName={input.LocationName}");
         }
 
         public IActionResult Details(int id)
         {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
             var experienceViewModel = this.experiencesService.GetById<ExperienceDetailsViewModel>(id);
 
             if (experienceViewModel == null)
@@ -87,6 +82,54 @@
             var locationName = this.locationService.GetNameById(experienceViewModel.LocationId);
             this.ViewData["locationName"] = locationName;
             return this.View(experienceViewModel);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var experience = this.experiencesService.GetById<ExperienceEditViewModel>(id);
+            if (experience == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(experience);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ExperienceEditViewModel input)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(input);
+            }
+
+            var images = this.UploadImages(input.FileNewImages);
+            var experienceId = await this.experiencesService.EditAsync(input, images);
+            return this.Redirect($"/Experiences/Details/{experienceId}");
+        }
+
+        private HashSet<string> UploadImages(ICollection<IFormFile> images)
+        {
+            var outputImages = new HashSet<string>();
+
+            foreach (var image in images)
+            {
+                if (image != null)
+                {
+                    var uniqueFileName = this.GetUniqueFileName(image.FileName);
+                    outputImages.Add(uniqueFileName);
+                    var uploads = Path.Combine(this.environment.WebRootPath, "uploads", "experiences");
+                    var filePath = Path.Combine(uploads, uniqueFileName);
+                    image.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
+            }
+
+            return outputImages;
         }
 
         private string GetUniqueFileName(string fileName)

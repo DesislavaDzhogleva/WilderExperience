@@ -31,7 +31,7 @@
 </div>
 
 <div>
-    @Html.ActionLink("Edit", "Edit", new {  id = @Model.Id  }) |
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
      <a asp-action="List" asp-route-locationName=@this.ViewData["locationName"]>Back to List</a>
     
 </div>
