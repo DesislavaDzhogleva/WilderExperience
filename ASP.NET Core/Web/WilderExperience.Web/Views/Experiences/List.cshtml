@@ -4,27 +4,66 @@
     ViewData["Title"] = "List";
 }
 
-<a class="btn btn-primary" asp-action="Create" asp-route-locationName="@this.ViewData["locationName"]">Add Experience</a>
 
-<div class="row row-cols-1 row-cols-md-2">
-    @foreach (var item in Model)
-    {
-        <div class="col mb-4">
-            <div class="card">
-                @if (item.Image == null)
-                {
-                    <img src="~/uploads/experiences/notAvailable.jpg" class="card-img-top" alt="...">
-                }
-                else
-                {
-                    <img src="~/uploads/experiences/@item.Image.Name" class="card-img-top" alt="...">
-                }
-                <div class="card-body">
-                    <h4 class="media-heading"><a asp-action="Details" asp-route-id="@item.Id">@item.Title</a></h4>
-                    <p class="card-text">@item.Description</p>
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6">
+                <div class="card card-plain card-blog text-center">
+                    <div class="card-image">
+                        @if (item.Image == null)
+                        {
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                <img class="img img-fluid" src="~/uploads/experiences/notAvailable.jpg">
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                <img class="img img-fluid" src="~/uploads/experiences/@item.Image.Name">
+                            </a>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-category text-warning">Travel</h6>
+                        <h3 class="card-title">
+                            <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                        </h3>
+                        <p class="card-description">
+                            @item.Description
+                        </p>
+                        <br>
+                        <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-outline-default btn-round">Read More</button></a>
+</div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
-   
+
+ <a class="btn btn-primary" asp-action="Create" asp-route-locationName="@this.ViewData["locationName"]">Add Experience</a>
+
+
+            @*<div class="row row-cols-1 row-cols-md-2">
+            @foreach (var item in Model)
+            {
+                <div class="col mb-4">
+                    <div class="card">
+                        @if (item.Image == null)
+                        {
+                            <img src="~/uploads/experiences/notAvailable.jpg" class="card-img-top" alt="...">
+                        }
+                        else
+                        {
+                            <img src="~/uploads/experiences/@item.Image.Name" class="card-img-top" alt="...">
+                        }
+                        <div class="card-body">
+                            <h4 class="media-heading"><a asp-action="Details" asp-route-id="@item.Id">@item.Title</a></h4>
+                            <p class="card-text">@item.Description</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>*@
+

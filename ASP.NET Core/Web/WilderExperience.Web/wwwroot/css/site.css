@@ -55,15 +55,8 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
-.home-search {
-    background: url("../img/bg.jpg") center center;
-    background-size: cover;
-    background-attachment: fixed;
-    padding-top: 12rem;
-    padding-bottom: 12rem;
-}
 
-.fixed-top {
+/*.fixed-top {
     position: fixed;
     top: 0;
     right: 0;
@@ -82,5 +75,16 @@ body {
 .nav-scrolled:hover {
     opacity: 1;
     transition: opacity .3s;
+}*/
+
+.page-header {
+    background-image: url("../img/bg.jpg");
+    background-attachment: fixed;
 }
 
+.title-brand {
+    max-width: initial;
+}
+.page-header-small{
+    height:300px;
+}

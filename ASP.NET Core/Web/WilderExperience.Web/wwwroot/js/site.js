@@ -3,19 +3,19 @@
 
 // Write your JavaScript code.
 
-$(function () {
-    let nav = $(".navbar");
-    $(window).scroll(function () {
-        var scroll = $(window).scrollTop();
+//$(function () {
+//    let nav = $(".navbar");
+//    $(window).scroll(function () {
+//        var scroll = $(window).scrollTop();
 
-        if (scroll >= nav.height()) {
-            nav.addClass('nav-scrolled').addClass('fixed-top');
-        } else {
-            nav.removeClass('nav-scrolled').removeClass('fixed-top');
-        }
-    });
-});
+//        if (scroll >= nav.height()) {
+//            nav.addClass('nav-scrolled').addClass('fixed-top');
+//        } else {
+//            nav.removeClass('nav-scrolled').removeClass('fixed-top');
+//        }
+//    });
+//});
 
-$(function () {
-    $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
-});
+//$(function () {
+//    $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
+//});
