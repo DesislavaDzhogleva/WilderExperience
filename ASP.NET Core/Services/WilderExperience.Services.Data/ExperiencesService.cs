@@ -53,5 +53,15 @@ namespace WilderExperience.Services.Data
 
             return experiences;
         }
+
+        public T GetById<T>(int id)
+        {
+            var post = this.experienceRepository.All()
+                .Where(x => x.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+
+            return post;
+        }
     }
 }

@@ -25,5 +25,20 @@
 
             return locationId;
         }
+
+        public string GetNameById(int? id)
+        {
+            if (id == null)
+            {
+                return null;
+            }
+
+            var locationName = this.locationRepository.All()
+                .Where(x => x.Id == id)
+                .Select(x => x.Name)
+                .FirstOrDefault();
+
+            return locationName;
+        }
     }
 }

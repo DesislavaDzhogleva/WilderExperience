@@ -1,0 +1,37 @@
+﻿@model WilderExperience.Web.ViewModels.Experiences.ExperienceDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <p class="card-text">@Model.Description</p>
+        <p class="card-text"><small class="text-muted">Last updated @Model.ModifiedOn mins ago</small></p>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="mdb-lightbox-ui"></div>
+                <div class="mdb-lightbox no-margin">
+                    @foreach (var image in Model.Images)
+                    {
+                        <figure class="col-md-4">
+                            <a href="~/uploads/experiences/@image.Name" data-size="1600x1067">
+                                <img alt="picture" src="~/uploads/experiences/@image.Name"
+                                        class="img-fluid" />
+                            </a>
+                        </figure>
+                    }
+                </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Edit", "Edit", new {  id = @Model.Id  }) |
+     <a asp-action="List" asp-route-locationName=@this.ViewData["locationName"]>Back to List</a>
+    
+</div>

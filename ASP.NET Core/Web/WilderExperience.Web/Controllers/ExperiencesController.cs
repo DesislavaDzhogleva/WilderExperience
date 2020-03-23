@@ -75,6 +75,20 @@
             return this.RedirectToAction(@$"/List?locationName={input.LocationName}");
         }
 
+        public IActionResult Details(int id)
+        {
+            var experienceViewModel = this.experiencesService.GetById<ExperienceDetailsViewModel>(id);
+
+            if (experienceViewModel == null)
+            {
+                return this.NotFound();
+            }
+
+            var locationName = this.locationService.GetNameById(experienceViewModel.LocationId);
+            this.ViewData["locationName"] = locationName;
+            return this.View(experienceViewModel);
+        }
+
         private string GetUniqueFileName(string fileName)
         {
             fileName = Path.GetFileName(fileName);

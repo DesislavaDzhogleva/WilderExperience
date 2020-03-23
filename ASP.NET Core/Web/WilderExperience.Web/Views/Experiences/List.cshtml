@@ -20,7 +20,7 @@
                     <img src="~/uploads/experiences/@item.Image.Name" class="card-img-top" alt="...">
                 }
                 <div class="card-body">
-                    <h5 class="card-title"><a asp-action="Details">@item.Title</a></h5>
+                    <h4 class="media-heading"><a asp-action="Details" asp-route-id="@item.Id">@item.Title</a></h4>
                     <p class="card-text">@item.Description</p>
                 </div>
             </div>

@@ -7,5 +7,6 @@
         int GetCount();
 
         IEnumerable<T> GetAll<T>();
+
     }
 }
