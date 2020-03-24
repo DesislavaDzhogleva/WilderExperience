@@ -1,5 +1,6 @@
 ﻿namespace WilderExperience.Web.ViewModels.Experiences
 {
+    using Ganss.XSS;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,8 @@
         [Required]
         public string Description { get; set; }
 
+        public string SanitizedDescription => new HtmlSanitizer().Sanitize(this.Description);
+
         public string Guide { get; set; }
 
         public Intensity Intensity { get; set; }
@@ -30,7 +33,7 @@
 
         public DateTime CreatedOn { get; set; }
 
-        public DateTime ModifiedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
 
         public ICollection<ExperienceImage> Images { get; set; }
 

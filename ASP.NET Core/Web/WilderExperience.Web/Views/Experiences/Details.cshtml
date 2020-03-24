@@ -9,24 +9,34 @@
 <div class="card mb-3">
     <div class="card-body">
         <h5 class="card-title">@Model.Title</h5>
-        <p class="card-text">@Model.Description</p>
-        <p class="card-text"><small class="text-muted">Last updated @Model.ModifiedOn mins ago</small></p>
+        <p class="card-text">@Html.Raw(Model.SanitizedDescription)</p>
+        @if (Model.ModifiedOn == null)
+        {
+            <p class="card-text"><small class="text-muted">Created @Model.CreatedOn</small></p>
+        }
+        else
+        {
+            <p class="card-text"><small class="text-muted">Updated on @Model.ModifiedOn</small></p>
+        }
+
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <div id="mdb-lightbox-ui"></div>
+        @foreach (var image in Model.Images)
+        {
+            <div class="col-md-12">
+                <div id="mdb-lightbox-ui"></div>
                 <div class="mdb-lightbox no-margin">
-                    @foreach (var image in Model.Images)
-                    {
-                        <figure class="col-md-4">
-                            <a href="~/uploads/experiences/@image.Name" data-size="1600x1067">
-                                <img alt="picture" src="~/uploads/experiences/@image.Name"
-                                        class="img-fluid" />
-                            </a>
-                        </figure>
-                    }
+
+                    <figure class="col-md-4">
+                        <a href="~/uploads/experiences/@image.Name" data-size="1600x1067">
+                            <img alt="picture" src="~/uploads/experiences/@image.Name"
+                                 class="img-fluid" />
+                        </a>
+                    </figure>
                 </div>
-        </div>
+            </div>
+        }
+
     </div>
 </div>
 

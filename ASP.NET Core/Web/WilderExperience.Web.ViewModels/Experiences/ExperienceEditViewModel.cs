@@ -1,18 +1,24 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using WilderExperience.Data.Models;
-using WilderExperience.Data.Models.Enums;
-using WilderExperience.Services.Mapping;
-
-namespace WilderExperience.Web.ViewModels.Experiences
+﻿namespace WilderExperience.Web.ViewModels.Experiences
 {
-    
-    public class ExperienceEditViewModel : IMapFrom<Experience>, IHaveCustomMappings
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using AutoMapper;
+    using Microsoft.AspNetCore.Http;
+    using WilderExperience.Data.Models;
+    using WilderExperience.Data.Models.Enums;
+    using WilderExperience.Services.Mapping;
+
+    public class ExperienceEditViewModel : IMapFrom<Experience>
     {
+        public ExperienceEditViewModel()
+        {
+            this.FileNewImages = new HashSet<IFormFile>();
+            this.Images = new HashSet<ExperienceImage>();
+        }
+
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -26,15 +32,15 @@ namespace WilderExperience.Web.ViewModels.Experiences
         public DateTime DateOfVisit { get; set; }
 
         [Display(Name = "Images")]
-        public ICollection<IFormFile> FileNewImages { get; set; } = new List<IFormFile>();
+        public ICollection<IFormFile> FileNewImages { get; set; }
 
-        public ICollection<ExperienceImage> Images { get; set; } = new List<ExperienceImage>();
+        public ICollection<ExperienceImage> Images { get; set; } 
 
 
 
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            configuration.AddGlobalIgnore("File");
-        }
+        //public void CreateMappings(IProfileExpression configuration)
+        //{
+        //    configuration.AddGlobalIgnore("File");
+        //}
     }
 }

@@ -19,3 +19,8 @@
 //$(function () {
 //    $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
 //});
+ClassicEditor
+    .create(document.querySelector('#editor'), {height:400})
+    .catch(error => {
+        console.error(error);
+    });

@@ -88,3 +88,7 @@ body {
 .page-header-small{
     height:300px;
 }
+.ck-editor__editable_inline {
+    min-height: 300px;
+    max-height:600px;
+}

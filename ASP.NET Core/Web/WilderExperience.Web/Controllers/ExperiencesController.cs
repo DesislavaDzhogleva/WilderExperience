@@ -14,7 +14,7 @@
     using WilderExperience.Services.Data;
     using WilderExperience.Web.ViewModels.Experiences;
 
-    public class ExperiencesController : Controller
+    public class ExperiencesController : BaseController
     {
         private readonly IHostingEnvironment environment;
         private readonly ILocationsService locationService;
