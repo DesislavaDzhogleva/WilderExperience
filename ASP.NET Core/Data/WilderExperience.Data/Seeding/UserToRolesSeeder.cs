@@ -5,20 +5,28 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using WilderExperience.Common;
     using WilderExperience.Data.Models;
 
     public class UserToRolesSeeder : ISeeder
     {
+        private readonly IConfiguration configuration;
+
+        public UserToRolesSeeder(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            await SeedUserToRoleAsync(userManager);
+            await SeedUserToRoleAsync(userManager, this.configuration);
         }
 
-        private static async Task SeedUserToRoleAsync(UserManager<ApplicationUser> userManager)
+        private static async Task SeedUserToRoleAsync(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             var user = await userManager.FindByNameAsync(GlobalConstants.AdminUsername);
             if (user == null)
@@ -26,10 +34,11 @@
                 var result = await userManager.CreateAsync(
                     new ApplicationUser
                     {
-                        UserName = GlobalConstants.AdminUsername,
-                        Email = GlobalConstants.AdminEmail,
+                        UserName = configuration["Admin:UserName"],
+                        Email = configuration["Admin:Email"],
+                        EmailConfirmed = true,
                     },
-                    "desiPass");
+                    configuration["Admin:Password"]);
 
                 if (!result.Succeeded)
                 {

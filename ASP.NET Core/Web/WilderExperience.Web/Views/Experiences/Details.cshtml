@@ -4,13 +4,9 @@
     ViewData["Title"] = "Details";
 }
 
-
-
-<h1>Details</h1>
-
 <div class="card mb-3">
     <div class="card-body">
-        <h5 class="card-title">@Model.Title</h5>
+        <h2 class="card-title"><strong>@Model.Title</strong></h2>
         <p class="card-text">@Html.Raw(Model.SanitizedDescription)</p>
         @if (Model.ModifiedOn == null)
         {

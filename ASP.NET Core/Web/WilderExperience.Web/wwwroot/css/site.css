@@ -97,3 +97,12 @@ body {
     height:200px;
     border-radius:0px;
 }
+
+.experience-list .card-description {
+    height: 100px;
+    overflow:hidden;
+}
+
+.card .image-list{
+    height:250px;
+}

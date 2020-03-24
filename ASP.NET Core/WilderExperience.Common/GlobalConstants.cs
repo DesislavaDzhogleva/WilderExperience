@@ -8,9 +8,7 @@
 
         public const string UserRoleName = "User";
 
-        public const string AdminUsername = "DesiDzhogleva";
-
-        public const string AdminEmail = "desi127@abv.bg";
+        public const string AdminUsername = "Admin";
 
         public const string CurrentContry = "Bulgaria";
     }

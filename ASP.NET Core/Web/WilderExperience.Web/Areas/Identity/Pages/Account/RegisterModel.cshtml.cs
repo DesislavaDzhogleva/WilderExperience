@@ -21,10 +21,10 @@
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ILogger<RegisterModel> logger;
+        private readonly IEmailSender emailSender;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -32,10 +32,10 @@
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
-            this._userManager = userManager;
-            this._signInManager = signInManager;
-            this._logger = logger;
-            this._emailSender = emailSender;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.logger = logger;
+            this.emailSender = emailSender;
         }
 
         [BindProperty]
@@ -53,6 +53,22 @@
             public string Email { get; set; }
 
             [Required]
+            [Display(Name = "First Name")]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            public string LastName { get; set; }
+
+            // TODO: validation of username - only string
+            [Required]
+            [Display(Name = "Username")]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            public string UserName { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -67,22 +83,23 @@
         public async Task OnGetAsync(string returnUrl = null)
         {
             this.ReturnUrl = returnUrl;
-            this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? this.Url.Content("~/");
-            this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email };
-                IdentityResult result = await this._userManager.CreateAsync(user, this.Input.Password);
+                var user = new ApplicationUser { UserName = this.Input.UserName, Email = this.Input.Email };
+                var result = await this.userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
-                    this._logger.LogInformation("User created a new account with password.");
+                    this.logger.LogInformation("User created a new account with password.");
 
-                    var code = await this._userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = this.Url.Page(
                         "/Account/ConfirmEmail",
@@ -90,17 +107,21 @@
                         values: new { area = "Identity", userId = user.Id, code = code },
                         protocol: this.Request.Scheme);
 
-                    await this._emailSender.SendEmailAsync(this.Input.Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await this.emailSender.SendEmailAsync(this.Input.Email, "Confirm your email",
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    if (this._userManager.Options.SignIn.RequireConfirmedAccount)
+                    if (this.userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email });
                     }
                     else
                     {
-                        await this._signInManager.SignInAsync(user, isPersistent: false);
+                        await this.signInManager.SignInAsync(user, isPersistent: false);
                         return this.LocalRedirect(returnUrl);
                     }
+
+
+
                 }
 
                 foreach (var error in result.Errors)
@@ -111,6 +132,18 @@
 
             // If we got this far, something failed, redisplay form
             return this.Page();
+        }
+
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await this.userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return this.Page();
+            }
+
+            var result = await this.userManager.ConfirmEmailAsync(user, token);
+            return this.LocalRedirect(this.ReturnUrl);
         }
     }
 }
