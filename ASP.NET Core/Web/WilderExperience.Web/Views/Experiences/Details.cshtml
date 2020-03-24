@@ -4,6 +4,8 @@
     ViewData["Title"] = "Details";
 }
 
+
+
 <h1>Details</h1>
 
 <div class="card mb-3">
@@ -18,26 +20,17 @@
         {
             <p class="card-text"><small class="text-muted">Updated on @Model.ModifiedOn</small></p>
         }
+        <div id="lightgallery" class="row">
+            @foreach (var image in Model.Images)
+            {
+                <a href="~/uploads/experiences/@image.Name" class="col-md-3 p-0">
+                    <img src="~/uploads/experiences/@image.Name" class="experience-details-thumb" />
+                </a>
+            }
 
+        </div>
     </div>
-    <div class="row">
-        @foreach (var image in Model.Images)
-        {
-            <div class="col-md-12">
-                <div id="mdb-lightbox-ui"></div>
-                <div class="mdb-lightbox no-margin">
 
-                    <figure class="col-md-4">
-                        <a href="~/uploads/experiences/@image.Name" data-size="1600x1067">
-                            <img alt="picture" src="~/uploads/experiences/@image.Name"
-                                 class="img-fluid" />
-                        </a>
-                    </figure>
-                </div>
-            </div>
-        }
-
-    </div>
 </div>
 
 <div>
