@@ -17,7 +17,7 @@ namespace WilderExperience.Services.Data
             this.experienceRepository = experienceRepository;
         }
 
-        public async Task<int> CreateAsync(ExperienceCreateViewModel input, string userId, int locationId, HashSet<string> fileNames)
+        public async Task<int> CreateAsync(ExperienceCreateViewModel input, string userId, int locationId)
         {
             var experience = new Experience()
             {
@@ -30,22 +30,21 @@ namespace WilderExperience.Services.Data
                 LocationId = locationId,
             };
 
-            foreach (var file in fileNames)
-            {
-                experience.Images.Add(new ExperienceImage
-                {
-                    Name = file,
-                });
-            }
+            //foreach (var file in fileNames)
+            //{
+            //    experience.Images.Add(new ExperienceImage
+            //    {
+            //        Name = file,
+            //    });
+            //}
 
             await this.experienceRepository.AddAsync(experience);
             await this.experienceRepository.SaveChangesAsync();
 
-
             return experience.Id;
         }
 
-        public async Task<int> EditAsync(ExperienceEditViewModel input, HashSet<string> fileNames)
+        public async Task<int> EditAsync(ExperienceEditViewModel input)
         {
             var experience = this.experienceRepository.All()
                 .Where(x => x.Id == input.Id)
@@ -62,13 +61,13 @@ namespace WilderExperience.Services.Data
             experience.Guide = input.Guide;
             experience.Intensity = input.Intensity;
 
-            foreach (var file in fileNames)
-            {
-                experience.Images.Add(new ExperienceImage
-                {
-                    Name = file,
-                });
-            }
+            //foreach (var file in fileNames)
+            //{
+            //    experience.Images.Add(new ExperienceImage
+            //    {
+            //        Name = file,
+            //    });
+            //}
 
             this.experienceRepository.Update(experience);
             await this.experienceRepository.SaveChangesAsync();

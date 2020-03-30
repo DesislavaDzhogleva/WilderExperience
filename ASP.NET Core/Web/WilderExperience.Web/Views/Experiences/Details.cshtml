@@ -4,33 +4,67 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="card mb-3">
-    <div class="card-body">
-        <h2 class="card-title"><strong>@Model.Title</strong></h2>
-        <p class="card-text">@Html.Raw(Model.SanitizedDescription)</p>
-        @if (Model.ModifiedOn == null)
-        {
-            <p class="card-text"><small class="text-muted">Created @Model.CreatedOn</small></p>
-        }
-        else
-        {
-            <p class="card-text"><small class="text-muted">Updated on @Model.ModifiedOn</small></p>
-        }
-        <div id="lightgallery" class="row">
-            @foreach (var image in Model.Images)
+    <div class="card mb-3">
+        <div class="card-body">
+            <h2 class="card-title"><strong>@Model.Title</strong></h2>
+            <h2 class="card-title"><small>By @Model.AuthorUserName</small></h2>
+            <p class="card-text">@Html.Raw(Model.SanitizedDescription)</p>
+            @if (Model.ModifiedOn == null)
             {
-                <a href="~/uploads/experiences/@image.Name" class="col-md-3 p-0">
-                    <img src="~/uploads/experiences/@image.Name" class="experience-details-thumb" />
-                </a>
+                <p class="card-text"><small class="text-muted">Created @Model.CreatedOn</small></p>
             }
+            else
+            {
+                <p class="card-text"><small class="text-muted">Updated on @Model.ModifiedOn</small></p>
+            }
+            <div id="lightgallery" class="row">
+                @foreach (var image in Model.Images)
+                {
+                    <a href="~/uploads/experiences/@image.Name" class="col-md-3 p-0">
+                        <img src="~/uploads/experiences/@image.Name" class="experience-details-thumb" />
+                    </a>
+                }
+            </div>
+            <a class="btn btn-outline-default btn-round mt-2 pull-right" asp-controller="Images" asp-action="Add" asp-route-experienceId="@Model.Id">Add Images</a>
 
         </div>
+
+        <hr />
+        <div>
+            @if (this.User.Identity.Name == Model.AuthorUserName)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            }
+            <a asp-action="List" asp-route-locationName=@this.ViewData["locationName"]>Back to List</a>
+
+        </div>
+        <hr />
     </div>
 
-</div>
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-     <a asp-action="List" asp-route-locationName=@this.ViewData["locationName"]>Back to List</a>
-    
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="comments media-area col-12">
+                <h3 class="text-center">Comments</h3>
+
+                <!-- end media -->
+                @foreach (var comment in Model.Comments)
+                {
+                    <div class="media">
+                        <div class="media-body">
+                            <h5 class="media-heading">@Model.AuthorUserName</h5>
+                            <div class="pull-right">
+                                <h6 class="text-muted">@comment.CreatedOn</h6>
+                                <a href="#" class="btn btn-info btn-link pull-right "> <i class="fa fa-reply"></i> Reply</a>
+                            </div>
+                            <p>@comment.Content</p>
+                        </div>
+                    </div>
+                }
+                <!-- end media -->
+            </div>
+        </div>
+    </div>
 </div>

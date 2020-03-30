@@ -1,0 +1,38 @@
+﻿@model WilderExperience.Web.ViewModels.Images.ImagesViewModel
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Add" enctype="multipart/form-data">
+
+            <input asp-for="NewImageVM.ExperienceId" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @foreach (var image in Model.ImagesListVM)
+            {
+                <figure class="col-md-8">
+                    <a href="~/uploads/experiences/@image.Name" data-size="1600x1067">
+                        <img alt="picture" src="~/uploads/experiences/@image.Name"
+                             class="img-fluid" />
+                    </a>
+                </figure>
+            }
+            <div class="form-group">
+                <label asp-for="NewImageVM.Images" class="control-label"></label>
+                <input asp-for="NewImageVM.Images" class="d-block" />
+                <span asp-validation-for="NewImageVM.Images" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

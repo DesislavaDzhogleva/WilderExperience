@@ -11,6 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200330133136_dljktghfbvlsfvfs.cs" />
+    <Compile Remove="Migrations\20200330133136_dljktghfbvlsfvfs.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
 

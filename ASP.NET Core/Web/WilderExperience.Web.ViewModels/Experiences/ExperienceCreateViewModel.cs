@@ -8,9 +8,12 @@
     using WilderExperience.Data.Models;
     using WilderExperience.Data.Models.Enums;
     using WilderExperience.Services.Mapping;
+    using WilderExperience.Web.ViewModels.Images;
 
     public class ExperienceCreateViewModel : IMapFrom<Experience>
     {
+        public int Id { get; set; }
+
         [Required]
         public string Title { get; set; }
 
@@ -26,6 +29,7 @@
 
         public DateTime DateOfVisit { get; set; }
 
-        public ICollection<IFormFile> Images { get; set; } = new List<IFormFile>();
+        public ImagesAddViewModel Images { get; set; }
+
     }
 }

@@ -14,8 +14,8 @@
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            //await this.SeedCitiesAsync(dbContext);
-            //await this.SeedVillagesAsync(dbContext);
+            await this.SeedCitiesAsync(dbContext);
+            await this.SeedVillagesAsync(dbContext);
             //await this.SeedLandmarksAsync(dbContext);
         }
 

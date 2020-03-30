@@ -16,16 +16,16 @@
 
     public class ExperiencesController : BaseController
     {
-        private readonly IHostingEnvironment environment;
         private readonly ILocationsService locationService;
         private readonly IExperiencesService experiencesService;
+        private readonly IImagesService imagesService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ExperiencesController(IHostingEnvironment environment, ILocationsService locationService, IExperiencesService experiencesService, UserManager<ApplicationUser> userManager)
+        public ExperiencesController(ILocationsService locationService, IExperiencesService experiencesService,IImagesService imagesService ,UserManager<ApplicationUser> userManager)
         {
-            this.environment = environment;
             this.locationService = locationService;
             this.experiencesService = experiencesService;
+            this.imagesService = imagesService;
             this.userManager = userManager;
         }
 
@@ -58,16 +58,17 @@
             var user = await this.userManager.GetUserAsync(this.User);
             var locationId = this.locationService.GetIdByName(input.LocationName);
 
-            var images = this.UploadImages(input.Images);
-
-            await this.experiencesService.CreateAsync(input, user.Id, locationId, images);
+            var experienceId = await this.experiencesService.CreateAsync(input, user.Id, locationId);
+            input.Images.ExperienceId = experienceId;
+            await this.imagesService.AddImagesAsync(input.Images);
 
             return this.Redirect($"/Experiences/List?locationName={input.LocationName}");
         }
 
+        [Authorize]
         public IActionResult Details(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return this.NotFound();
             }
@@ -84,9 +85,10 @@
             return this.View(experienceViewModel);
         }
 
-        public IActionResult Edit(int id)
+        [Authorize]
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return this.NotFound();
             }
@@ -97,10 +99,17 @@
                 return this.NotFound();
             }
 
+            var user = await this.userManager.GetUserAsync(this.User);
+            if (experience.AuthorId != user.Id)
+            {
+                return this.Unauthorized();
+            }
+
             return this.View(experience);
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Edit(ExperienceEditViewModel input)
         {
             if (!this.ModelState.IsValid)
@@ -108,37 +117,42 @@
                 return this.View(input);
             }
 
-            var images = this.UploadImages(input.FileNewImages);
-            var experienceId = await this.experiencesService.EditAsync(input, images);
+            var user = await this.userManager.GetUserAsync(this.User);
+            if (input.AuthorId != user.Id)
+            {
+                return this.Unauthorized();
+            }
+
+            var experienceId = await this.experiencesService.EditAsync(input);
             return this.Redirect($"/Experiences/Details/{experienceId}");
         }
 
-        private HashSet<string> UploadImages(ICollection<IFormFile> images)
-        {
-            var outputImages = new HashSet<string>();
+        //private HashSet<string> UploadImages(ICollection<IFormFile> images)
+        //{
+        //    var outputImages = new HashSet<string>();
 
-            foreach (var image in images)
-            {
-                if (image != null)
-                {
-                    var uniqueFileName = this.GetUniqueFileName(image.FileName);
-                    outputImages.Add(uniqueFileName);
-                    var uploads = Path.Combine(this.environment.WebRootPath, "uploads", "experiences");
-                    var filePath = Path.Combine(uploads, uniqueFileName);
-                    image.CopyTo(new FileStream(filePath, FileMode.Create));
-                }
-            }
+        //    foreach (var image in images)
+        //    {
+        //        if (image != null)
+        //        {
+        //            var uniqueFileName = this.GetUniqueFileName(image.FileName);
+        //            outputImages.Add(uniqueFileName);
+        //            var uploads = Path.Combine(this.environment.WebRootPath, "uploads", "experiences");
+        //            var filePath = Path.Combine(uploads, uniqueFileName);
+        //            image.CopyTo(new FileStream(filePath, FileMode.Create));
+        //        }
+        //    }
 
-            return outputImages;
-        }
+        //    return outputImages;
+        //}
 
-        private string GetUniqueFileName(string fileName)
-        {
-            fileName = Path.GetFileName(fileName);
-            return Path.GetFileNameWithoutExtension(fileName)
-                      + "_"
-                      + Guid.NewGuid().ToString().Substring(0, 4)
-                      + Path.GetExtension(fileName);
-        }
+        //private string GetUniqueFileName(string fileName)
+        //{
+        //    fileName = Path.GetFileName(fileName);
+        //    return Path.GetFileNameWithoutExtension(fileName)
+        //              + "_"
+        //              + Guid.NewGuid().ToString().Substring(0, 4)
+        //              + Path.GetExtension(fileName);
+        //}
     }
 }
