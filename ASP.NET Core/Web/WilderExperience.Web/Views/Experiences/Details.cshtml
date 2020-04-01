@@ -39,32 +39,22 @@
 
         </div>
         <hr />
-    </div>
 
-
-
-<div class="card mb-3">
-    <div class="card-body">
         <div class="row">
             <div class="comments media-area col-12">
                 <h3 class="text-center">Comments</h3>
-
-                <!-- end media -->
-                @foreach (var comment in Model.Comments)
-                {
-                    <div class="media">
-                        <div class="media-body">
-                            <h5 class="media-heading">@Model.AuthorUserName</h5>
-                            <div class="pull-right">
-                                <h6 class="text-muted">@comment.CreatedOn</h6>
-                                <a href="#" class="btn btn-info btn-link pull-right "> <i class="fa fa-reply"></i> Reply</a>
-                            </div>
-                            <p>@comment.Content</p>
-                        </div>
-                    </div>
-                }
-                <!-- end media -->
+                <vc:comments></vc:comments>
             </div>
+
         </div>
+
+        @*<div class="row">
+            <div class="comments media-area col-12">
+                <h3 class="text-center">Comments</h3>
+                <partial name="_CommentPartial" for="Comments">
+            </div>
+
+        </div>*@
+
+
     </div>
-</div>

@@ -23,6 +23,7 @@ ClassicEditor
     .create(document.querySelector('#editor'), {height:400})
     .catch(error => {
     });
+
 $(document).ready(function () {
     $("#lightgallery").lightGallery();
 });

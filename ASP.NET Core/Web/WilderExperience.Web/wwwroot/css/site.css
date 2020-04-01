@@ -55,29 +55,6 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
-
-/*.fixed-top {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 1030;
-}
-.navbar {
-    opacity: 1;
-    transition: opacity .3s;
-}
-
-.nav-scrolled {
-    opacity: 0.8;
-    transition: opacity .3s;
-}
-.nav-scrolled:hover {
-    opacity: 1;
-    transition: opacity .3s;
-}*/
-
-
 .page-header {
     background-image: url("../img/bg.jpg");
     background-attachment: fixed;
@@ -106,4 +83,26 @@ body {
 
 .card .image-list{
     height:250px;
+}
+
+.comments > .media {
+    margin: 20px;
+    box-shadow: 2px 2px #eee;
+    border: 1px solid #eee;
+    padding: 20px;
+}
+.comments  .media img{
+    width:64px;
+}
+
+.card-inner {
+    margin-left: 4rem;
+}
+.dummy-image{
+    visibility:hidden;
+    width:30px;
+}
+
+.wrap-fix{
+    width: 500px;
 }

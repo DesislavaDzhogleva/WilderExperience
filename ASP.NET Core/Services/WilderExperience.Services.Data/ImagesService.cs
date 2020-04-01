@@ -1,18 +1,19 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using WilderExperience.Data.Common.Repositories;
-using WilderExperience.Data.Models;
-using WilderExperience.Services.Mapping;
-using WilderExperience.Web.ViewModels.Images;
-
-namespace WilderExperience.Services.Data
+﻿namespace WilderExperience.Services.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.SqlClient;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using WilderExperience.Data.Common.Repositories;
+    using WilderExperience.Data.Models;
+    using WilderExperience.Services.Mapping;
+    using WilderExperience.Web.ViewModels.Images;
+
     public class ImagesService : IImagesService
     {
         private readonly IDeletableEntityRepository<ExperienceImage> imageRepository;

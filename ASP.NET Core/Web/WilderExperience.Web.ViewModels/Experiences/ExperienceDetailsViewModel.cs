@@ -41,7 +41,6 @@
 
         public ICollection<Rating> Ratings { get; set; }
 
-        public ICollection<CommentViewModel> Comments { get; set; }
 
         [Required]
         public string AuthorUserName { get; set; }

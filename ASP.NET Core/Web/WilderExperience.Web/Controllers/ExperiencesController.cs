@@ -127,32 +127,5 @@
             return this.Redirect($"/Experiences/Details/{experienceId}");
         }
 
-        //private HashSet<string> UploadImages(ICollection<IFormFile> images)
-        //{
-        //    var outputImages = new HashSet<string>();
-
-        //    foreach (var image in images)
-        //    {
-        //        if (image != null)
-        //        {
-        //            var uniqueFileName = this.GetUniqueFileName(image.FileName);
-        //            outputImages.Add(uniqueFileName);
-        //            var uploads = Path.Combine(this.environment.WebRootPath, "uploads", "experiences");
-        //            var filePath = Path.Combine(uploads, uniqueFileName);
-        //            image.CopyTo(new FileStream(filePath, FileMode.Create));
-        //        }
-        //    }
-
-        //    return outputImages;
-        //}
-
-        //private string GetUniqueFileName(string fileName)
-        //{
-        //    fileName = Path.GetFileName(fileName);
-        //    return Path.GetFileNameWithoutExtension(fileName)
-        //              + "_"
-        //              + Guid.NewGuid().ToString().Substring(0, 4)
-        //              + Path.GetExtension(fileName);
-        //}
     }
 }
