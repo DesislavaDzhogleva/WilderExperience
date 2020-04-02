@@ -25,14 +25,15 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(input);
+                return new BadRequestResult();
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
             input.UserId = user.Id;
-            var comment = await this.commentsService.AddComment(input);
+            var commentId = await this.commentsService.AddComment(input);
 
-            return this.Redirect($"/Experiences/Details?Id={input.ExperienceId}");
+
+            return this.PartialView("_CommentPartial", this.commentsService.GetById<CommentViewModel>(commentId));
         }
     }
 }

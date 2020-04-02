@@ -4,19 +4,18 @@
     ViewData["Title"] = "Default";
 }
 
-<div>
-    <form asp-controller="Comments" asp-action="AddComment" method="post">
-        <input type="hidden" name="ExperienceId" value="@Model.FirstOrDefault().ExperienceId" />
-        <input type="hidden" name="ParentId" value="0" />
-        <div>
-            <label for="Content"></label>
-            <textarea name="Content" id="Content" class="form-control"></textarea>
-        </div>
-        <div>
-            <input type="submit" class="btn btn-primary" value="Add comment" />
-        </div>
-    </form>
-</div>
+<form asp-controller="Comments" asp-action="AddComment" method="post">
+    <input type="hidden" name="ExperienceId" value="@Model.FirstOrDefault().ExperienceId" />
+    <input type="hidden" name="ParentId" value="0" />
+    <div>
+        <label for="Content"></label>
+        <textarea name="Content" id="Content" class="form-control"></textarea>
+    </div>
+    <div>
+        <input type="submit" class="btn btn-primary ajax-submit-btn" value="Add comment" />
+    </div>
+
+</form>
 
 
 @{
@@ -33,22 +32,16 @@
                         <button class="btn btn-info btn-link pull-right " data-toggle="collapse" data-target="#collapseExample@(comment.Id)" aria-expanded="false" aria-controls="collapseExample@(comment.Id)"> <i class="fa fa-reply"></i> Reply</button>
 
                     </div>
-                    <p class="overflow-hidden wrap-fix" >@comment.Content</p>
+                    <p class="overflow-hidden wrap-fix">@comment.Content</p>
+
+                        
                     <div class="children">
+
                         <div class="media">
                             <img class="align-self-start mr-3 dummy-image" src="/img/avatar.jpg" alt="image">
 
                         </div>
-                        @{
-                            var children = Model.Where(x => x.ParentId == comment.Id).OrderByDescending(x => x.CreatedOn).ToList();
-                            if (children.Count() > 0)
-                            {
-                                RenderComment(children);
-                            }
-                        }
-                    </div>
-                    <div class="collapse" id="collapseExample@(comment.Id)">
-                        <form asp-controller="Comments" asp-action="AddComment" method="post">
+                        <form asp-controller="Comments" asp-action="AddComment" method="post" class="collapse" id="collapseExample@(comment.Id)">
                             <input type="hidden" name="ExperienceId" value="@Model.FirstOrDefault().ExperienceId" />
                             <input type="hidden" name="ParentId" value="@comment.Id" />
                             <div>
@@ -56,14 +49,30 @@
                                 <textarea name="Content" id="Content" class="form-control"></textarea>
                             </div>
                             <div>
-                                <input type="submit" class="btn btn-primary" value="Add comment" />
+                                <input type="submit" class="btn btn-primary  ajax-submit-btn ajax-submit-btn-collapsable" value="Add comment" />
                             </div>
                         </form>
+                        @{
+                            var children = Model.Where(x => x.ParentId == comment.Id).OrderByDescending(x => x.CreatedOn).ToList();
+                            if (children.Count() > 0)
+                            {
+                                await RenderComment(children);
+                            }
+                        }
                     </div>
                 </div>
             </div>
         }
     }
 }
-@{RenderComment(Model.Where(x => x.ParentId == 0).OrderByDescending(x=>x.CreatedOn));}
+@{await RenderComment(Model.Where(x => x.ParentId == 0).OrderByDescending(x => x.CreatedOn));}
+
+    @*<div class="row">
+            <div class="comments media-area col-12">
+                <h3 class="text-center">Comments</h3>
+                <partial name="_CommentPartial" for="Comments">
+            </div>
+
+        </div>*@
+
 

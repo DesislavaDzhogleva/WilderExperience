@@ -26,4 +26,19 @@ ClassicEditor
 
 $(document).ready(function () {
     $("#lightgallery").lightGallery();
+
+    $(document).on("click", ".ajax-submit-btn", function (evt) {
+        evt.preventDefault();
+        let form = $(this).closest("form");
+
+        if ($(this).hasClass("ajax-submit-btn-collapsable")) {
+            form.toggle();
+        }
+        $.post(form.attr("action"), form.serialize(), function (data) {
+            console.log(data);
+            $(data).insertAfter(form);
+        });
+    });
+
 });
+

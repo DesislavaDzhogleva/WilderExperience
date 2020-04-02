@@ -41,5 +41,15 @@
 
             return comment.Id;
         }
+
+        public T GetById<T>(int id)
+        {
+            var comment = this.commentsRepository.All()
+                .Where(x => x.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+
+            return comment;
+        }
     }
 }

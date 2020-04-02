@@ -10,5 +10,7 @@
         IEnumerable<T> GetAll<T>();
 
         Task<int> AddComment(CommentViewModel input);
+
+        T GetById<T>(int id);
     }
 }

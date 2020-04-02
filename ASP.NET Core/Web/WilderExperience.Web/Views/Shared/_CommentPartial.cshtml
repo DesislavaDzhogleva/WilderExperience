@@ -1,15 +1,33 @@
-﻿
-<div>
-    <form asp-controller="Comments" asp-action="AddComment" method="post">
-        <input type="hidden" name="ExperienceId" value="@Model.FirstOrDefault().ExperienceId" />
-        <input type="hidden" name="ParentId" value="0" />
-        <div>
-            <label for="Content"></label>
-            <textarea name="Content" id="Content" class="form-control"></textarea>
+﻿@model WilderExperience.Web.ViewModels.Comments.CommentViewModel
+<div class="media">
+    <img class="align-self-start mr-3" src="/img/avatar.jpg" alt="image">
+    <div class="media-body">
+        <h5 class="mt-0">@Model.AuthorUsername</h5>
+        <div class="pull-right">
+            <h6 class="text-muted">@Model.CreatedOn</h6>
+            <button class="btn btn-info btn-link pull-right " data-toggle="collapse" data-target="#collapseExample@(Model.Id)" aria-expanded="false" aria-controls="collapseExample@(Model.Id)"> <i class="fa fa-reply"></i> Reply</button>
+
         </div>
-        <div>
-            <input type="submit" class="btn btn-primary" value="Add comment" />
+        <p class="overflow-hidden wrap-fix">@Model.Content</p>
+
+        <div class="children">
+
+            <div class="media">
+                <img class="align-self-start mr-3 dummy-image" src="/img/avatar.jpg" alt="image">
+            </div>
+            <form asp-controller="Comments" asp-action="AddComment" method="post" class="collapse" id="collapseExample@(Model.Id)">
+                <input type="hidden" name="ExperienceId" value="@Model.ExperienceId" />
+                <input type="hidden" name="ParentId" value="@Model.Id" />
+                <div>
+                    <label for="Content"></label>
+                    <textarea name="Content" id="Content" class="form-control"></textarea>
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-primary ajax-submit-btn ajax-submit-btn-collapsable" data-ajax-response-holder=".children" value="Add comment" />
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 
+    
