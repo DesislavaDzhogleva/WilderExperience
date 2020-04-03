@@ -74,10 +74,11 @@
                 await this.context.SaveChangesAsync();
                 return this.RedirectToAction(nameof(this.Index));
             }
+
             this.ViewData["AuthorId"] = new SelectList(this.context.Users, "Id", "Id", experience.AuthorId);
             this.ViewData["LocationId"] = new SelectList(this.context.Locations, "Id", "Name", experience.LocationId);
             this.ViewData["WildLocationId"] = new SelectList(this.context.WildLocations, "Id", "Id", experience.WildLocationId);
-            return View(experience);
+            return this.View(experience);
         }
 
         // GET: Administration/Experiences/Edit/5

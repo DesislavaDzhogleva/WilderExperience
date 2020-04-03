@@ -5,7 +5,7 @@
 }
 
 <form asp-controller="Comments" asp-action="AddComment" method="post">
-    <input type="hidden" name="ExperienceId" value="@Model.FirstOrDefault().ExperienceId" />
+    <input type="hidden" name="ExperienceId" value="@this.ViewData["experienceId"]" />
     <input type="hidden" name="ParentId" value="0" />
     <div>
         <label for="Content"></label>

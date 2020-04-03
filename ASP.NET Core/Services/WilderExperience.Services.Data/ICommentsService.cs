@@ -7,7 +7,7 @@
 
     public interface ICommentsService
     {
-        IEnumerable<T> GetAll<T>();
+        IEnumerable<T> GetAll<T>(int experienceId);
 
         Task<int> AddComment(CommentViewModel input);
 

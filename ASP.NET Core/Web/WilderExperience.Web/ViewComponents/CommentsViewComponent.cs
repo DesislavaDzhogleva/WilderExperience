@@ -17,10 +17,12 @@
             this.commentsService = commentsService;
         }
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(int experienceId)
         {
-            var comments = this.commentsService.GetAll<CommentViewModel>();
+            var comments = this.commentsService.GetAll<CommentViewModel>(experienceId);
             comments.OrderByDescending(x => x.CreatedOn);
+
+            this.ViewData["experienceId"] = experienceId;
 
             return this.View(comments);
         }

@@ -17,9 +17,10 @@
             this.commentsRepository = commentsRepository;
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public IEnumerable<T> GetAll<T>(int experienceId)
         {
             var comments = this.commentsRepository.All()
+                .Where(x=>x.ExperienceId == experienceId)
                 .To<T>();
 
             return comments;
