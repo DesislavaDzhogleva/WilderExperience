@@ -16,6 +16,7 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
+    using WilderExperience.Common;
     using WilderExperience.Data.Models;
 
     [AllowAnonymous]
@@ -98,6 +99,7 @@
                 if (result.Succeeded)
                 {
                     this.logger.LogInformation("User created a new account with password.");
+                    await this.userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
 
                     var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -119,9 +121,6 @@
                         await this.signInManager.SignInAsync(user, isPersistent: false);
                         return this.LocalRedirect(returnUrl);
                     }
-
-
-
                 }
 
                 foreach (var error in result.Errors)

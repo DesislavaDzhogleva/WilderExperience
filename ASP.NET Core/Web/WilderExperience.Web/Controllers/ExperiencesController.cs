@@ -48,6 +48,7 @@
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ExperienceCreateViewModel input)
         {
             if (!this.ModelState.IsValid)
@@ -110,6 +111,7 @@
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ExperienceEditViewModel input)
         {
             if (!this.ModelState.IsValid)

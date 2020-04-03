@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using WilderExperience.Data.Models;
@@ -21,6 +22,8 @@
             this.userManager = userManager;
         }
 
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddComment(CommentViewModel input)
         {
             if (!this.ModelState.IsValid)

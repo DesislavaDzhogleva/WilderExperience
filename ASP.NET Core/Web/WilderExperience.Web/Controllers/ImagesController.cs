@@ -48,6 +48,7 @@ namespace WilderExperience.Web.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(ImagesViewModel input)
         {
             if (!this.ModelState.IsValid)
