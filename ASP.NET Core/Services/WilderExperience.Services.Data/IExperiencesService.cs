@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
+    using WilderExperience.Data.Models;
     using WilderExperience.Web.ViewModels.Experiences;
 
     public interface IExperiencesService
@@ -13,6 +13,10 @@
 
         T GetById<T>(int id);
 
+        Experience GetOriginalById(int id);
+
         Task<int> EditAsync(ExperienceEditViewModel input);
+
+        Task DeleteAsync(Experience input);
     }
 }

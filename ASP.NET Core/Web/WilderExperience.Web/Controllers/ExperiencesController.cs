@@ -129,5 +129,60 @@
             return this.Redirect($"/Experiences/Details/{experienceId}");
         }
 
+        [Authorize]
+        public async Task<IActionResult> DeleteAsync(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var experience = this.experiencesService.GetById<ExperienceDeleteViewModel>((int)id);
+            if (experience == null)
+            {
+                return this.NotFound();
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+            if (experience.AuthorId != user.Id)
+            {
+                return this.Unauthorized();
+            }
+
+            return this.View(experience);
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            var experience = this.experiencesService.GetOriginalById((int)id);
+            if (experience.AuthorId != user.Id)
+            {
+                return this.Unauthorized();
+            }
+
+            var locationName = this.locationService.GetNameById(experience.LocationId);
+
+            // TODO: find right exception
+            if (locationName == null)
+            {
+                return this.NotFound();
+            }
+
+            await this.experiencesService.DeleteAsync(experience);
+
+            return this.Redirect($"/Experiences/List?locationName={locationName}");
+        }
+
     }
 }

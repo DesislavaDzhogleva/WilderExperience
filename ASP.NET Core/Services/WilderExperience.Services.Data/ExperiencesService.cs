@@ -44,6 +44,12 @@ namespace WilderExperience.Services.Data
             return experience.Id;
         }
 
+        public async Task DeleteAsync(Experience input)
+        {
+            this.experienceRepository.Delete(input);
+            await this.experienceRepository.SaveChangesAsync();
+        }
+
         public async Task<int> EditAsync(ExperienceEditViewModel input)
         {
             var experience = this.experienceRepository.All()
@@ -61,13 +67,6 @@ namespace WilderExperience.Services.Data
             experience.Guide = input.Guide;
             experience.Intensity = input.Intensity;
 
-            //foreach (var file in fileNames)
-            //{
-            //    experience.Images.Add(new ExperienceImage
-            //    {
-            //        Name = file,
-            //    });
-            //}
 
             this.experienceRepository.Update(experience);
             await this.experienceRepository.SaveChangesAsync();
@@ -89,6 +88,15 @@ namespace WilderExperience.Services.Data
             var post = this.experienceRepository.All()
                 .Where(x => x.Id == id)
                 .To<T>()
+                .FirstOrDefault();
+
+            return post;
+        }
+
+        public Experience GetOriginalById(int id)
+        {
+            var post = this.experienceRepository.All()
+                .Where(x => x.Id == id)
                 .FirstOrDefault();
 
             return post;

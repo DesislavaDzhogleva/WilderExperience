@@ -34,11 +34,11 @@
 
         public int? LocationId { get; set; }
 
-        public Location Location { get; set; }
+        public virtual Location Location { get; set; }
 
         public int? WildLocationId { get; set; }
 
-        public WildLocation WildLocation { get; set; }
+        public virtual WildLocation WildLocation { get; set; }
 
         public ICollection<ExperienceImage> Images { get; set; }
 
