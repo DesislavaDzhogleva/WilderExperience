@@ -1,0 +1,49 @@
+﻿@model WilderExperience.Web.ViewModels.Locations.WildLocationCreateViewModel
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<div class="row form-group">
+    <div class="col">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="#">Step 1 - Choose Destionation</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active text-primary" href="#">Step 2 - Add Destination (Optional)</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-secondary" href="#">Step 3 - Add Experience</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Add">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="Choose name ..." />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lat" class="control-label"></label>
+                <input asp-for="Lat" class="form-control" value="@ViewBag.Lat" />
+                <span asp-validation-for="Lat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lon" class="control-label"></label>
+                <input asp-for="Lon" class="form-control" value="@ViewBag.Lon" />
+                <span asp-validation-for="Lon" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <a class="btn btn-secondary" asp-controller="WildLocations" asp-action="Create">Add</a>
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

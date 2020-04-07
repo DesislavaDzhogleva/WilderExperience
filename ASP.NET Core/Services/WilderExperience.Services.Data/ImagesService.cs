@@ -51,6 +51,22 @@
             return images;
         }
 
+        public async Task DeleteAsync(ExperienceImage image)
+        {
+            this.imageRepository.Delete(image);
+            await this.imageRepository.SaveChangesAsync();
+        }
+
+
+        public ExperienceImage GetOriginalById(int id)
+        {
+            var image = this.imageRepository.All()
+               .Where(x => x.Id == id)
+               .FirstOrDefault();
+
+            return image;
+        }
+
         private HashSet<string> UploadImages(ICollection<IFormFile> images)
         {
             var outputImages = new HashSet<string>();
@@ -78,6 +94,5 @@
                       + Guid.NewGuid().ToString().Substring(0, 4)
                       + Path.GetExtension(fileName);
         }
-
     }
 }

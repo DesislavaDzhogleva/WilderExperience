@@ -61,6 +61,7 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ILocationsService, LocationsService>();
+            services.AddTransient<IWildLocationService, WildLocationService>();
             services.AddTransient<IExperiencesService, ExperiencesService>();
             services.AddTransient<IImagesService, ImagesService>();
             services.AddTransient<ICommentsService, CommentsService>();

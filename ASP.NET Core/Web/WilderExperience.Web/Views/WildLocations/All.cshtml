@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "All";
+}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 pb-3">
+                <!--The div element for the map -->
+                <div id="map" class="w-100" style="height:400px;"></div>
+            </div>
+            <div class="col">
+                <a class="btn btn-primary" asp-controller="Destinations" asp-action="Add">Don't see your destination. Add one here <span class="fa fa-arrow-right"></span></a>
+            </div>
+        </div>
+
+
+
+        @section scripts
+        {
+            <script>
+                let model = @Html.Raw(Json.Serialize(Model));
+                // Initialize and add the map
+                function initMap() {
+                    if (!navigator.geolocation) {
+                        console.log('Geolocation is not supported by your browser');
+                        actualyInitMap(); // center map around plovdiv
+
+                      } else {
+                        console.log('Locating…');
+                        navigator.geolocation.getCurrentPosition(success, error);
+                    }
+
+                }
+                
+                function success(userPosition) {
+                    console.log('Fetched location successfully. Loading map…');
+                    actualyInitMap(userPosition); // center map around user position
+                }
+                function error() {
+                    console.log('Could not fetch location. Loading default map…');
+                    actualyInitMap(); // center map around plovdiv
+                }
+
+                function actualyInitMap(userPosition = null) {
+                    let centerPosition = userPosition != null ? userPosition : { coords: { latitude: 42.136097, longitude: 24.742168 } };
+                    
+                    let map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 8,
+                        center: { lat: centerPosition.coords.latitude, lng: centerPosition.coords.longitude },
+                        mapTypeId: 'hybrid'
+                    });
+
+                    let iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+
+                   /* let marker = new google.maps.Marker({
+                        position: {lat: 42.136097, lng: 24.742168  },
+                        map: map,
+                        icon: iconBase + 'schools_maps.png',
+                        infoWindow: new google.maps.InfoWindow({
+                            content: "Text"
+                        })
+                    });
+                    marker.addListener('click', function () {
+                        this.infoWindow.open(this.map, this);
+                    });*/
+
+                    // user marker
+                    if (userPosition != null) {
+                        let userMarker = new google.maps.Marker({
+                            position: { lat: userPosition.coords.latitude, lng: userPosition.coords.longitude },
+                            map: map,
+                            icon: iconBase + 'schools_maps.png',
+                            infoWindow: new google.maps.InfoWindow({
+                                content: "You are here"
+                            })
+                        });
+                        userMarker.addListener('click', function () {
+                            this.infoWindow.open(this.map, this);
+                        });
+                    }
+
+                }
+            </script>
+            <!--Load the API from the specified URL
+        * The async attribute allows the browser to render the page while the API loads
+        * The key parameter will contain your own API key (which is not needed for this tutorial)
+        * The callback parameter executes the initMap() function
+        -->
+            <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKBk4NjJerK43vFHvrqtPdG9LW0GR-ORc&callback=initMap">
+            </script>
+        }
+    </div>

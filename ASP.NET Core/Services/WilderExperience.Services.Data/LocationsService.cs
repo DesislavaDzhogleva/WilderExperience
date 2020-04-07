@@ -6,6 +6,7 @@
     using WilderExperience.Data.Common.Repositories;
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Mapping;
+    using WilderExperience.Web.ViewModels.Locations;
 
     public class LocationsService : ILocationsService
     {
@@ -15,6 +16,8 @@
         {
             this.locationRepository = locationRepository;
         }
+
+        
 
         public int GetIdByName(string name)
         {

@@ -1,13 +1,8 @@
 ﻿namespace WilderExperience.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using WilderExperience.Data.Models;
@@ -35,6 +30,7 @@
             var experiencesViewModel = this.experiencesService.GetAllByLocationId<ExperiencesListViewModel>(locationId);
 
             this.ViewData["locationName"] = locationName;
+
             // TODO: If location or experience == null, do something
             return this.View(experiencesViewModel);
         }

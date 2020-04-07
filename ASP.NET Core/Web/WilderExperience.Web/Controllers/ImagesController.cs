@@ -56,9 +56,32 @@ namespace WilderExperience.Web.Controllers
                 return this.View(input);
             }
 
+            // TODO: Image service - get authorId, check if the current user is author
+            var user = await this.userManager.GetUserAsync(this.User);
             int experienceId = await this.imagesService.AddImagesAsync(input.NewImageVM);
 
             return this.Redirect($"/Experiences/Details?Id={experienceId}");
+        }
+
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            // TODO: AUTHOR==USER
+
+            var image = this.imagesService.GetOriginalById((int)id);
+            if (image == null)
+            {
+                return this.NotFound();
+            }
+
+            await this.imagesService.DeleteAsync(image);
+            return this.Redirect($"/Experiences/Details?Id={image.ExperienceId}");
         }
     }
 }
