@@ -1,19 +1,21 @@
 ﻿@{
     ViewData["Title"] = "All";
 }
-
-        <div class="row">
-            <div class="col-12 mt-3">
-                <!--The div element for the map -->
-                <div id="map" class="w-100" style="height:600px;"></div>
-            </div>
+    @section bodyFull
+    {
+    <div class="row">
+        <div class="col-12 mt-3">
+            <!--The div element for the map -->
+            <div id="map" class="w-100" style="height:600px;"></div>
         </div>
+    </div>
+    }
 
 
 
-        @section scripts
+    @section scripts
         {
-            <script>
+        <script>
                 // TODO: sanitize
                 let model = @Html.Raw(Json.Serialize(Model));
                 // Initialize and add the map
@@ -28,7 +30,7 @@
                     }
 
                 }
-                
+
                 function success(userPosition) {
                     console.log('Fetched location successfully. Loading map…');
                     actualyInitMap(userPosition); // center map around user position
@@ -40,7 +42,7 @@
 
                 function actualyInitMap(userPosition = null) {
                     let centerPosition = userPosition != null ? userPosition : { coords: { latitude: 42.136097, longitude: 24.742168 } };
-                    
+
                     let map = new google.maps.Map(document.getElementById('map'), {
                         zoom: 8,
                         center: { lat: centerPosition.coords.latitude, lng: centerPosition.coords.longitude },
@@ -55,7 +57,10 @@
                                 map: map,
                                 icon: iconBase + 'red-stars.png',
                                 infoWindow: new google.maps.InfoWindow({
-                                    content: "<h3 style='padding:0;margin:0;'>"+location.name+"</h3>"
+                                    content: `
+                                    <h3 style='padding:0;margin:0;'>${location.name}</h3>
+                                    <button class='btn btn-primary'>Add Experience</button>
+                                    `
                                 })
                             });
                             marker.addListener('click', function () {
@@ -81,7 +86,7 @@
 
 
                     // add marker to mouse click postiion
-                    google.maps.event.addListener(map, 'click', function (event) {      
+                    google.maps.event.addListener(map, 'click', function (event) {
                         if (window.newMarker != null)
                             window.newMarker.setMap(null);
 
@@ -90,7 +95,17 @@
                             map: map,
                             icon: iconBase + 'grn-circle.png',
                             infoWindow: new google.maps.InfoWindow({
-                                content: "<button>Add Location</button>"
+                                content: `
+                                <form method="post" action="/Locations/Add">
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Password</label>
+                                        <input type="hidden" name="lat" value="${event.latLng.lat()}" />
+                                        <input type="hidden" name="lng" value="${event.latLng.lng()}" />
+                                        <input type="text" class="form-control" id="locationName" name="locationName" placeholder="Location Name">
+                                     </div>
+                                    <input type='submit' class='btn btn-primary' value='Add Location'>
+                                </form>
+                                `
                             })
                         });
                         window.newMarker.infoWindow.open(window.newMarker.map, window.newMarker);
@@ -102,13 +117,13 @@
 
 
                 }
-            </script>
-            <!--Load the API from the specified URL
+        </script>
+        <!--Load the API from the specified URL
         * The async attribute allows the browser to render the page while the API loads
         * The key parameter will contain your own API key (which is not needed for this tutorial)
         * The callback parameter executes the initMap() function
         -->
-            <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKBk4NjJerK43vFHvrqtPdG9LW0GR-ORc&callback=initMap">
-            </script>
-        }
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKBk4NjJerK43vFHvrqtPdG9LW0GR-ORc&callback=initMap">
+        </script>
+    }

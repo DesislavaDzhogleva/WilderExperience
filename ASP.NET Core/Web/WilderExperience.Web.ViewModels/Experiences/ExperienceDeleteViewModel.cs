@@ -1,9 +1,10 @@
 ﻿namespace WilderExperience.Web.ViewModels.Experiences
 {
-    using Ganss.XSS;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
+    using Ganss.XSS;
     using WilderExperience.Data.Models;
     using WilderExperience.Data.Models.Enums;
     using WilderExperience.Services.Mapping;

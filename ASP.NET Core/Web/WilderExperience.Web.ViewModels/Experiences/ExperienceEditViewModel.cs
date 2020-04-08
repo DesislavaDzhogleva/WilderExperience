@@ -6,6 +6,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
 
     using AutoMapper;
+    using Ganss.XSS;
     using Microsoft.AspNetCore.Http;
     using WilderExperience.Data.Models;
     using WilderExperience.Data.Models.Enums;
@@ -23,6 +24,7 @@
 
         [Required]
         public string Description { get; set; }
+
 
         public string Guide { get; set; }
 

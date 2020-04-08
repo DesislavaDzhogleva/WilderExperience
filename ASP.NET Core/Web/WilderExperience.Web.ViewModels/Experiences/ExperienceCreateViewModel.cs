@@ -1,5 +1,6 @@
 ﻿namespace WilderExperience.Web.ViewModels.Experiences
 {
+    using Ganss.XSS;
     using Microsoft.AspNetCore.Http;
     using System;
     using System.Collections.Generic;

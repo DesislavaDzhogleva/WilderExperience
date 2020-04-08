@@ -5,5 +5,6 @@
         City = 1,
         Village = 2,
         Landmark = 3,
+        Wild = 4,
     }
 }

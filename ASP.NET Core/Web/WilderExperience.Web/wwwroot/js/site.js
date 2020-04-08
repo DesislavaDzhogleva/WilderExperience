@@ -35,7 +35,6 @@ $(document).ready(function () {
             form.toggle();
         }
         $.post(form.attr("action"), form.serialize(), function (data) {
-            console.log(data);
             $(data).insertAfter(form);
         });
     });

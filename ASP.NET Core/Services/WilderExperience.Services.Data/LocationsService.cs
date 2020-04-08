@@ -17,8 +17,6 @@
             this.locationRepository = locationRepository;
         }
 
-        
-
         public int GetIdByName(string name)
         {
             var locationId = this.locationRepository.All()

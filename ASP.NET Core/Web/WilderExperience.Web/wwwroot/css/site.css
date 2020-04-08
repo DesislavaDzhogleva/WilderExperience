@@ -58,14 +58,19 @@ body {
 .page-header {
     background-image: url("../img/bg.jpg");
     background-attachment: fixed;
+    height: 600px;
+    min-height: 600px;
 }
+.home .page-header {
+    height:100%;
+    min-height:100vh;
+}
+
 
 .title-brand {
     max-width: initial;
 }
-.page-header-small{
-    height:300px;
-}
+
 .ck-editor__editable_inline {
     min-height: 300px;
     max-height:600px;

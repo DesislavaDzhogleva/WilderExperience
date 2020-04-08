@@ -31,7 +31,16 @@
     </environment>
 
 </head>
-<body>
+
+@{
+    var className = "home";
+    var routeUrl = Url.RouteUrl(ViewContext.RouteData.Values);
+    if (routeUrl != "/")
+    {
+        className = routeUrl.Substring(1).Replace('/', '-').ToLower();
+    }
+}
+<body class="@(className)">
     <nav class="navbar navbar-expand-lg fixed-top navbar-transparent " color-on-scroll="300">
         <div class="container">
             <div class="navbar-translate">
@@ -55,33 +64,13 @@
             </div>
         </div>
     </nav>
-    @*<nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@GlobalConstants.SystemName</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Settings" asp-action="Index">Settings</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>*@
 
-    <div class="page-header section-dark page-header-small">
+    <div class="page-header section-dark">
         <div class="filter"></div>
         <div class="content-center">
             <div class="container">
                 <div class="title-brand">
-                    <h1 class="presentation-title">Next Journey</h1>
+                    <h1 class="presentation-title">Your Journey Awaits</h1>
                 </div>
                 <form>
                     <div class="input-group mb-3">
@@ -96,12 +85,15 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
-            @this.RenderBody()
+            @this.RenderSection("bodyFull", required: false)
+            <div class="container">
+                @this.RenderBody()
+
+            </div>
         </main>
-    </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
