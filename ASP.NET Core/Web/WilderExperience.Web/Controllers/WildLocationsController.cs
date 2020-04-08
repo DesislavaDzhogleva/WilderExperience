@@ -1,7 +1,9 @@
 ﻿namespace WilderExperience.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using WilderExperience.Services.Data;
+    using WilderExperience.Web.ViewModels.WildLocations;
 
     public class WildLocationsController : BaseController
     {
@@ -12,9 +14,11 @@
             this.wildLocationService = wildLocationService;
         }
 
+        [Authorize]
         public IActionResult All()
         {
-            return this.View();
+            var locations = this.wildLocationService.GetAll<WildLocationListViewModel>();
+            return this.View(locations);
         }
     }
 }

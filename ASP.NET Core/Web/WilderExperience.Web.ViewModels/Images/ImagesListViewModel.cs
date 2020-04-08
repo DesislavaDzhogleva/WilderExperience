@@ -14,7 +14,6 @@
 
         public int ExperienceId { get; set; }
 
-
         public string Name { get; set; }
     }
 }

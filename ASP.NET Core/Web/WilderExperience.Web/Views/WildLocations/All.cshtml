@@ -2,11 +2,10 @@
     ViewData["Title"] = "All";
 }
 
-    <div class="container">
         <div class="row">
-            <div class="col-12 pb-3">
+            <div class="col-12 mt-3">
                 <!--The div element for the map -->
-                <div id="map" class="w-100" style="height:400px;"></div>
+                <div id="map" class="w-100" style="height:600px;"></div>
             </div>
         </div>
 
@@ -49,22 +48,25 @@
                     });
 
                     let iconBase = 'http://maps.google.com/mapfiles/kml/paddle/';
-
-                   /* let marker = new google.maps.Marker({
-                        position: {lat: 42.136097, lng: 24.742168  },
-                        map: map,
-                        icon: iconBase + 'schools_maps.png',
-                        infoWindow: new google.maps.InfoWindow({
-                            content: "Text"
-                        })
+                    model.forEach(function (location) {
+                        if (isFinite(location.lat) && isFinite(location.long)) {
+                            let marker = new google.maps.Marker({
+                                position: { lat: parseFloat(location.lat), lng: parseFloat(location.long) },
+                                map: map,
+                                icon: iconBase + 'red-stars.png',
+                                infoWindow: new google.maps.InfoWindow({
+                                    content: "<h3 style='padding:0;margin:0;'>"+location.name+"</h3>"
+                                })
+                            });
+                            marker.addListener('click', function () {
+                                this.infoWindow.open(this.map, this);
+                            });
+                        }
                     });
-                    marker.addListener('click', function () {
-                        this.infoWindow.open(this.map, this);
-                    });*/
 
                     // user marker
                     if (userPosition != null) {
-                        let userMarker = new google.maps.Marker({
+                                    let userMarker = new google.maps.Marker({
                             position: { lat: userPosition.coords.latitude, lng: userPosition.coords.longitude},
                             map: map,
                             icon: iconBase + 'grn-stars.png',
@@ -88,7 +90,7 @@
                             map: map,
                             icon: iconBase + 'grn-circle.png',
                             infoWindow: new google.maps.InfoWindow({
-                                content: "<button>Add Experience</button>"
+                                content: "<button>Add Location</button>"
                             })
                         });
                         window.newMarker.infoWindow.open(window.newMarker.map, window.newMarker);
@@ -110,4 +112,3 @@
                     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKBk4NjJerK43vFHvrqtPdG9LW0GR-ORc&callback=initMap">
             </script>
         }
-    </div>
