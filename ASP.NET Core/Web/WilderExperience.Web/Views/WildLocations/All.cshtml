@@ -8,9 +8,6 @@
                 <!--The div element for the map -->
                 <div id="map" class="w-100" style="height:400px;"></div>
             </div>
-            <div class="col">
-                <a class="btn btn-primary" asp-controller="Destinations" asp-action="Add">Don't see your destination. Add one here <span class="fa fa-arrow-right"></span></a>
-            </div>
         </div>
 
 
@@ -18,6 +15,7 @@
         @section scripts
         {
             <script>
+                // TODO: sanitize
                 let model = @Html.Raw(Json.Serialize(Model));
                 // Initialize and add the map
                 function initMap() {
@@ -50,7 +48,7 @@
                         mapTypeId: 'hybrid'
                     });
 
-                    let iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+                    let iconBase = 'http://maps.google.com/mapfiles/kml/paddle/';
 
                    /* let marker = new google.maps.Marker({
                         position: {lat: 42.136097, lng: 24.742168  },
@@ -67,9 +65,9 @@
                     // user marker
                     if (userPosition != null) {
                         let userMarker = new google.maps.Marker({
-                            position: { lat: userPosition.coords.latitude, lng: userPosition.coords.longitude },
+                            position: { lat: userPosition.coords.latitude, lng: userPosition.coords.longitude},
                             map: map,
-                            icon: iconBase + 'schools_maps.png',
+                            icon: iconBase + 'grn-stars.png',
                             infoWindow: new google.maps.InfoWindow({
                                 content: "You are here"
                             })
@@ -78,6 +76,28 @@
                             this.infoWindow.open(this.map, this);
                         });
                     }
+
+
+                    // add marker to mouse click postiion
+                    google.maps.event.addListener(map, 'click', function (event) {      
+                        if (window.newMarker != null)
+                            window.newMarker.setMap(null);
+
+                        window.newMarker = new google.maps.Marker({
+                            position: { lat: event.latLng.lat(), lng: event.latLng.lng()},
+                            map: map,
+                            icon: iconBase + 'grn-circle.png',
+                            infoWindow: new google.maps.InfoWindow({
+                                content: "<button>Add Experience</button>"
+                            })
+                        });
+                        window.newMarker.infoWindow.open(window.newMarker.map, window.newMarker);
+                        /*newMarker.addListener('click', function () {
+                            this.infoWindow.open(this.map, this);
+                        });*/
+                    });
+
+
 
                 }
             </script>
