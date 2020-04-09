@@ -4,7 +4,7 @@
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Mapping;
 
-    public class WildLocationListViewModel : IMapFrom<WildLocation>
+    public class WildLocationListViewModel : IMapFrom<Location>
     {
         [Required]
         public string Name { get; set; }
@@ -13,6 +13,6 @@
         public string Lat { get; set; }
 
         [Required]
-        public string Long { get; set; }
+        public string Lng { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using WilderExperience.Data.Common.Repositories;
 using WilderExperience.Data.Models;
@@ -9,31 +10,33 @@ namespace WilderExperience.Services.Data
 {
     public class WildLocationService : IWildLocationService
     {
-        private readonly IDeletableEntityRepository<WildLocation> wildLocationRepository;
+        private readonly IDeletableEntityRepository<Location> locationRepository;
 
-        public WildLocationService(IDeletableEntityRepository<WildLocation> wildLocationRepository)
+        public WildLocationService(IDeletableEntityRepository<Location> locationRepository)
         {
-            this.wildLocationRepository = wildLocationRepository;
+            this.locationRepository = locationRepository;
         }
 
         public async Task<int> AddAsync(WildLocationCreateViewModel input)
         {
-            var destination = new WildLocation()
+            var destination = new Location()
             {
                 Name = input.Name,
                 Lat = input.Lat,
-                Long = input.Lon,
+                Lng = input.Lng,
+                Type = WilderExperience.Data.Models.Enums.Type.Wild,
             };
 
-            await this.wildLocationRepository.AddAsync(destination);
-            await this.wildLocationRepository.SaveChangesAsync();
+            await this.locationRepository.AddAsync(destination);
+            await this.locationRepository.SaveChangesAsync();
 
             return destination.Id;
         }
 
         public IEnumerable<T> GetAll<T>()
         {
-            var locations = this.wildLocationRepository.All()
+            var locations = this.locationRepository.All()
+                .Where(x => x.Type == WilderExperience.Data.Models.Enums.Type.Wild)
                 .To<T>();
 
             return locations;

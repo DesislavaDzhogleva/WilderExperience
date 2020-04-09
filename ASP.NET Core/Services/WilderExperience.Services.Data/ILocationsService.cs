@@ -1,5 +1,6 @@
 ﻿namespace WilderExperience.Services.Data
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using WilderExperience.Web.ViewModels.Locations;

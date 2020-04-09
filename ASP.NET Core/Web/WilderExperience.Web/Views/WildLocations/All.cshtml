@@ -51,9 +51,9 @@
 
                     let iconBase = 'http://maps.google.com/mapfiles/kml/paddle/';
                     model.forEach(function (location) {
-                        if (isFinite(location.lat) && isFinite(location.long)) {
+                        if (isFinite(location.lat) && isFinite(location.lng)) {
                             let marker = new google.maps.Marker({
-                                position: { lat: parseFloat(location.lat), lng: parseFloat(location.long) },
+                                position: { lat: parseFloat(location.lat), lng: parseFloat(location.lng) },
                                 map: map,
                                 icon: iconBase + 'red-stars.png',
                                 infoWindow: new google.maps.InfoWindow({
@@ -79,9 +79,11 @@
                                 content: "You are here"
                             })
                         });
-                        userMarker.addListener('click', function () {
+                        
+                        userMarker.infoWindow.open(userMarker.map, userMarker);
+                        /*userMarker.addListener('click', function () {
                             this.infoWindow.open(this.map, this);
-                        });
+                        });*/
                     }
 
 
@@ -96,12 +98,11 @@
                             icon: iconBase + 'grn-circle.png',
                             infoWindow: new google.maps.InfoWindow({
                                 content: `
-                                <form method="post" action="/Locations/Add">
+                                <form method="post" action="/WildLocations/Add">
                                     <div class="form-group">
-                                        <label for="exampleInputPassword1">Password</label>
-                                        <input type="hidden" name="lat" value="${event.latLng.lat()}" />
-                                        <input type="hidden" name="lng" value="${event.latLng.lng()}" />
-                                        <input type="text" class="form-control" id="locationName" name="locationName" placeholder="Location Name">
+                                        <input type="hidden" name="Lat" value="${event.latLng.lat()}" />
+                                        <input type="hidden" name="Lng" value="${event.latLng.lng()}" />
+                                        <input type="text" class="form-control" id="locationName" name="Name" placeholder="Location Name">
                                      </div>
                                     <input type='submit' class='btn btn-primary' value='Add Location'>
                                 </form>

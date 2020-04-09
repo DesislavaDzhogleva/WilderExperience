@@ -14,6 +14,6 @@
         public string Lat { get; set; }
 
         [Required]
-        public string Lon { get; set; }
+        public string Lng { get; set; }
     }
 }

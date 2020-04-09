@@ -2,7 +2,9 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
     using WilderExperience.Services.Data;
+    using WilderExperience.Web.ViewModels.Locations;
     using WilderExperience.Web.ViewModels.WildLocations;
 
     public class WildLocationsController : BaseController
@@ -19,6 +21,14 @@
         {
             var locations = this.wildLocationService.GetAll<WildLocationListViewModel>();
             return this.View(locations);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Add(WildLocationCreateViewModel input)
+        {
+            await this.wildLocationService.AddAsync(input);
+            return this.Redirect("All");
         }
     }
 }

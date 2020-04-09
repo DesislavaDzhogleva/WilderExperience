@@ -115,7 +115,6 @@
                     if (this.userManager.Options.SignIn.RequireConfirmedEmail)
                     {
                         return this.LocalRedirect(returnUrl);
-                        //return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email });
                     }
                     else
                     {
