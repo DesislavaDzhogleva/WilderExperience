@@ -11,13 +11,13 @@
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
     using WilderExperience.Common;
     using WilderExperience.Data.Models;
+    using WilderExperience.Services.Messaging;
 
     [AllowAnonymous]
     public class RegisterModel : PageModel
@@ -55,12 +55,12 @@
 
             [Required]
             [Display(Name = "First Name")]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
             public string FirstName { get; set; }
 
             [Required]
             [Display(Name = "Last Name")]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
             public string LastName { get; set; }
 
             // TODO: validation of username - only string
@@ -108,13 +108,14 @@
                         pageHandler: null,
                         values: new { area = "Identity", userId = user.Id, code = code },
                         protocol: this.Request.Scheme);
-
-                    await this.emailSender.SendEmailAsync(this.Input.Email, "Confirm your email",
+                    await this.emailSender.SendEmailAsync("support@wilderexperience.com", "Support", this.Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    if (this.userManager.Options.SignIn.RequireConfirmedAccount)
+
+                    if (this.userManager.Options.SignIn.RequireConfirmedEmail)
                     {
-                        return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email });
+                        return this.LocalRedirect(returnUrl);
+                        //return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email });
                     }
                     else
                     {

@@ -49,7 +49,7 @@
             // TODO: login with email
             [Required]
             [Display(Name = "Username")]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             public string Username { get; set; }
 
             [Required]
@@ -91,13 +91,16 @@
                     this.logger.LogInformation("User logged in.");
                     return this.LocalRedirect(returnUrl);
                 }
+                else
+                {
+                    this.ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                    return this.Page();
+                }
 
                 if (result.RequiresTwoFactor)
                 {
                     return this.RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = this.Input.RememberMe });
                 }
-
-                
 
                 if (result.IsLockedOut)
                 {

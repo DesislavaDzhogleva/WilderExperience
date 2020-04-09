@@ -12,9 +12,9 @@
     {
         private readonly SendGridClient client;
 
-        public SendGridEmailSender(string apiKey)
+        public SendGridEmailSender()
         {
-            this.client = new SendGridClient(apiKey);
+            this.client = new SendGridClient("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");
         }
 
         public async Task SendEmailAsync(string from, string fromName, string to, string subject, string htmlContent, IEnumerable<EmailAttachment> attachments = null)
