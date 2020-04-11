@@ -47,11 +47,6 @@
                 <select asp-for="LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
                 <span asp-validation-for="LocationId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="WildLocationId" class="control-label"></label>
-                <select asp-for="WildLocationId" class="form-control" asp-items="ViewBag.WildLocationId"></select>
-                <span asp-validation-for="WildLocationId" class="text-danger"></span>
-            </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)

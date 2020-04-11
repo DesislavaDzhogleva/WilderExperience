@@ -18,6 +18,15 @@
             this.locationRepository = locationRepository;
         }
 
+        public IEnumerable<T> Search<T>(string name)
+        {
+            var locations = this.locationRepository.All()
+                .Where(x => x.Name.Contains(name))
+                .To<T>();
+
+            return locations;
+        }
+
         public int GetIdByName(string name)
         {
             var locationId = this.locationRepository.All()

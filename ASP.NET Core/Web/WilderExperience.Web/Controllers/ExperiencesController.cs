@@ -26,18 +26,33 @@
 
         public IActionResult List(string locationName)
         {
+            if (string.IsNullOrEmpty(locationName) || string.IsNullOrWhiteSpace(locationName))
+            {
+                return this.NotFound();
+            }
+
             var locationId = this.locationService.GetIdByName(locationName);
+
+            if (locationId == 0)
+            {
+                return this.NotFound();
+            }
+
             var experiencesViewModel = this.experiencesService.GetAllByLocationId<ExperiencesListViewModel>(locationId);
 
             this.ViewData["locationName"] = locationName;
 
-            // TODO: If location or experience == null, do something
             return this.View(experiencesViewModel);
         }
 
         [Authorize]
         public IActionResult Create(string locationName)
         {
+            if (string.IsNullOrEmpty(locationName) || string.IsNullOrWhiteSpace(locationName))
+            {
+                return this.NotFound();
+            }
+
             this.ViewData["locationName"] = locationName;
             return this.View();
         }

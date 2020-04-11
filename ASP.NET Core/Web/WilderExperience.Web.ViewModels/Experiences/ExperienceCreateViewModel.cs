@@ -1,11 +1,11 @@
 ﻿namespace WilderExperience.Web.ViewModels.Experiences
 {
-    using Ganss.XSS;
-    using Microsoft.AspNetCore.Http;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+
+    using Ganss.XSS;
+    using Microsoft.AspNetCore.Http;
     using WilderExperience.Data.Models;
     using WilderExperience.Data.Models.Enums;
     using WilderExperience.Services.Mapping;
@@ -13,12 +13,16 @@
 
     public class ExperienceCreateViewModel : IMapFrom<Experience>
     {
+        [Required]
         public int Id { get; set; }
 
         [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string Title { get; set; }
 
         [Required]
+        [MinLength(20)]
         public string Description { get; set; }
 
         public string Guide { get; set; }
@@ -26,11 +30,12 @@
         [NotMapped]
         public string LocationName { get; set; }
 
+        [Required]
         public Intensity Intensity { get; set; }
 
-        public DateTime DateOfVisit { get; set; }
+        [Display(Name = "Date of visit")]
+        public DateTime? DateOfVisit { get; set; }
 
         public ImagesAddViewModel Images { get; set; }
-
     }
 }

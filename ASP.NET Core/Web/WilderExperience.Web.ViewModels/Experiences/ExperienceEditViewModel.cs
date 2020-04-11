@@ -20,16 +20,18 @@
         public string AuthorId { get; set; }
 
         [Required]
+        [MinLength(5)]
+        [MaxLength(30)]
         public string Title { get; set; }
 
         [Required]
+        [MinLength(20)]
         public string Description { get; set; }
-
 
         public string Guide { get; set; }
 
         public Intensity Intensity { get; set; }
 
-        public DateTime DateOfVisit { get; set; }
+        public DateTime? DateOfVisit { get; set; }
     }
 }

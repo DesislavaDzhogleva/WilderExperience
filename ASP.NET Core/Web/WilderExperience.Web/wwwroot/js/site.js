@@ -39,5 +39,23 @@ $(document).ready(function () {
         });
     });
 
+
+    $('.location-search').select2({
+        ajax: {
+            url: '/Locations/Search',
+            dataType: 'json',
+            minimumInputLength: 3,
+            processResults: function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    data[i].text = data[i].name;
+                }
+                console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data
+                };
+            }
+        }
+    });
 });
 

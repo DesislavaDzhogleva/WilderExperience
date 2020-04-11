@@ -1,12 +1,13 @@
-﻿using AutoMapper;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using WilderExperience.Data.Models;
-using WilderExperience.Services.Mapping;
-
-namespace WilderExperience.Web.ViewModels.Experiences
+﻿namespace WilderExperience.Web.ViewModels.Experiences
 {
+    using System.Linq;
+    using System.Net;
+    using System.Text.RegularExpressions;
+
+    using AutoMapper;
+    using WilderExperience.Data.Models;
+    using WilderExperience.Services.Mapping;
+
     public class ExperiencesListViewModel : IMapFrom<Experience>, IHaveCustomMappings
     {
         public int Id { get; set; }

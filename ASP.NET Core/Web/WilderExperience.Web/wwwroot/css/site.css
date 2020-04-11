@@ -220,3 +220,16 @@ body {
         column-count: 3;
     }
 }
+
+.select2-selection__rendered {
+    line-height: 45px !important;
+}
+
+.select2-container .select2-selection--single {
+    height: 49px !important;
+}
+
+.select2-selection__arrow {
+    height: 48px !important;
+    visibility:hidden;
+}

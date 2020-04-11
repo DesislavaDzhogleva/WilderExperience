@@ -11,5 +11,7 @@
 
         string GetNameById(int? id);
 
+        IEnumerable<T> Search<T>(string name);
+
     }
 }

@@ -28,8 +28,6 @@
 
         public DbSet<Location> Locations { get; set; }
 
-        public DbSet<WildLocation> WildLocations { get; set; }
-
         public DbSet<Experience> Experiences { get; set; }
 
         public DbSet<Rating> Ratings { get; set; }

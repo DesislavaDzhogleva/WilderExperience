@@ -14,8 +14,8 @@
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            await this.SeedCitiesAsync(dbContext);
-            await this.SeedVillagesAsync(dbContext);
+            //await this.SeedCitiesAsync(dbContext);
+            //await this.SeedVillagesAsync(dbContext);
             //await this.SeedLandmarksAsync(dbContext);
         }
 
@@ -34,7 +34,7 @@
                     var line = streamReader.ReadLine();
                     var data = line.Split(new[] { ',' });
                     data[1] = ConvertCyrlicToLatin.Convert(data[1]);
-                    var location = new Location() 
+                    var location = new Location()
                     {
                         Name = data[1],
                         Country = "Bulgaria",

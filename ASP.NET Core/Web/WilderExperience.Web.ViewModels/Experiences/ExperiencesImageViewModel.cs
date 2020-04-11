@@ -7,13 +7,14 @@
 
     public class ExperiencesImageViewModel : IMapFrom<ExperienceImage>
     {
-
         [Required]
         public int ExperienceId { get; set; }
 
         public virtual Experience Experience { get; set; }
 
         [Required]
+        [MinLength(3)]
+        [MaxLength(30)]
         public string Name { get; set; }
     }
 }

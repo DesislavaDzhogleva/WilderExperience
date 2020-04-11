@@ -35,7 +35,6 @@
             input.UserId = user.Id;
             var commentId = await this.commentsService.AddComment(input);
 
-
             return this.PartialView("_CommentPartial", this.commentsService.GetById<CommentViewModel>(commentId));
         }
     }

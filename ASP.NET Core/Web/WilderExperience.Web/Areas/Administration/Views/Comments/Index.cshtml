@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WilderExperience.Data.Models.Experience>
+﻿@model IEnumerable<WilderExperience.Data.Models.Comment>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,25 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Experience)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Content)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Guide)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Intensity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfVisit)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
+                @Html.DisplayNameFor(model => model.ParentId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsDeleted)
@@ -52,25 +43,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Author.Id)
+                @Html.DisplayFor(modelItem => item.User.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.Experience.AuthorId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.Content)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Guide)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Intensity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfVisit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.Name)
+                @Html.DisplayFor(modelItem => item.ParentId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsDeleted)

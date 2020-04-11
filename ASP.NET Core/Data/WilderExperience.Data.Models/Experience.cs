@@ -21,6 +21,7 @@
         public ApplicationUser Author { get; set; }
 
         [Required]
+        [StringLength(60, MinimumLength = 3)]
         public string Title { get; set; }
 
         [Required]
@@ -28,17 +29,15 @@
 
         public string Guide { get; set; }
 
+        [Required]
         public Intensity Intensity { get; set; }
 
-        public DateTime DateOfVisit { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? DateOfVisit { get; set; }
 
-        public int? LocationId { get; set; }
+        public int LocationId { get; set; }
 
         public virtual Location Location { get; set; }
-
-        public int? WildLocationId { get; set; }
-
-        public virtual WildLocation WildLocation { get; set; }
 
         public ICollection<ExperienceImage> Images { get; set; }
 

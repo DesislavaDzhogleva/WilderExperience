@@ -22,7 +22,7 @@
 
 
     <link rel="stylesheet" href="~/lib/lightgallery/css/lightgallery.css">
-
+    <link href="~/lib/select2/select2.min.css" rel="stylesheet" />
     <environment names="Development">
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
@@ -70,16 +70,20 @@
         <div class="content-center">
             <div class="container">
                 <div class="title-brand">
+
+
                     <h1 class="presentation-title">Your Journey Awaits</h1>
                 </div>
                 <form>
                     <div class="input-group mb-3">
-                        <input type="text" name="locationName" class="form-control form-control-lg" placeholder="Enter city, village or landmark...">
+
+                        <select name="locationId" class="location-search form-control form-control-lg h-100" placeholder="Enter city, village or landmark..."></select>
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-outline-default  btn-lg" asp-controller="Experiences" asp-action="List">
                                 <span class="fas fa-search pr-2"></span>Search
                             </button>
                         </div>
+
 
                     </div>
                 </form>
@@ -87,15 +91,15 @@
             </div>
         </div>
     </div>
-    
-        <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
-            @this.RenderSection("bodyFull", required: false)
-            <div class="container">
-                @this.RenderBody()
 
-            </div>
-        </main>
+    <partial name="_CookieConsentPartial" />
+    <main role="main" class="pb-3">
+        @this.RenderSection("bodyFull", required: false)
+        <div class="container">
+            @this.RenderBody()
+
+        </div>
+    </main>
 
     <footer class="border-top footer text-muted">
         <div class="container">
@@ -129,7 +133,7 @@
     <script src="~/lib/lightgallery/js/lightgallery-all.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
-
+    <script src="~/lib/select2/select2.min.js"></script>
     <environment names="Development">
         @*<script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
             <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>

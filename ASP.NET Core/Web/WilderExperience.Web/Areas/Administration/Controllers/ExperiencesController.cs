@@ -27,7 +27,7 @@
         // GET: Administration/Experiences
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = this.context.Experiences.Include(e => e.Author).Include(e => e.Location).Include(e => e.WildLocation);
+            var applicationDbContext = this.context.Experiences.Include(e => e.Author).Include(e => e.Location);/*.Include(e => e.Location);*/
             return this.View(await applicationDbContext.ToListAsync());
         }
 
@@ -42,7 +42,6 @@
             var experience = await this.context.Experiences
                 .Include(e => e.Author)
                 .Include(e => e.Location)
-                .Include(e => e.WildLocation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (experience == null)
             {
@@ -57,7 +56,7 @@
         {
             this.ViewData["AuthorId"] = new SelectList(this.context.Users, "Id", "Id");
             this.ViewData["LocationId"] = new SelectList(this.context.Locations, "Id", "Name");
-            this.ViewData["WildLocationId"] = new SelectList(this.context.WildLocations, "Id", "Id");
+            //this.ViewData["WildLocationId"] = new SelectList(this.context.WildLocations, "Id", "Id");
             return this.View();
         }
 
@@ -77,7 +76,7 @@
 
             this.ViewData["AuthorId"] = new SelectList(this.context.Users, "Id", "Id", experience.AuthorId);
             this.ViewData["LocationId"] = new SelectList(this.context.Locations, "Id", "Name", experience.LocationId);
-            this.ViewData["WildLocationId"] = new SelectList(this.context.WildLocations, "Id", "Id", experience.WildLocationId);
+            //this.ViewData["WildLocationId"] = new SelectList(this.context.WildLocations, "Id", "Id", experience.WildLocationId);
             return this.View(experience);
         }
 
@@ -97,7 +96,7 @@
 
             this.ViewData["AuthorId"] = new SelectList(this.context.Users, "Id", "Id", experience.AuthorId);
             this.ViewData["LocationId"] = new SelectList(this.context.Locations, "Id", "Name", experience.LocationId);
-            this.ViewData["WildLocationId"] = new SelectList(this.context.WildLocations, "Id", "Id", experience.WildLocationId);
+            //this.ViewData["WildLocationId"] = new SelectList(this.context.WildLocations, "Id", "Id", experience.WildLocationId);
             return this.View(experience);
         }
 
@@ -137,7 +136,7 @@
 
             this.ViewData["AuthorId"] = new SelectList(this.context.Users, "Id", "Id", experience.AuthorId);
             this.ViewData["LocationId"] = new SelectList(this.context.Locations, "Id", "Name", experience.LocationId);
-            this.ViewData["WildLocationId"] = new SelectList(this.context.WildLocations, "Id", "Id", experience.WildLocationId);
+            //this.ViewData["WildLocationId"] = new SelectList(this.context.WildLocations, "Id", "Id", experience.WildLocationId);
             return this.View(experience);
         }
 
@@ -152,7 +151,7 @@
             var experience = await this.context.Experiences
                 .Include(e => e.Author)
                 .Include(e => e.Location)
-                .Include(e => e.WildLocation)
+                //.Include(e => e.WildLocation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (experience == null)
             {
