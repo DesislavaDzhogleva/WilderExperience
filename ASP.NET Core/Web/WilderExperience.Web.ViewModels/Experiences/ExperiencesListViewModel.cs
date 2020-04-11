@@ -1,5 +1,6 @@
 ﻿namespace WilderExperience.Web.ViewModels.Experiences
 {
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using System.Net;
     using System.Text.RegularExpressions;
@@ -26,6 +27,9 @@
                     : content;
             }
         }
+
+        [NotMapped]
+        public string LocationName { get; set; }
 
         public ExperienceImage Image { get; set; }
 

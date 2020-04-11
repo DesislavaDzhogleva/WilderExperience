@@ -27,8 +27,7 @@
 
         public string Guide { get; set; }
 
-        [NotMapped]
-        public string LocationName { get; set; }
+        public int LocationId { get; set; }
 
         [Required]
         public Intensity Intensity { get; set; }

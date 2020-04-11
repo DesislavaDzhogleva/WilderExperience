@@ -1,10 +1,10 @@
-﻿@model IEnumerable<WilderExperience.Web.ViewModels.Experiences.ExperiencesListViewModel>
+﻿@model WilderExperience.Web.ViewModels.Experiences.ExperiencesEnumerableViewModel
 
 @{
     ViewData["Title"] = "List";
 }
 
-@if (Model.Any() == false)
+@if (Model.List.Any() == false)
 {
     <div>
         <h1 class="title">No Experiences For This Location Yet!</h1>
@@ -14,8 +14,10 @@ else
 {
     <div class="container">
         <div class="row">
-
-            @foreach (var item in Model)
+            <h1 class="title fancy-title w-100 text-center">@this.ViewData["locationName"]</h1>
+        </div>
+        <div class="row">
+            @foreach (var item in Model.List)
             {
                 <div class="col-md-6 experience-list">
                     <div class="card card-blog text-center">
@@ -53,4 +55,4 @@ else
     </div>
 }
 
-<a class="btn btn-primary" asp-action="Create" asp-route-locationName="@this.ViewData["locationName"]">Add Experience</a>
+<a class="btn btn-primary" asp-action="Create" asp-route-locationId="@Model.LocationId">Add Experience</a>

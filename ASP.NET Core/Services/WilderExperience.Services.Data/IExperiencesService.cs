@@ -9,7 +9,7 @@
     {
         IEnumerable<T> GetAllByLocationId<T>(int locationId);
 
-        Task<int> CreateAsync(ExperienceCreateViewModel input, string userId, int locationId);
+        Task<int> CreateAsync(ExperienceCreateViewModel input, string userId);
 
         T GetById<T>(int id);
 

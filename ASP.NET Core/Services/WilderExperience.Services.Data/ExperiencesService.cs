@@ -17,7 +17,7 @@ namespace WilderExperience.Services.Data
             this.experienceRepository = experienceRepository;
         }
 
-        public async Task<int> CreateAsync(ExperienceCreateViewModel input, string userId, int locationId)
+        public async Task<int> CreateAsync(ExperienceCreateViewModel input, string userId)
         {
             var experience = new Experience()
             {
@@ -27,7 +27,7 @@ namespace WilderExperience.Services.Data
                 Guide = input.Guide,
                 Intensity = input.Intensity,
                 DateOfVisit = input.DateOfVisit,
-                LocationId = locationId,
+                LocationId = input.LocationId,
             };
 
             //foreach (var file in fileNames)

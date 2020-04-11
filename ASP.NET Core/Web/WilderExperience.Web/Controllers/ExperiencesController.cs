@@ -24,36 +24,36 @@
             this.userManager = userManager;
         }
 
-        public IActionResult List(string locationName)
+        public IActionResult List(int locationId)
         {
-            if (string.IsNullOrEmpty(locationName) || string.IsNullOrWhiteSpace(locationName))
-            {
-                return this.NotFound();
-            }
-
-            var locationId = this.locationService.GetIdByName(locationName);
-
             if (locationId == 0)
             {
                 return this.NotFound();
             }
 
             var experiencesViewModel = this.experiencesService.GetAllByLocationId<ExperiencesListViewModel>(locationId);
+            var experienceList = new ExperiencesEnumerableViewModel
+            {
+                List = experiencesViewModel,
+                LocationId = locationId,
+            };
+
+            var locationName = this.locationService.GetNameById(locationId);
 
             this.ViewData["locationName"] = locationName;
 
-            return this.View(experiencesViewModel);
+            return this.View(experienceList);
         }
 
         [Authorize]
-        public IActionResult Create(string locationName)
+        public IActionResult Create(int locationId)
         {
-            if (string.IsNullOrEmpty(locationName) || string.IsNullOrWhiteSpace(locationName))
+            if (locationId == 0)
             {
                 return this.NotFound();
             }
 
-            this.ViewData["locationName"] = locationName;
+            this.ViewData["locationId"] = locationId;
             return this.View();
         }
 
@@ -68,13 +68,12 @@
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            var locationId = this.locationService.GetIdByName(input.LocationName);
 
-            var experienceId = await this.experiencesService.CreateAsync(input, user.Id, locationId);
+            var experienceId = await this.experiencesService.CreateAsync(input, user.Id);
             input.Images.ExperienceId = experienceId;
             await this.imagesService.AddImagesAsync(input.Images);
 
-            return this.Redirect($"/Experiences/List?locationName={input.LocationName}");
+            return this.Redirect($"/Experiences/List?locationId={input.LocationId}");
         }
 
         [Authorize]
@@ -92,8 +91,6 @@
                 return this.NotFound();
             }
 
-            var locationName = this.locationService.GetNameById(experienceViewModel.LocationId);
-            this.ViewData["locationName"] = locationName;
             return this.View(experienceViewModel);
         }
 
