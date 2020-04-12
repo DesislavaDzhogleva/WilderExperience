@@ -93,7 +93,14 @@
                 }
                 else
                 {
-                    this.ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                    if (result.IsNotAllowed == true)
+                    {
+                        this.ModelState.AddModelError(string.Empty, "Email is not confirmed!");
+                    }
+                    else
+                    {
+                        this.ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                    }
                     return this.Page();
                 }
 

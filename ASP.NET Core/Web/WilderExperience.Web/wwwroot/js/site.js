@@ -41,6 +41,8 @@ $(document).ready(function () {
 
 
     $('.location-search').select2({
+        width: 'resolve', // need to override the changed default
+        height: 'resolve',
         ajax: {
             url: '/Locations/Search',
             dataType: 'json',
