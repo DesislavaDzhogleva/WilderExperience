@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WilderExperience.Data.Common.Repositories;
-using WilderExperience.Data.Models;
-using WilderExperience.Services.Mapping;
-using WilderExperience.Web.ViewModels.Experiences;
-
-namespace WilderExperience.Services.Data
+﻿namespace WilderExperience.Services.Data
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using WilderExperience.Data.Common.Repositories;
+    using WilderExperience.Data.Models;
+    using WilderExperience.Services.Mapping;
+    using WilderExperience.Web.ViewModels.Experiences;
+
     public class ExperiencesService : IExperiencesService
     {
         private readonly IDeletableEntityRepository<Experience> experienceRepository;
@@ -78,6 +79,15 @@ namespace WilderExperience.Services.Data
         {
             var experiences = this.experienceRepository.All()
                 .Where(x => x.LocationId == locationId)
+                .To<T>();
+
+            return experiences;
+        }
+
+        public IEnumerable<T> GetAllForCurrentUser<T>(string userId)
+        {
+            var experiences = this.experienceRepository.All()
+                .Where(x => x.AuthorId == userId)
                 .To<T>();
 
             return experiences;

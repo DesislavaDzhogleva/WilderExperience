@@ -1,0 +1,15 @@
+﻿@using WilderExperience.Data.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    ViewData["Title"] = "_NavPartial";
+}
+
+    <ul class="navbar-nav">
+        @if (this.SignInManager.IsSignedIn(this.User))
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Experiences" asp-action="MyExperiences">My Experiences</a>
+            </li>
+        }
+    </ul>

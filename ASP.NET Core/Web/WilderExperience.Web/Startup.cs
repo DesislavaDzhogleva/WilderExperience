@@ -59,6 +59,7 @@
 
             // Application services
             services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<ILocationsService, LocationsService>();
             services.AddTransient<IWildLocationService, WildLocationService>();

@@ -55,9 +55,11 @@
             </div>
             <div class="collapse navbar-collapse justify-content-end" id="navigation">
                 <ul class="navbar-nav">
+
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
+                    <partial name="_NavPartial" />
                     <partial name="_LoginPartial" />
 
                 </ul>
@@ -74,12 +76,12 @@
 
                     <h1 class="presentation-title">Your Journey Awaits</h1>
                 </div>
-                <form>
+                <form asp-area="" asp-controller="Experiences" asp-action="List">
                     <div class="input-group mb-3">
 
                         <select name="locationId" class="location-search form-control form-control-lg h-100" placeholder="Enter city, village or landmark..."></select>
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-outline-default  btn-lg" asp-controller="Experiences" asp-action="List">
+                            <button type="submit" class="btn btn-outline-default  btn-lg">
                                 <span class="fas fa-search pr-2"></span>Search
                             </button>
                         </div>

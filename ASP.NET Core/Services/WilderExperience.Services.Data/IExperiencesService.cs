@@ -18,5 +18,8 @@
         Task<int> EditAsync(ExperienceEditViewModel input);
 
         Task DeleteAsync(Experience input);
+
+        IEnumerable<T> GetAllForCurrentUser<T>(string userId);
+
     }
 }

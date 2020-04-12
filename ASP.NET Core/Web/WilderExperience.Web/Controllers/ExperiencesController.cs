@@ -5,9 +5,11 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using WilderExperience.Common;
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Data;
     using WilderExperience.Web.ViewModels.Experiences;
+    using WilderExperience.Web.ViewModels.Shared;
 
     public class ExperiencesController : BaseController
     {
@@ -22,6 +24,14 @@
             this.experiencesService = experiencesService;
             this.imagesService = imagesService;
             this.userManager = userManager;
+        }
+
+        [Authorize]
+        public IActionResult MyExperiences()
+        {
+            var user = this.userManager.GetUserAsync(this.User);
+            var experiences = this.experiencesService.GetAllForCurrentUser<ExperienceViewModel>(user.Result.Id);
+            return this.View(experiences);
         }
 
         public IActionResult List(int locationId)
@@ -76,6 +86,8 @@
             return this.Redirect($"/Experiences/List?locationId={input.LocationId}");
         }
 
+       
+
         [Authorize]
         public IActionResult Details(int id)
         {
@@ -109,12 +121,13 @@
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            if (experience.AuthorId != user.Id)
+            var role = this.userManager.GetRolesAsync(user);
+            if (experience.AuthorId == user.Id)
             {
-                return this.Unauthorized();
+                return this.View(experience);
             }
 
-            return this.View(experience);
+            return this.Unauthorized();
         }
 
         [HttpPost]
