@@ -30,12 +30,15 @@ $(document).ready(function () {
     $(document).on("click", ".ajax-submit-btn", function (evt) {
         evt.preventDefault();
         let form = $(this).closest("form");
-
+        
         if ($(this).hasClass("ajax-submit-btn-collapsable")) {
             form.toggle();
         }
         $.post(form.attr("action"), form.serialize(), function (data) {
             $(data).insertAfter(form);
+        });
+        $(form).find("textarea").each(function () {
+            $(this).val('');
         });
     });
 

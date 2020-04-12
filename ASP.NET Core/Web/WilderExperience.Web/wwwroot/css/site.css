@@ -237,3 +237,6 @@ body {
     height: 48px !important;
     visibility:hidden;
 }
+.select2-container{
+    width:86% !important;
+}
