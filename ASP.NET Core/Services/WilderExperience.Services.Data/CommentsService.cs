@@ -17,6 +17,21 @@
             this.commentsRepository = commentsRepository;
         }
 
+        public Comment GetOriginalById(int id)
+        {
+            var post = this.commentsRepository.All()
+                .Where(x => x.Id == id)
+                .FirstOrDefault();
+
+            return post;
+        }
+
+        public async Task DeleteAsync(Comment input)
+        {
+            this.commentsRepository.Delete(input);
+            await this.commentsRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<T> GetAll<T>(int experienceId)
         {
             var comments = this.commentsRepository.All()

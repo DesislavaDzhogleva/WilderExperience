@@ -28,9 +28,38 @@
                 <div class="media-body">
                     <h5 class="mt-0">@comment.AuthorUsername</h5>
                     <div class="pull-right">
-                        <h6 class="text-muted">@comment.CreatedOn</h6>
+                        <h6 class="text-muted text-right">@comment.CreatedOn</h6>
                         <button class="btn btn-info btn-link pull-right " data-toggle="collapse" data-target="#collapseExample@(comment.Id)" aria-expanded="false" aria-controls="collapseExample@(comment.Id)"> <i class="fa fa-reply"></i> Reply</button>
+                        @if (this.User.Identity.Name == comment.AuthorUsername || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
+                        {
+                            <button type="button" class="btn btn-danger btn-link pull-right " data-toggle="modal" data-target="#deleteModal">
+                                &times; Delete
+                            </button>
 
+                            <!-- Modal -->
+                            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title position-fixed" id="deleteModalLabel">Delete Comment</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete your comment
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <form asp-controller="Comments" asp-action="Delete" method="post">
+                                                <input type="hidden" name="id" value="@comment.Id" />
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                     <p class="overflow-hidden wrap-fix">@comment.Content</p>
 
