@@ -123,8 +123,6 @@ body {
 }
 
 
-
-
 /* Masonry grid */
 .masonry {
     transition: all .5s ease-in-out;
@@ -239,4 +237,8 @@ body {
 }
 .select2-container{
     width:86% !important;
+}
+
+#deleteUserModalLabel{
+    position:fixed;
 }

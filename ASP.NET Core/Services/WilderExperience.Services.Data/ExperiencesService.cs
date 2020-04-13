@@ -31,14 +31,6 @@
                 LocationId = input.LocationId,
             };
 
-            //foreach (var file in fileNames)
-            //{
-            //    experience.Images.Add(new ExperienceImage
-            //    {
-            //        Name = file,
-            //    });
-            //}
-
             await this.experienceRepository.AddAsync(experience);
             await this.experienceRepository.SaveChangesAsync();
 
@@ -101,6 +93,15 @@
                 .FirstOrDefault();
 
             return post;
+        }
+
+        public IEnumerable<Experience> GetAllByUserId(string id)
+        {
+            var experiences = this.experienceRepository.All()
+                .Where(x => x.AuthorId == id)
+                .ToList();
+
+            return experiences;
         }
 
         public Experience GetOriginalById(int id)

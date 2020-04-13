@@ -27,6 +27,10 @@ ClassicEditor
 $(document).ready(function () {
     $("#lightgallery").lightGallery();
 
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    })
+
     $(document).on("click", ".ajax-submit-btn", function (evt) {
         evt.preventDefault();
         let form = $(this).closest("form");
@@ -63,4 +67,6 @@ $(document).ready(function () {
         }
     });
 });
+
+
 

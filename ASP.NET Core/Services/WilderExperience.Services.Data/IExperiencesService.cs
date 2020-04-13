@@ -21,5 +21,6 @@
 
         IEnumerable<T> GetAllForCurrentUser<T>(string userId);
 
+        IEnumerable<Experience> GetAllByUserId(string id);
     }
 }

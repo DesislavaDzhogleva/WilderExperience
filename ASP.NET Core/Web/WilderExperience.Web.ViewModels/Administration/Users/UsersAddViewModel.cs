@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-using WilderExperience.Data.Models;
-using WilderExperience.Services.Mapping;
-
-namespace WilderExperience.Web.ViewModels.Administration.Users
+﻿namespace WilderExperience.Web.ViewModels.Administration.Users
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Text;
+
+    using WilderExperience.Data.Models;
+    using WilderExperience.Services.Mapping;
+
     public class UsersAddViewModel : IMapFrom<ApplicationUser>
     {
         [Required]

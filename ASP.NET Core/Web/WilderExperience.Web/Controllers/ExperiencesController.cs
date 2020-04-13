@@ -86,8 +86,6 @@
             return this.Redirect($"/Experiences/List?locationId={input.LocationId}");
         }
 
-       
-
         [Authorize]
         public IActionResult Details(int id)
         {

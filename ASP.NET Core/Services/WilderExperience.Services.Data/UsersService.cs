@@ -61,10 +61,16 @@
                 FirstName = input.FirstName,
                 LastName = input.LastName,
                 UserName = input.UserName,
-                Email = input.Email
+                Email = input.Email,
             };
 
             return user;
+        }
+
+        public async Task DeleteAsync(ApplicationUser user)
+        {
+            this.usersRepository.Delete(user);
+            await this.usersRepository.SaveChangesAsync();
         }
     }
 }

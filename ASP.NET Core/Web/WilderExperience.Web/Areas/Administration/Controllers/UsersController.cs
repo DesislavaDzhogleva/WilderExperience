@@ -9,21 +9,24 @@
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Data;
     using WilderExperience.Web.ViewModels.Administration.Users;
+    using WilderExperience.Web.ViewModels.Shared;
 
     public class UsersController : AdministrationController
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUsersService usersService;
+        private readonly IExperiencesService experiencesService;
 
-        public UsersController(UserManager<ApplicationUser> userManager, IUsersService usersService)
+        public UsersController(UserManager<ApplicationUser> userManager, IUsersService usersService, IExperiencesService experiencesService)
         {
             this.userManager = userManager;
             this.usersService = usersService;
+            this.experiencesService = experiencesService;
         }
 
-        public async Task<IActionResult> List()
+        public IActionResult List()
         {
-            var users = await this.userManager.GetUsersInRoleAsync(GlobalConstants.UserRoleName);
+            var users = this.usersService.GetAll<UsersListViewModel>();
             return this.View(users);
         }
 
@@ -49,7 +52,6 @@
             }
 
             return this.RedirectToAction("List");
-
         }
 
         public IActionResult Edit(string id)
@@ -86,6 +88,45 @@
             }
 
             await this.usersService.EditAsync(input);
+
+            return this.RedirectToAction("List");
+        }
+
+        public IActionResult Details(string id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var user = this.usersService.GetById<UsersDetailsViewModel>(id);
+            var experiences = this.experiencesService.GetAllForCurrentUser<ExperienceViewModel>(id);
+
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+
+            user.Experiences = experiences;
+
+            return this.View(user);
+        }
+
+        public async Task<IActionResult> DeleteAsync(string id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var user = await this.userManager.FindByIdAsync(id);
+            var experiences = this.experiencesService.GetAllByUserId(id);
+            foreach (var experience in experiences)
+            {
+                await this.experiencesService.DeleteAsync(experience);
+            }
+
+            await this.usersService.DeleteAsync(user);
 
             return this.RedirectToAction("List");
         }
