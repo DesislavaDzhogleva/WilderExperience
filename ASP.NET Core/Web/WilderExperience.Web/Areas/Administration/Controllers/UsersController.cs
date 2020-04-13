@@ -30,7 +30,6 @@
             return this.View(users);
         }
 
-
         public IActionResult Add()
         {
             return this.View();

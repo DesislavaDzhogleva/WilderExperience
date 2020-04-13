@@ -13,6 +13,8 @@
 
         T GetById<T>(int id);
 
+        IEnumerable<T> GetAll<T>();
+
         Experience GetOriginalById(int id);
 
         Task<int> EditAsync(ExperienceEditViewModel input);

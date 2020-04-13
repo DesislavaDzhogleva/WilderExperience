@@ -31,8 +31,6 @@
 
         public int? LocationId { get; set; }
 
-        public int? WildLocationId { get; set; }
-
         public DateTime CreatedOn { get; set; }
 
         public DateTime? ModifiedOn { get; set; }

@@ -18,6 +18,14 @@
             this.experienceRepository = experienceRepository;
         }
 
+        public IEnumerable<T> GetAll<T>()
+        {
+            var comments = this.experienceRepository.All()
+                .To<T>();
+
+            return comments;
+        }
+
         public async Task<int> CreateAsync(ExperienceCreateViewModel input, string userId)
         {
             var experience = new Experience()

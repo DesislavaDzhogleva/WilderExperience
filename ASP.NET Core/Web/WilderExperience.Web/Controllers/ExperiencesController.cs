@@ -119,13 +119,14 @@
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            var role = this.userManager.GetRolesAsync(user);
-            if (experience.AuthorId == user.Id)
+            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
+            if (experience.AuthorId != user.Id && !isAdmin)
             {
-                return this.View(experience);
+                return this.Unauthorized();
             }
 
-            return this.Unauthorized();
+            return this.View(experience);
         }
 
         [HttpPost]
@@ -139,7 +140,9 @@
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            if (input.AuthorId != user.Id)
+            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            
+            if (input.AuthorId != user.Id && !isAdmin)
             {
                 return this.Unauthorized();
             }
@@ -163,7 +166,8 @@
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
-            if (experience.AuthorId != user.Id)
+            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            if (experience.AuthorId != user.Id && !isAdmin)
             {
                 return this.Unauthorized();
             }
@@ -185,7 +189,8 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             var experience = this.experiencesService.GetOriginalById((int)id);
-            if (experience.AuthorId != user.Id)
+            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            if (experience.AuthorId != user.Id && !isAdmin)
             {
                 return this.Unauthorized();
             }
