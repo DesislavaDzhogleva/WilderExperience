@@ -1,4 +1,4 @@
-﻿@model WilderExperience.Web.ViewModels.Images.ImagesViewModel
+﻿@model WilderExperience.Web.ViewModels.Images.ImagesListViewModel
 
 @{
     ViewData["Title"] = "Add";
@@ -8,7 +8,7 @@
     <div class="col-md-4">
         <form asp-action="Add" enctype="multipart/form-data">
 
-            <input asp-for="NewImageVM.ExperienceId" type="hidden" />
+            <input asp-for="ExperienceId" type="hidden" />
             <input asp-for="UserId" type="hidden" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @foreach (var image in Model.ImagesListVM)
@@ -20,11 +20,12 @@
                     </a>
                 </figure>
             }
-            <div class="form-group">
-                <label asp-for="NewImageVM.Images" class="control-label"></label>
-                <input asp-for="NewImageVM.Images" class="d-block" />
-                <span asp-validation-for="NewImageVM.Images" class="text-danger"></span>
-            </div>
+        <div class="form-group">
+            <label asp-for="NewImageVM.Images" class="control-label"></label>
+            <input asp-for="NewImageVM.Images" class="d-block" />
+
+            <span asp-validation-for="NewImageVM.Images" class="text-danger"></span>
+        </div>
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

@@ -1,20 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using WilderExperience.Common;
-using WilderExperience.Data.Models;
-using WilderExperience.Services.Data;
-using WilderExperience.Web.ViewModels.Experiences;
-using WilderExperience.Web.ViewModels.Images;
-
-namespace WilderExperience.Web.Controllers
+﻿namespace WilderExperience.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using WilderExperience.Common;
+    using WilderExperience.Data.Models;
+    using WilderExperience.Services.Data;
+    using WilderExperience.Web.ViewModels.Experiences;
+    using WilderExperience.Web.ViewModels.Images;
+
     public class ImagesController : BaseController
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -31,73 +33,98 @@ namespace WilderExperience.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Add(int experienceId)
         {
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            var experience = this.experiencesService.GetById<ExperienceEditViewModel>(experienceId);
-
-            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
-
-            if (experience.AuthorId != user.Id && !isAdmin)
+            if (experienceId != 0)
             {
-                return this.Forbid();
+                if (this.experiencesService.Exists(experienceId))
+                {
+                    var imagesList = this.imagesService.GetAllByExperienceId<ImagesViewModel>(experienceId);
+                    var isAllowed = await this.IsAllowedToAccess(experienceId);
+
+                    if (isAllowed)
+                    {
+                        var user = await this.userManager.GetUserAsync(this.User);
+                        var imageVM = new ImagesListViewModel { ImagesListVM = imagesList, NewImageVM = new ImagesAddViewModel() { ExperienceId = experienceId }, UserId = user.Id };
+                        return this.View(imageVM);
+                    }
+                    else
+                    {
+                        return this.Forbid();
+                    }
+                }
             }
 
-            var imagesList = this.imagesService.GetAllByExperienceId<ImagesListViewModel>(experienceId);
-
-            var imageVM = new ImagesViewModel { ImagesListVM = imagesList, NewImageVM = new ImagesAddViewModel() { ExperienceId = experienceId }, UserId = user.Id};
-
-            return this.View(imageVM);
+            return this.NotFound();
         }
 
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(ImagesViewModel input)
+        public async Task<IActionResult> Add(ImagesListViewModel input)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View(input);
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
-            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            var isAllowed = await this.IsAllowedToAccess(input.ExperienceId);
 
-            if (input.UserId != user.Id && !isAdmin)
+            if (!isAllowed)
             {
                 return this.Forbid();
             }
 
-            int experienceId = await this.imagesService.AddImagesAsync(input.NewImageVM);
+            if (input.NewImageVM != null)
+            {
+                input.NewImageVM.ExperienceId = input.ExperienceId;
+                await this.imagesService.AddImagesAsync(input.NewImageVM);
+            }
 
-            return this.Redirect($"/Experiences/Details?Id={experienceId}");
+            return this.Redirect($"/Experiences/Details?Id={input.ExperienceId}");
         }
 
+        [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+            if (id != 0)
             {
-                return this.NotFound();
+                var exists = this.imagesService.Exists(id);
+
+                if (exists)
+                {
+                    // TODO: Appropriate viewModel
+                    var image = this.imagesService.GetById<ImagesViewModel>(id);
+                    var isAllowed = await this.IsAllowedToAccess(image.ExperienceId);
+
+                    if (isAllowed)
+                    {
+                        await this.imagesService.DeleteAsync(id);
+                        return this.Redirect($"/Experiences/Details?Id={image.ExperienceId}");
+                    }
+                    else
+                    {
+                        return this.Forbid();
+                    }
+                }
             }
 
-            var image = this.imagesService.GetOriginalById((int)id);
-            if (image == null)
-            {
-                return this.NotFound();
-            }
+            return this.NotFound();
+        }
 
+        private async Task<bool> IsAllowedToAccess(int experienceId)
+        {
             var user = await this.userManager.GetUserAsync(this.User);
             bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
 
-            if (image.UserId != user.Id && !isAdmin)
+            var isAuthor = this.experiencesService.IsAuthoredBy(experienceId, user.Id);
+
+            if (!isAuthor && !isAdmin)
             {
-                return this.Forbid();
+                return false;
             }
 
-
-            await this.imagesService.DeleteAsync(image);
-            return this.Redirect($"/Experiences/Details?Id={image.ExperienceId}");
+            return true;
         }
     }
 }

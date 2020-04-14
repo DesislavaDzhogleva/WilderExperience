@@ -25,24 +25,6 @@
             this.environment = environment;
         }
 
-        public async Task<int> AddImagesAsync(ImagesAddViewModel input)
-        {
-            var fileNames = this.UploadImages(input.Images);
-            foreach (var file in fileNames)
-            {
-            await this.imageRepository.AddAsync(new ExperienceImage
-                {
-                    Name = file,
-                    ExperienceId = input.ExperienceId,
-                    UserId = input.UserId,
-                });
-            }
-
-            await this.imageRepository.SaveChangesAsync();
-
-            return input.ExperienceId;
-        }
-
         public IEnumerable<T> GetAllByExperienceId<T>(int experienceId)
         {
             var images = this.imageRepository.All()
@@ -52,10 +34,43 @@
             return images;
         }
 
-        public async Task DeleteAsync(ExperienceImage image)
+        public async Task<int> AddImagesAsync(ImagesAddViewModel input)
         {
+            var fileNames = this.UploadImages(input.Images);
+
+            foreach (var file in fileNames)
+            {
+                await this.imageRepository.AddAsync(new ExperienceImage
+                    {
+                        Name = file,
+                        ExperienceId = input.ExperienceId,
+                        UserId = input.UserId,
+                    });
+            }
+
+            await this.imageRepository.SaveChangesAsync();
+
+            return input.ExperienceId;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var image = this.imageRepository.All()
+                .Where(x => x.Id == id)
+                .FirstOrDefault();
+
             this.imageRepository.Delete(image);
             await this.imageRepository.SaveChangesAsync();
+        }
+
+        public T GetById<T>(int id)
+        {
+            var image = this.imageRepository.All()
+                .Where(x => x.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+
+            return image;
         }
 
         public ExperienceImage GetOriginalById(int id)
@@ -65,6 +80,18 @@
                .FirstOrDefault();
 
             return image;
+        }
+
+        public bool Exists(int id)
+        {
+            return this.imageRepository.All()
+                .Where(x => x.Id == id).Count() == 1;
+        }
+
+        public bool IsAuthoredBy(int id, string loggedUserId)
+        {
+            return this.imageRepository.All()
+                .Where(x => x.Id == id && x.UserId == loggedUserId).Count() == 1;
         }
 
         private HashSet<string> UploadImages(ICollection<IFormFile> images)

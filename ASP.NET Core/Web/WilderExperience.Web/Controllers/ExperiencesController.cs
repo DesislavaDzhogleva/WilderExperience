@@ -91,7 +91,7 @@
         }
 
         [Authorize]
-        public async Task<IActionResult> DetailsAsync(int id)
+        public IActionResult Details(int id)
         {
             if (id != 0)
             {
@@ -100,15 +100,7 @@
                 {
                     var experienceViewModel = this.experiencesService.GetById<ExperienceDetailsViewModel>(id);
 
-                    var isAllowed = await this.IsAllowedToAccess(id);
-                    if (isAllowed)
-                    {
-                        return this.View(experienceViewModel);
-                    }
-                    else
-                    {
-                        return this.Forbid();
-                    }
+                    return this.View(experienceViewModel);
                 }
             }
 
