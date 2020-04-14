@@ -4,6 +4,9 @@
     ViewData["Title"] = "List";
 }
 
+    <h1 class="title fancy-title w-100 text-center">@this.ViewData["locationName"]</h1>
+    <a class="btn btn-primary" asp-action="Create" asp-route-locationId="@Model.LocationId">Add Experience</a>
+
 @if (Model.List.Any() == false)
 {
     <div>
@@ -14,9 +17,6 @@ else
 {
     <div class="container">
         <div class="row">
-            <h1 class="title fancy-title w-100 text-center">@this.ViewData["locationName"]</h1>
-        </div>
-        <div class="row">
             @foreach (var item in Model.List)
             {
                 <div class="col-md-6 experience-list">
@@ -26,7 +26,7 @@ else
                                 @if (item.Image == null)
                                 {
                                     <a asp-action="Details" asp-route-id="@item.Id">
-                                        <img class="img img-fluid image-list" src="~/uploads/experiences/notAvailable.jpg">
+                                        <img class="img img-fluid image-list" src="~/img/not-available.jpg">
                                     </a>
                                 }
                                 else
@@ -55,4 +55,4 @@ else
     </div>
 }
 
-<a class="btn btn-primary" asp-action="Create" asp-route-locationId="@Model.LocationId">Add Experience</a>
+

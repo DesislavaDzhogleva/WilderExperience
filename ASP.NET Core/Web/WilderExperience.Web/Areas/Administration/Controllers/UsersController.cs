@@ -99,7 +99,7 @@
             }
 
             var user = this.usersService.GetById<UsersDetailsViewModel>(id);
-            var experiences = this.experiencesService.GetAllForCurrentUser<ExperienceViewModel>(id);
+            var experiences = this.experiencesService.GetAllForUser<ExperienceViewModel>(id);
 
             if (user == null)
             {
@@ -119,10 +119,10 @@
             }
 
             var user = await this.userManager.FindByIdAsync(id);
-            var experiences = this.experiencesService.GetAllByUserId(id);
+            var experiences = this.experiencesService.GetAllByUserIdddd(id);
             foreach (var experience in experiences)
             {
-                await this.experiencesService.DeleteAsync(experience);
+                await this.experiencesService.DeleteAsync(experience.Id);
             }
 
             await this.usersService.DeleteAsync(user);

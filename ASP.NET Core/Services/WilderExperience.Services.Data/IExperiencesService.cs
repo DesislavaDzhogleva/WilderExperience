@@ -7,22 +7,26 @@
 
     public interface IExperiencesService
     {
-        IEnumerable<T> GetAllByLocationId<T>(int locationId);
+        IEnumerable<T> GetAll<T>();
 
-        Task<int> CreateAsync(ExperienceCreateViewModel input, string userId);
+        IEnumerable<T> GetAllByLocationId<T>(int locationId);
+        
+        IEnumerable<T> GetAllForUser<T>(string userId);
 
         T GetById<T>(int id);
 
-        IEnumerable<T> GetAll<T>();
+        IEnumerable<Experience> GetAllByUserIdddd(string id);
 
-        Experience GetOriginalById(int id);
+        Task<int> CreateAsync(ExperienceCreateViewModel input, string userId);
 
         Task<int> EditAsync(ExperienceEditViewModel input);
 
-        Task DeleteAsync(Experience input);
+        Task DeleteAsync(int id);
 
-        IEnumerable<T> GetAllForCurrentUser<T>(string userId);
+        bool Exists(int id);
 
-        IEnumerable<Experience> GetAllByUserId(string id);
+        bool IsAuthoredBy(int id, string loggedUserId);
+
+        int GetLocationId(int id);
     }
 }

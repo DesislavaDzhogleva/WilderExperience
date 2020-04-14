@@ -39,7 +39,7 @@ namespace WilderExperience.Web.Controllers
 
             if (experience.AuthorId != user.Id && !isAdmin)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             var imagesList = this.imagesService.GetAllByExperienceId<ImagesListViewModel>(experienceId);
@@ -64,7 +64,7 @@ namespace WilderExperience.Web.Controllers
 
             if (input.UserId != user.Id && !isAdmin)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
             int experienceId = await this.imagesService.AddImagesAsync(input.NewImageVM);
@@ -92,7 +92,7 @@ namespace WilderExperience.Web.Controllers
 
             if (image.UserId != user.Id && !isAdmin)
             {
-                return this.Unauthorized();
+                return this.Forbid();
             }
 
 

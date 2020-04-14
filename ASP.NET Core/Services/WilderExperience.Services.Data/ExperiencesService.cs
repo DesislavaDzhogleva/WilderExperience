@@ -1,5 +1,6 @@
 ﻿namespace WilderExperience.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -20,10 +21,47 @@
 
         public IEnumerable<T> GetAll<T>()
         {
-            var comments = this.experienceRepository.All()
+            var experiences = this.experienceRepository.All()
                 .To<T>();
 
-            return comments;
+            return experiences;
+        }
+
+        public IEnumerable<T> GetAllByLocationId<T>(int locationId)
+        {
+            var experiences = this.experienceRepository.All()
+                .Where(x => x.LocationId == locationId)
+                .To<T>();
+
+            return experiences;
+        }
+
+        public IEnumerable<T> GetAllForUser<T>(string userId)
+        {
+            var experiences = this.experienceRepository.All()
+                .Where(x => x.AuthorId == userId)
+                .To<T>();
+
+            return experiences;
+        }
+
+        public IEnumerable<Experience> GetAllByUserIdddd(string id)
+        {
+            var experiences = this.experienceRepository.All()
+                .Where(x => x.AuthorId == id)
+                .ToList();
+
+            return experiences;
+        }
+
+        public T GetById<T>(int id)
+        {
+            var experience = this.experienceRepository.All()
+                .Where(x => x.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+
+            return experience;
         }
 
         public async Task<int> CreateAsync(ExperienceCreateViewModel input, string userId)
@@ -45,22 +83,11 @@
             return experience.Id;
         }
 
-        public async Task DeleteAsync(Experience input)
-        {
-            this.experienceRepository.Delete(input);
-            await this.experienceRepository.SaveChangesAsync();
-        }
-
         public async Task<int> EditAsync(ExperienceEditViewModel input)
         {
             var experience = this.experienceRepository.All()
                 .Where(x => x.Id == input.Id)
                 .FirstOrDefault();
-
-            if (experience == null)
-            {
-                return -1;
-            }
 
             experience.DateOfVisit = input.DateOfVisit;
             experience.Title = input.Title;
@@ -68,57 +95,42 @@
             experience.Guide = input.Guide;
             experience.Intensity = input.Intensity;
 
-
             this.experienceRepository.Update(experience);
             await this.experienceRepository.SaveChangesAsync();
 
             return experience.Id;
         }
 
-        public IEnumerable<T> GetAllByLocationId<T>(int locationId)
+        public async Task DeleteAsync(int id)
         {
-            var experiences = this.experienceRepository.All()
-                .Where(x => x.LocationId == locationId)
-                .To<T>();
-
-            return experiences;
-        }
-
-        public IEnumerable<T> GetAllForCurrentUser<T>(string userId)
-        {
-            var experiences = this.experienceRepository.All()
-                .Where(x => x.AuthorId == userId)
-                .To<T>();
-
-            return experiences;
-        }
-
-        public T GetById<T>(int id)
-        {
-            var post = this.experienceRepository.All()
-                .Where(x => x.Id == id)
-                .To<T>()
-                .FirstOrDefault();
-
-            return post;
-        }
-
-        public IEnumerable<Experience> GetAllByUserId(string id)
-        {
-            var experiences = this.experienceRepository.All()
-                .Where(x => x.AuthorId == id)
-                .ToList();
-
-            return experiences;
-        }
-
-        public Experience GetOriginalById(int id)
-        {
-            var post = this.experienceRepository.All()
+            var experience = this.experienceRepository.All()
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
 
-            return post;
+            this.experienceRepository.Delete(experience);
+            await this.experienceRepository.SaveChangesAsync();
+        }
+
+        public bool Exists(int id)
+        {
+            return this.experienceRepository.All()
+                .Where(x => x.Id == id).Count() == 1;
+        }
+
+        public bool IsAuthoredBy(int id, string loggedUserId)
+        {
+            return this.experienceRepository.All()
+                .Where(x => x.Id == id && x.AuthorId == loggedUserId).Count() == 1;
+        }
+
+        public int GetLocationId(int id)
+        {
+            var locationId = this.experienceRepository.All()
+                .Where(x => x.Id == id)
+                .Select(x => x.LocationId)
+                .FirstOrDefault();
+
+            return locationId;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace WilderExperience.Web.Controllers
 {
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return new BadRequestResult();
+                return this.View(input);
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
@@ -46,14 +47,13 @@
                 return this.NotFound();
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
-
             var comment = this.commentsService.GetOriginalById((int)id);
             if (comment == null)
             {
                 return this.NotFound();
             }
 
+            var user = await this.userManager.GetUserAsync(this.User);
             bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
             if (comment.UserId != user.Id && !isAdmin)
             {

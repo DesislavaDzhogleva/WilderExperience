@@ -26,17 +26,9 @@
         [Required]
         public string AuthorId { get; set; }
 
+        public int LocationId { get; set; }
+
         public string SanitizedDescription => new HtmlSanitizer().Sanitize(this.Description);
-
-        public string Guide { get; set; }
-
-        public Intensity Intensity { get; set; }
-
-        public DateTime? DateOfVisit { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public DateTime DeletedOn { get; set; }
 
         public ICollection<ExperienceImage> Images { get; set; }
 

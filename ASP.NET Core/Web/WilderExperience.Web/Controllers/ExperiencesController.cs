@@ -30,7 +30,7 @@
         public IActionResult MyExperiences()
         {
             var user = this.userManager.GetUserAsync(this.User);
-            var experiences = this.experiencesService.GetAllForCurrentUser<ExperienceViewModel>(user.Result.Id);
+            var experiences = this.experiencesService.GetAllForUser<ExperienceViewModel>(user.Result.Id);
             return this.View(experiences);
         }
 
@@ -63,7 +63,8 @@
                 return this.NotFound();
             }
 
-            this.ViewData["locationId"] = locationId;
+            this.ViewData["LocationId"] = locationId;
+            this.ViewData["AuthorId"] = this.userManager.GetUserAsync(this.User).Id;
             return this.View();
         }
 
@@ -80,53 +81,63 @@
             var user = await this.userManager.GetUserAsync(this.User);
 
             var experienceId = await this.experiencesService.CreateAsync(input, user.Id);
-            input.Images.ExperienceId = experienceId;
-            await this.imagesService.AddImagesAsync(input.Images);
+            if (input.Images != null)
+            {
+                input.Images.ExperienceId = experienceId;
+                await this.imagesService.AddImagesAsync(input.Images);
+            }
 
             return this.Redirect($"/Experiences/List?locationId={input.LocationId}");
         }
 
         [Authorize]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> DetailsAsync(int id)
         {
-            if (id == 0)
+            if (id != 0)
             {
-                return this.NotFound();
+                var exists = this.experiencesService.Exists(id);
+                if (exists)
+                {
+                    var experienceViewModel = this.experiencesService.GetById<ExperienceDetailsViewModel>(id);
+
+                    var isAllowed = await this.IsAllowedToAccess(id);
+                    if (isAllowed)
+                    {
+                        return this.View(experienceViewModel);
+                    }
+                    else
+                    {
+                        return this.Forbid();
+                    }
+                }
             }
 
-            var experienceViewModel = this.experiencesService.GetById<ExperienceDetailsViewModel>(id);
-
-            if (experienceViewModel == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.View(experienceViewModel);
+            return this.NotFound();
         }
 
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            if (id == 0)
+            if (id != 0)
             {
-                return this.NotFound();
+                var exists = this.experiencesService.Exists(id);
+                if (exists)
+                {
+                    var experience = this.experiencesService.GetById<ExperienceEditViewModel>(id);
+
+                    var isAllowed = await this.IsAllowedToAccess(experience.Id);
+                    if (isAllowed)
+                    {
+                        return this.View(experience);
+                    }
+                    else
+                    {
+                        return this.Forbid();
+                    }
+                }
             }
 
-            var experience = this.experiencesService.GetById<ExperienceEditViewModel>(id);
-            if (experience == null)
-            {
-                return this.NotFound();
-            }
-
-            var user = await this.userManager.GetUserAsync(this.User);
-            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
-
-            if (experience.AuthorId != user.Id && !isAdmin)
-            {
-                return this.Unauthorized();
-            }
-
-            return this.View(experience);
+            return this.NotFound();
         }
 
         [HttpPost]
@@ -139,74 +150,91 @@
                 return this.View(input);
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
-            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
-            
-            if (input.AuthorId != user.Id && !isAdmin)
+            var exists = this.experiencesService.Exists(input.Id);
+
+            if (exists)
             {
-                return this.Unauthorized();
+                var isAllowed = await this.IsAllowedToAccess(input.Id);
+                if (isAllowed)
+                {
+                    var experienceId = await this.experiencesService.EditAsync(input);
+                    return this.Redirect($"/Experiences/Details/{experienceId}");
+                }
+                else
+                {
+                    return this.Forbid();
+                }
             }
 
-            var experienceId = await this.experiencesService.EditAsync(input);
-            return this.Redirect($"/Experiences/Details/{experienceId}");
+            return this.NotFound();
         }
 
         [Authorize]
-        public async Task<IActionResult> DeleteAsync(int? id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            if (id == null)
+            if (id != 0)
             {
-                return this.NotFound();
+                var exists = this.experiencesService.Exists(id);
+
+                if (exists)
+                {
+                    var isAllowed = await this.IsAllowedToAccess(id);
+                    if (isAllowed)
+                    {
+                        var experience = this.experiencesService.GetById<ExperienceDeleteViewModel>((int)id);
+                        return this.View(experience);
+                    }
+                    else
+                    {
+                        return this.Forbid();
+                    }
+                }
             }
 
-            var experience = this.experiencesService.GetById<ExperienceDeleteViewModel>((int)id);
-            if (experience == null)
-            {
-                return this.NotFound();
-            }
-
-            var user = await this.userManager.GetUserAsync(this.User);
-            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
-            if (experience.AuthorId != user.Id && !isAdmin)
-            {
-                return this.Unauthorized();
-            }
-
-            return this.View(experience);
+            return this.NotFound();
         }
 
+        [Authorize]
         [HttpPost]
-        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+            if (id != 0)
             {
-                return this.NotFound();
+                var exists = this.experiencesService.Exists(id);
+
+                if (exists)
+                {
+                    var isAllowed = await this.IsAllowedToAccess(id);
+                    if (isAllowed)
+                    {
+                        var locationId = this.experiencesService.GetLocationId(id);
+                        await this.experiencesService.DeleteAsync(id);
+                        return this.Redirect($"/Experiences/List?locationId={locationId}");
+                    }
+                    else
+                    {
+                        return this.Forbid();
+                    }
+                }
             }
 
-            var user = await this.userManager.GetUserAsync(this.User);
-
-            var experience = this.experiencesService.GetOriginalById((int)id);
-            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
-            if (experience.AuthorId != user.Id && !isAdmin)
-            {
-                return this.Unauthorized();
-            }
-
-            var locationName = this.locationService.GetNameById(experience.LocationId);
-
-            // TODO: find right exception
-            if (locationName == null)
-            {
-                return this.NotFound();
-            }
-
-            await this.experiencesService.DeleteAsync(experience);
-
-            return this.Redirect($"/Experiences/List?locationName={locationName}");
+            return this.NotFound();
         }
 
+        private async Task<bool> IsAllowedToAccess(int experienceId)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
+            var isAuthor = this.experiencesService.IsAuthoredBy(experienceId, user.Id);
+
+            if (!isAuthor && !isAdmin)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
