@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using WilderExperience.Common;
 using WilderExperience.Data.Models;
 using WilderExperience.Services.Data;
 using WilderExperience.Web.ViewModels.Experiences;
@@ -34,14 +35,16 @@ namespace WilderExperience.Web.Controllers
 
             var experience = this.experiencesService.GetById<ExperienceEditViewModel>(experienceId);
 
-            if (experience.AuthorId != user.Id)
+            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
+            if (experience.AuthorId != user.Id && !isAdmin)
             {
                 return this.Unauthorized();
             }
 
             var imagesList = this.imagesService.GetAllByExperienceId<ImagesListViewModel>(experienceId);
 
-            var imageVM = new ImagesViewModel { ImagesListVM = imagesList, NewImageVM = new ImagesAddViewModel() { ExperienceId = experienceId } };
+            var imageVM = new ImagesViewModel { ImagesListVM = imagesList, NewImageVM = new ImagesAddViewModel() { ExperienceId = experienceId }, UserId = user.Id};
 
             return this.View(imageVM);
         }
@@ -56,8 +59,14 @@ namespace WilderExperience.Web.Controllers
                 return this.View(input);
             }
 
-            // TODO: Image service - get authorId, check if the current user is author
             var user = await this.userManager.GetUserAsync(this.User);
+            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
+            if (input.UserId != user.Id && !isAdmin)
+            {
+                return this.Unauthorized();
+            }
+
             int experienceId = await this.imagesService.AddImagesAsync(input.NewImageVM);
 
             return this.Redirect($"/Experiences/Details?Id={experienceId}");
@@ -72,13 +81,20 @@ namespace WilderExperience.Web.Controllers
                 return this.NotFound();
             }
 
-            // TODO: AUTHOR==USER
-
             var image = this.imagesService.GetOriginalById((int)id);
             if (image == null)
             {
                 return this.NotFound();
             }
+
+            var user = await this.userManager.GetUserAsync(this.User);
+            bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
+            if (image.UserId != user.Id && !isAdmin)
+            {
+                return this.Unauthorized();
+            }
+
 
             await this.imagesService.DeleteAsync(image);
             return this.Redirect($"/Experiences/Details?Id={image.ExperienceId}");

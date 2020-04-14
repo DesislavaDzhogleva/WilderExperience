@@ -34,6 +34,7 @@
                 {
                     Name = file,
                     ExperienceId = input.ExperienceId,
+                    UserId = input.UserId,
                 });
             }
 
@@ -56,7 +57,6 @@
             this.imageRepository.Delete(image);
             await this.imageRepository.SaveChangesAsync();
         }
-
 
         public ExperienceImage GetOriginalById(int id)
         {

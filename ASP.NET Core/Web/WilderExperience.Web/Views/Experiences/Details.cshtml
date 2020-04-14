@@ -17,15 +17,19 @@
             {
                 <p class="card-text"><small class="text-muted">Updated on @Model.ModifiedOn</small></p>
             }
-        <div id="lightgallery" class="row">
-            @foreach (var image in Model.Images)
+            <div id="lightgallery" class="row">
+                @foreach (var image in Model.Images)
+                {
+                    <a href="~/uploads/experiences/@image.Name" class="col-md-3 p-0">
+                        <img src="~/uploads/experiences/@image.Name" class="experience-details-thumb" />
+                    </a>
+                }
+            </div>
+            @if (this.User.Identity.Name == Model.AuthorUserName || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
             {
-            <a href="~/uploads/experiences/@image.Name" class="col-md-3 p-0">
-                <img src="~/uploads/experiences/@image.Name" class="experience-details-thumb" />
-            </a>
+                <a class="btn btn-outline-default btn-round mt-2 pull-right" asp-controller="Images" asp-action="Add" asp-route-experienceId="@Model.Id">Add Images</a>
             }
-        </div>
-            <a class="btn btn-outline-default btn-round mt-2 pull-right" asp-controller="Images" asp-action="Add" asp-route-experienceId="@Model.Id">Add Images</a>
+            
         </div>
 
         <hr />

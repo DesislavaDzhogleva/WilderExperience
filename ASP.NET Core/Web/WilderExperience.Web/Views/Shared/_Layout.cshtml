@@ -76,12 +76,12 @@
 
                     <h1 class="presentation-title">Your Journey Awaits</h1>
                 </div>
-                <form asp-area="" asp-controller="Experiences" asp-action="List">
+                <form asp-area="" asp-controller="Experiences" asp-action="List" method="get">
                     <div class="input-group mb-3 justify-content-center">
 
                         <select name="locationId" class="location-search form-control form-control-lg"  placeholder="Enter city, village or landmark..."></select>
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-outline-default  btn-lg">
+                            <button type="submit" class="btn btn-outline-default btn-lg">
                                 <span class="fas fa-search pr-2"></span>Search
                             </button>
                         </div>

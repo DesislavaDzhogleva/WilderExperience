@@ -13,6 +13,8 @@
         public ICollection<IFormFile> Images { get; set; }
 
         public int ExperienceId { get; set; }
+
+        public string UserId { get; set; }
     }
 
 }

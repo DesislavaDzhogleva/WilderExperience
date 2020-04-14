@@ -17,6 +17,10 @@
     <Compile Remove="Migrations\20200411175810_ModelsImprovement.Designer.cs" />
     <Compile Remove="Migrations\20200411175933_LatLngNullable.cs" />
     <Compile Remove="Migrations\20200411175933_LatLngNullable.Designer.cs" />
+    <Compile Remove="Migrations\20200414115518_ImageModelAddAuthor.cs" />
+    <Compile Remove="Migrations\20200414115518_ImageModelAddAuthor.Designer.cs" />
+    <Compile Remove="Migrations\20200414115841_ImageModelAddAuthor.cs" />
+    <Compile Remove="Migrations\20200414115841_ImageModelAddAuthor.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
