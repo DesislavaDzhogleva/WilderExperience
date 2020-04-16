@@ -79,7 +79,7 @@
                 <form asp-area="" asp-controller="Experiences" asp-action="List" method="get">
                     <div class="input-group mb-3 justify-content-center">
 
-                        <select name="locationId" class="location-search form-control form-control-lg"  placeholder="Enter city, village or landmark..."></select>
+                        <select name="locationId" class="location-search form-control form-control-lg" placeholder="Enter city, village or landmark..."></select>
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-outline-default btn-lg">
                                 <span class="fas fa-search pr-2"></span>Search
@@ -93,6 +93,21 @@
             </div>
         </div>
     </div>
+
+    @if (ViewBag.Messages != null)
+    {
+        @foreach (var msg in ViewBag.Messages)
+        {
+            <div class="text-center alert alert-@msg.AlertType alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p><strong>@msg.AlertTitle</strong> @msg.AlertMessage</p>
+            </div>
+
+
+        }
+    }
 
     <partial name="_CookieConsentPartial" />
     <main role="main" class="pb-3">

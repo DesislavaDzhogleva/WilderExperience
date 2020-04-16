@@ -16,5 +16,7 @@
         Task DeleteAsync(Comment input);
 
         T GetById<T>(int id);
+
+        bool Exists(int id);
     }
 }

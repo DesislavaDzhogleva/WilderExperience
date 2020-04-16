@@ -4,55 +4,88 @@
     ViewData["Title"] = "Details";
 }
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h2 class="card-title"><strong>@Model.Title</strong></h2>
-            <h2 class="card-title"><small>By @Model.AuthorUserName</small></h2>
-            <p class="card-text">@Html.Raw(Model.SanitizedDescription)</p>
-            @if (Model.ModifiedOn == null)
-            {
-                <p class="card-text"><small class="text-muted">Created @Model.CreatedOn</small></p>
-            }
-            else
-            {
-                <p class="card-text"><small class="text-muted">Updated on @Model.ModifiedOn</small></p>
-            }
-            <div id="lightgallery" class="row">
-                @foreach (var image in Model.Images)
+
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h2 class="card-title">
+            <div class="pull-right">
+                @if (this.User.Identity.Name == Model.AuthorUserName || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
                 {
-                    <a href="~/uploads/experiences/@image.Name" class="col-md-3 p-0">
-                        <img src="~/uploads/experiences/@image.Name" class="experience-details-thumb" />
-                    </a>
+                    <a class="btn btn-outline-default btn-round mt-2" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                    <a class="btn btn-outline-default btn-round mt-2" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+
                 }
+                <a class="btn btn-outline-default btn-round mt-2" asp-action="List" asp-route-locationId=@Model.LocationId>Back to List</a>
+
             </div>
-            @if (this.User.Identity.Name == Model.AuthorUserName || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
-            {
-                <a class="btn btn-outline-default btn-round mt-2 pull-right" asp-controller="Images" asp-action="Add" asp-route-experienceId="@Model.Id">Add Images</a>
-            }
-            
-        </div>
-
+            <strong>@Model.Title</strong>
+            <span class="rating pt-3 text-center">
+                <span class="averageRating bg-success p-2 m-2">
+                    @if (Model.AverageRating > 0)
+                    {
+                        <span class="pl-2">@Model.AverageRating</span>
+                    }
+                    else
+                    {
+                        <span class="pl-2">N.A.</span>
+                    }
+                </span>
+                @if (Model.IsUserAlreadyRated == false)
+                {
+                <span class="newRating">
+                    <a asp-controller="Rating" asp-action="Rate" asp-route-experienceId="@Model.Id" asp-route-score="1" data-score="1"><span class="fa w-auto fa-star-o"></span></a>
+                    <a asp-controller="Rating" asp-action="Rate" asp-route-experienceId="@Model.Id" asp-route-score="2" data-score="2"><span class="fa w-auto fa-star-o"></span></a>
+                    <a asp-controller="Rating" asp-action="Rate" asp-route-experienceId="@Model.Id" asp-route-score="3" data-score="3"><span class="fa w-auto fa-star-o"></span></a>
+                    <a asp-controller="Rating" asp-action="Rate" asp-route-experienceId="@Model.Id" asp-route-score="4" data-score="4"><span class="fa w-auto fa-star-o"></span></a>
+                    <a asp-controller="Rating" asp-action="Rate" asp-route-experienceId="@Model.Id" asp-route-score="5" data-score="5"><span class="fa w-auto fa-star-o"></span></a>
+                </span>
+                }
+            </span>
+        </h2>
+        <h2 class="card-title"><small>By @Model.AuthorUserName</small></h2>
+        @if (Model.ModifiedOn == null)
+        {
+            <p class="card-text"><small class="text-muted">Created On @Model.CreatedOn</small></p>
+        }
+        else
+        {
+            <p class="card-text"><small class="text-muted">Updated On @Model.ModifiedOn</small></p>
+        }
+        <p class="card-text">@Html.Raw(Model.SanitizedDescription)</p>
         <hr />
-        <div>
-            @if (this.User.Identity.Name == Model.AuthorUserName || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
+        <h4><strong>Intensity</strong></h4>
+        <p class="card-text">@Model.Intensity</p>
+        <h4><strong>Guide</strong></h4>
+        <p class="card-text">@Model.Guide</p>
+        <h4><strong>Date of visit</strong></h4>
+        <p class="card-text">@Model.DateOfVisit</p>
+
+        <div id="lightgallery" class="row">
+            @foreach (var image in Model.Images)
             {
-                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-
+                <a href="~/uploads/experiences/@image.Name" class="col-md-3 p-0">
+                    <img src="~/uploads/experiences/@image.Name" class="experience-details-thumb" />
+                </a>
             }
-            <a asp-action="List" asp-route-locationId=@Model.LocationId>Back to List</a>
-
         </div>
-        <hr />
-
-        <div class="row">
-            <div class="comments media-area col-12">
-                <h3 class="text-center">Comments</h3>
-                @*<vc:comments></vc:comments>*@
-                @await Component.InvokeAsync("Comments", new { experienceId = Model.Id });
-            </div>
-
-        </div>
-
+        @if (this.User.Identity.Name == Model.AuthorUserName || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
+        {
+            <a class="btn btn-outline-default btn-round mt-2 pull-right" asp-controller="Images" asp-action="Add" asp-route-experienceId="@Model.Id">Add Images</a>
+        }
 
     </div>
+
+
+
+    <div class="row">
+        <div class="comments media-area col-12">
+            <h3 class="text-center">Comments</h3>
+            @*<vc:comments></vc:comments>*@
+            @await Component.InvokeAsync("Comments", new { experienceId = Model.Id })
+        </div>
+
+    </div>
+
+
+</div>

@@ -65,6 +65,28 @@ $(document).ready(function () {
             }
         }
     });
+
+
+    // rating
+
+    $(".newRating").mouseout(function () {
+        $(this).children().each(function () {
+            $(this).find("span").addClass("fa-star-o").removeClass("fa-star").removeClass("text-warning");
+        });
+        console.log("a");
+    });
+    $(".newRating a").mouseover(function () {
+        let dataScore = parseInt($(this).attr("data-score"));
+        $(this).parent().children().each(function () {
+            let currentDataScore = parseInt($(this).attr("data-score"));
+            if (currentDataScore <= dataScore) {
+                $(this).find("span").removeClass("fa-star-o").addClass("fa-star").addClass("text-warning");
+            } else {
+                $(this).find("span").addClass("fa-star-o").removeClass("fa-star").removeClass("text-warning");
+            }
+
+        });
+    });
 });
 
 

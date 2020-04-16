@@ -66,6 +66,7 @@
             services.AddTransient<IExperiencesService, ExperiencesService>();
             services.AddTransient<IImagesService, ImagesService>();
             services.AddTransient<ICommentsService, CommentsService>();
+            services.AddTransient<IRatingService, RatingSerivce>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,7 +81,11 @@
 
                 if (env.IsDevelopment())
                 {
-                    dbContext.Database.Migrate();
+                    app.UseDeveloperExceptionPage();
+                }
+                else
+                {
+                    app.UseExceptionHandler("/Home/Error");
                 }
 
                 new ApplicationDbContextSeeder(this.configuration).SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();

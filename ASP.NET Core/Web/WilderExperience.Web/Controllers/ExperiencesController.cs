@@ -1,5 +1,6 @@
 ﻿namespace WilderExperience.Web.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -13,13 +14,15 @@
 
     public class ExperiencesController : BaseController
     {
+        private readonly IRatingService ratingService;
         private readonly ILocationsService locationService;
         private readonly IExperiencesService experiencesService;
         private readonly IImagesService imagesService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ExperiencesController(ILocationsService locationService, IExperiencesService experiencesService,IImagesService imagesService ,UserManager<ApplicationUser> userManager)
+        public ExperiencesController(IRatingService ratingService, ILocationsService locationService, IExperiencesService experiencesService,IImagesService imagesService ,UserManager<ApplicationUser> userManager)
         {
+            this.ratingService = ratingService;
             this.locationService = locationService;
             this.experiencesService = experiencesService;
             this.imagesService = imagesService;
@@ -31,10 +34,11 @@
         {
             var user = this.userManager.GetUserAsync(this.User);
             var experiences = this.experiencesService.GetAllForUser<ExperienceViewModel>(user.Result.Id);
+            this.ViewData["Username"] = user.Result.UserName;
             return this.View(experiences);
         }
 
-        public IActionResult List(int locationId)
+        public IActionResult List(int locationId, string status = "")
         {
             if (locationId == 0)
             {
@@ -52,11 +56,18 @@
 
             this.ViewData["locationName"] = locationName;
 
+            if (status.Equals("success"))
+            {
+                ViewBag.Messages = new[] {
+                new AlertViewModel("success", "Success!", "The experience was added successfully!"),
+                };
+            }
+
             return this.View(experienceList);
         }
 
         [Authorize]
-        public IActionResult Create(int locationId)
+        public async Task<IActionResult> CreateAsync(int locationId)
         {
             if (locationId == 0)
             {
@@ -64,7 +75,9 @@
             }
 
             this.ViewData["LocationId"] = locationId;
-            this.ViewData["AuthorId"] = this.userManager.GetUserAsync(this.User).Id;
+            var user = await this.userManager.GetUserAsync(this.User);
+            this.ViewData["AuthorId"] = user.Id;
+
             return this.View();
         }
 
@@ -75,23 +88,25 @@
         {
             if (!this.ModelState.IsValid)
             {
+                ViewBag.Messages = new[] {
+                    new AlertViewModel("danger", "Warning!", "You have entered invalid data!"),
+                };
                 return this.View(input);
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            var experienceId = await this.experiencesService.CreateAsync(input, user.Id);
+            var experienceId = await this.experiencesService.CreateAsync(input);
             if (input.Images != null)
             {
                 input.Images.ExperienceId = experienceId;
                 await this.imagesService.AddImagesAsync(input.Images);
             }
 
-            return this.Redirect($"/Experiences/List?locationId={input.LocationId}");
+            return this.Redirect($"/Experiences/List?locationId={input.LocationId}&status=success");
         }
 
-        [Authorize]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> DetailsAsync(int id)
         {
             if (id != 0)
             {
@@ -99,6 +114,10 @@
                 if (exists)
                 {
                     var experienceViewModel = this.experiencesService.GetById<ExperienceDetailsViewModel>(id);
+
+                    var user = await this.userManager.GetUserAsync(this.User);
+                    experienceViewModel.IsUserAlreadyRated = await this.ratingService.IsUserRated(id, user.Id);
+                    experienceViewModel.AverageRating = this.ratingService.GetRating(id);
 
                     return this.View(experienceViewModel);
                 }

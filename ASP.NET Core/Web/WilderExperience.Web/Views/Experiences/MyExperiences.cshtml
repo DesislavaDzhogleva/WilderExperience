@@ -1,18 +1,30 @@
-﻿
+﻿@model IEnumerable<WilderExperience.Web.ViewModels.Shared.ExperienceViewModel>
 @{
     ViewData["Title"] = "MyExperiences";
 }
 
-<h1 class="mb-3 text-center">User <b class="text-primary">MyExperiences</b></h1>
+<h1 class="mb-3 text-center">User <b class="text-primary">@this.ViewData["Username"]</b></h1>
 
-<table class="table">
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col">Location</th>
-            <th scope="col">Experience Title</th>
-            <th scope="col">Date Of Visit</th>
-            <th scope="col">Modify</th>
-        </tr>
-    </thead>
-    @Html.DisplayForModel();
-</table>
+@if (!Model.Any())
+{
+    <div>
+        <h1 class="title">No Experiences Yet!</h1>
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Location</th>
+                <th scope="col">Experience Title</th>
+                <th scope="col">Date Of Visit</th>
+                <th scope="col">Modify</th>
+            </tr>
+        </thead>
+        @Html.DisplayForModel();
+    </table>
+}
+
+
+

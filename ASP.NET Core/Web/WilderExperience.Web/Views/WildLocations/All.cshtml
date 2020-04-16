@@ -17,6 +17,9 @@
         {
         <script>
                 // TODO: sanitize
+                var getUrl = window.location;
+                window.baseUrl = getUrl.protocol + "//" + getUrl.host;
+
                 let model = @Html.Raw(Json.Serialize(Model));
                 // Initialize and add the map
                 function initMap() {
@@ -58,8 +61,8 @@
                                 icon: iconBase + 'red-stars.png',
                                 infoWindow: new google.maps.InfoWindow({
                                     content: `
-                                    <h3 style='padding:0;margin:0;'>${location.name}</h3>
-                                    <button class='btn btn-primary'>Add Experience</button>
+                                    <h3 style='padding:0;margin:0;'><a href='${window.baseUrl}/Experiences/List?locationId=${location.id}' style='text-decoration:none;'>${location.name}</a></h3>
+                                    <a class='btn btn-primary' href='${window.baseUrl}/Experiences/Create?locationId=${location.id}'>Add Experience</a>
                                     `
                                 })
                             });

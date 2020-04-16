@@ -67,5 +67,11 @@
 
             return comment;
         }
+
+        public bool Exists(int id)
+        {
+            return this.commentsRepository.All()
+                .Where(x => x.Id == id).Count() == 1;
+        }
     }
 }

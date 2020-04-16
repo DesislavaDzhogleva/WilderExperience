@@ -34,6 +34,16 @@
             return images;
         }
 
+        public T GetById<T>(int id)
+        {
+            var image = this.imageRepository.All()
+                .Where(x => x.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+
+            return image;
+        }
+
         public async Task<int> AddImagesAsync(ImagesAddViewModel input)
         {
             var fileNames = this.UploadImages(input.Images);
@@ -61,16 +71,6 @@
 
             this.imageRepository.Delete(image);
             await this.imageRepository.SaveChangesAsync();
-        }
-
-        public T GetById<T>(int id)
-        {
-            var image = this.imageRepository.All()
-                .Where(x => x.Id == id)
-                .To<T>()
-                .FirstOrDefault();
-
-            return image;
         }
 
         public ExperienceImage GetOriginalById(int id)

@@ -64,13 +64,13 @@
             return experience;
         }
 
-        public async Task<int> CreateAsync(ExperienceCreateViewModel input, string userId)
+        public async Task<int> CreateAsync(ExperienceCreateViewModel input)
         {
             var experience = new Experience()
             {
                 Title = input.Title,
                 Description = input.Description,
-                AuthorId = userId,
+                AuthorId = input.AuthorId,
                 Guide = input.Guide,
                 Intensity = input.Intensity,
                 DateOfVisit = input.DateOfVisit,
@@ -78,7 +78,7 @@
             };
 
             await this.experienceRepository.AddAsync(experience);
-            await this.experienceRepository.SaveChangesAsync();
+            var result = await this.experienceRepository.SaveChangesAsync();
 
             return experience.Id;
         }

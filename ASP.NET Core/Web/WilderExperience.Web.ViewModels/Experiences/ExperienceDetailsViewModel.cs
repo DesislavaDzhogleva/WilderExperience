@@ -5,7 +5,8 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
     using WilderExperience.Data.Models;
     using WilderExperience.Data.Models.Enums;
     using WilderExperience.Services.Mapping;
@@ -37,8 +38,11 @@
 
         public ICollection<ExperienceImage> Images { get; set; }
 
-        public ICollection<Rating> Ratings { get; set; }
+        [NotMapped]
+        public double AverageRating { get; set; }
 
+        [NotMapped]
+        public bool IsUserAlreadyRated { get; set; }
 
         [Required]
         public string AuthorUserName { get; set; }
