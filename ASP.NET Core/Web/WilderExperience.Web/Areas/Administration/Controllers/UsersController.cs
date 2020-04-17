@@ -9,6 +9,7 @@
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Data;
     using WilderExperience.Web.Helpers;
+    using WilderExperience.Web.ViewModels.Administration.Experiences;
     using WilderExperience.Web.ViewModels.Administration.Users;
     using WilderExperience.Web.ViewModels.Shared;
 
@@ -127,7 +128,7 @@
             }
 
             var user = await this.userManager.FindByIdAsync(id);
-            var experiences = this.experiencesService.GetAllByUserIdddd(id);
+            var experiences = this.experiencesService.GetAllForUser<ExperienceDeleteViewModel>(id);
             foreach (var experience in experiences)
             {
                 await this.experiencesService.DeleteAsync(experience.Id);

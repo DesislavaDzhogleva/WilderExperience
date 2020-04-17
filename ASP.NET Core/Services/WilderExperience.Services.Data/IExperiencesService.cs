@@ -15,8 +15,6 @@
 
         T GetById<T>(int id);
 
-        IEnumerable<Experience> GetAllByUserIdddd(string id);
-
         Task<int> CreateAsync(ExperienceCreateViewModel input);
 
         Task<int> EditAsync(ExperienceEditViewModel input);

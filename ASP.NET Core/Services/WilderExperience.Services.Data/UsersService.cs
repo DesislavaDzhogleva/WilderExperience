@@ -43,9 +43,8 @@
             var users = this.usersRepository.AllWithDeleted();
 
             users = this.GetUsersPerPage(users);
-                
 
-            return users.To<T>(); ;
+            return users.To<T>();
         }
 
         public async Task<int> EditAsync(UsersEditViewModel model)

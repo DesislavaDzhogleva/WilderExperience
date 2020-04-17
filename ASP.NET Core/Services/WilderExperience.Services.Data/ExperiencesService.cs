@@ -7,6 +7,7 @@
 
     using WilderExperience.Data.Common.Repositories;
     using WilderExperience.Data.Models;
+    using WilderExperience.Data.Models.Enums;
     using WilderExperience.Services.Mapping;
     using WilderExperience.Web.ViewModels.Experiences;
 
@@ -28,13 +29,6 @@
         public IEnumerable<T> GetAll<T>()
         {
             var experiences = this.experienceRepository.All();
-
-            //var count = experiences.Count();
-            //var totalPages = (int)Math.Ceiling(count / (double)this.PageSize);
-            //this.HasNextPage = this.PageNumber < totalPages;
-            //// pagination
-            //experiences = experiences.Skip((this.PageNumber - 1) * this.PageSize).Take(this.PageSize);
-
             experiences = this.GetExperiencePerPage(experiences);
 
             return experiences.To<T>();
@@ -55,26 +49,9 @@
             var experiences = this.experienceRepository.All()
                 .Where(x => x.AuthorId == userId);
 
-
-            //var count = experiences.Count();
-            //var totalPages = (int)Math.Ceiling(count / (double)this.PageSize);
-            //this.HasNextPage = this.PageNumber < totalPages;
-            //// pagination
-            //experiences = experiences.Skip((this.PageNumber - 1) * this.PageSize).Take(this.PageSize);
-
             experiences = this.GetExperiencePerPage(experiences);
 
             return experiences.To<T>();
-        }
-
-        public IEnumerable<Experience> GetAllByUserIdddd(string id)
-        {
-            var experiences = this.experienceRepository.All()
-                .Where(x => x.AuthorId == id);
-
-            experiences = this.GetExperiencePerPage(experiences);
-
-            return experiences;
         }
 
         public T GetById<T>(int id)
@@ -89,6 +66,11 @@
 
         public async Task<int> CreateAsync(ExperienceCreateViewModel input)
         {
+            if (input == null)
+            {
+                throw new ArgumentNullException("Incorrect Data");
+            }
+
             var experience = new Experience()
             {
                 Title = input.Title,
@@ -108,9 +90,19 @@
 
         public async Task<int> EditAsync(ExperienceEditViewModel input)
         {
+            if (input == null)
+            {
+                throw new ArgumentNullException("Incorrect input");
+            }
+
             var experience = this.experienceRepository.All()
                 .Where(x => x.Id == input.Id)
                 .FirstOrDefault();
+
+            if (experience == null)
+            {
+                throw new ArgumentNullException("Experience does not exist");
+            }
 
             experience.DateOfVisit = input.DateOfVisit;
             experience.Title = input.Title;
@@ -129,6 +121,11 @@
             var experience = this.experienceRepository.All()
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
+
+            if (experience == null)
+            {
+                throw new ArgumentNullException("Experience does not exist");
+            }
 
             this.experienceRepository.Delete(experience);
             await this.experienceRepository.SaveChangesAsync();
