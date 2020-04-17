@@ -30,7 +30,6 @@
         {
             var experiences = this.experienceRepository.All();
             experiences = this.GetExperiencePerPage(experiences);
-
             return experiences.To<T>();
         }
 
@@ -153,6 +152,7 @@
             return locationId;
         }
 
+        //TODO: TEST
         private IQueryable<Experience> GetExperiencePerPage(IQueryable<Experience> experiences)
         {
             var count = experiences.Count();

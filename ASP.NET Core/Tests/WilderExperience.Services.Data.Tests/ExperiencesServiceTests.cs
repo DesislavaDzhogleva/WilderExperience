@@ -303,6 +303,100 @@
             await Assert.ThrowsAsync<ArgumentNullException>(act);
         }
 
+        [Fact]
+        public async Task Exist_ShouldWorkCorrectly()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+
+            int testExperienceId = context.Experiences.First().Id;
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+            var actual = service.Exists(testExperienceId);
+
+            Assert.True(actual);
+        }
+
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public async Task Exist_WithInvalidId_ShouldWorkCorrectly(int id)
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+            var actual = service.Exists(id);
+
+            Assert.True(actual == false);
+        }
+
+        [Fact]
+        public async Task IsAuthorBy_ShouldWorkCorrectly()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+
+            int testExperienceId = context.Experiences.First().Id;
+            string author = context.Experiences.First().AuthorId;
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+            var actual = service.IsAuthoredBy(testExperienceId, author);
+
+            Assert.True(actual);
+        }
+
+        [Theory]
+        [InlineData(1, "sdf")]
+        [InlineData(1, null)]
+        public async Task IsAuthorBy_WithInvalidData_ShouldWorkCorrectly(int experienceId, string authorId)
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+            var actual = service.IsAuthoredBy(experienceId, authorId);
+
+            Assert.True(actual == false);
+        }
+
+        [Fact]
+        public async Task GetLocationId_ReturnsCorrectValue()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+
+            var experience = context.Experiences.First();
+            var expectedLocationId = experience.LocationId;
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+
+            var actualLocationId = service.GetLocationId(experience.Id);
+
+            Assert.True(actualLocationId == expectedLocationId);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public async Task GetLocationId_WithInvalidData_ReturnsCorrectValue(int id)
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+
+            var actualLocationId = service.GetLocationId(id);
+
+            Assert.True(actualLocationId == 0);
+        }
 
         private async Task SeedData(ApplicationDbContext context)
         {
