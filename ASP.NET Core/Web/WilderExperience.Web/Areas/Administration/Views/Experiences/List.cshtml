@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "List";
 }
 
 <table class="table">
@@ -13,3 +13,6 @@
     </thead>
     @Html.DisplayForModel();
 </table>
+
+
+@Html.Partial("_PaginationPartial")

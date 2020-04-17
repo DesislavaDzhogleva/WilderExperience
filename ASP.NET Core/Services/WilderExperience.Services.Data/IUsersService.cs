@@ -6,7 +6,7 @@
     using WilderExperience.Data.Models;
     using WilderExperience.Web.ViewModels.Administration.Users;
 
-    public interface IUsersService
+    public interface IUsersService : IPaginatableService
     {
         IEnumerable<T> GetAll<T>();
 

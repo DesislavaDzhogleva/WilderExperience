@@ -1,6 +1,7 @@
 ﻿namespace WilderExperience.Web.Areas.Administration.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using WilderExperience.Common;
     using WilderExperience.Services.Data;
     using WilderExperience.Web.ViewModels.Shared;
 
@@ -13,10 +14,15 @@
             this.experiencesService = experiencesService;
         }
 
-        // GET: Administration/Experiences
-        public IActionResult Index()
+        public IActionResult List(int? pageNumber)
         {
+            this.experiencesService.PageNumber = pageNumber ?? 1;
+            this.experiencesService.PageSize = GlobalConstants.PageSize;
+
             var experiences = this.experiencesService.GetAll<ExperienceViewModel>();
+
+            this.ViewBag.PageNumber = pageNumber ?? 1;
+            this.ViewBag.HasNextPage = this.experiencesService.HasNextPage;
             return this.View(experiences);
         }
     }

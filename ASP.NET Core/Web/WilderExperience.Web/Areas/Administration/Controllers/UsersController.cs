@@ -8,6 +8,7 @@
     using WilderExperience.Common;
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Data;
+    using WilderExperience.Web.Helpers;
     using WilderExperience.Web.ViewModels.Administration.Users;
     using WilderExperience.Web.ViewModels.Shared;
 
@@ -17,16 +18,23 @@
         private readonly IUsersService usersService;
         private readonly IExperiencesService experiencesService;
 
-        public UsersController(UserManager<ApplicationUser> userManager, IUsersService usersService, IExperiencesService experiencesService)
+        public UsersController( UserManager<ApplicationUser> userManager, IUsersService usersService, IExperiencesService experiencesService)
         {
             this.userManager = userManager;
             this.usersService = usersService;
             this.experiencesService = experiencesService;
         }
 
-        public IActionResult List()
+        public IActionResult List(int? pageNumber)
         {
+            this.usersService.PageNumber = pageNumber ?? 1;
+            this.usersService.PageSize = GlobalConstants.PageSize;
+
             var users = this.usersService.GetAll<UsersListViewModel>();
+
+            this.ViewBag.PageNumber = pageNumber ?? 1;
+            this.ViewBag.HasNextPage = this.usersService.HasNextPage;
+
             return this.View(users);
         }
 

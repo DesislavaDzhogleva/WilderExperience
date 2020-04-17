@@ -5,7 +5,7 @@
     using WilderExperience.Data.Models;
     using WilderExperience.Web.ViewModels.Experiences;
 
-    public interface IExperiencesService
+    public interface IExperiencesService : IPaginatableService
     {
         IEnumerable<T> GetAll<T>();
 

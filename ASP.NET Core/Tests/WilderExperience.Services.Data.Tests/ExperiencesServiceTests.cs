@@ -22,26 +22,14 @@
         {
             AutoMapperConfig.RegisterMappings(
                 typeof(Experience).GetTypeInfo().Assembly,
-                typeof(ExperienceViewModel).GetTypeInfo().Assembly
-                );
-
+                typeof(ExperienceViewModel).GetTypeInfo().Assembly);
         }
+
         [Fact]
         public async Task GetAllShouldReturnCorrectCountAsync()
         {
-            //var repository = new Mock<IDeletableEntityRepository<Experience>>();
-            //repository.Setup(r => r.All()).Returns(new List<Experience>
-            //                                            {
-            //                                                new Experience(),
-            //                                                new Experience(),
-            //                                                new Experience(),
-            //                                            }.AsQueryable());
-            //var service = new ExperiencesService(repository.Object);
-            // TODO: 
-
-
             var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await SeedData(context);
+            await this.SeedData(context);
 
             var repository = new EfDeletableEntityRepository<Experience>(context);
             var service = new ExperiencesService(repository);
@@ -62,7 +50,7 @@
                 UserName = "Kaplata69",
                 Email = "kaplata69@abv.bg",
                 EmailConfirmed = true,
-                PasswordHash = "someRandomHash"
+                PasswordHash = "someRandomHash",
             };
             context.Users.Add(user);
 
@@ -72,14 +60,11 @@
                 Name = "Perushtica",
                 Lat = "53.555",
                 Lng = "23.456",
-                Type = WilderExperience.Data.Models.Enums.Type.City
+                Type = WilderExperience.Data.Models.Enums.Type.City,
             };
 
             context.Locations.Add(location);
-
-
             await context.SaveChangesAsync();
-
 
             var experience = new Experience()
             {
@@ -90,7 +75,6 @@
             };
             context.Experiences.Add(experience);
 
-
             await context.SaveChangesAsync();
         }
 
@@ -99,7 +83,7 @@
         public async Task CreateAsync_ShouldReturnEntity()
         {
             var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await SeedData(context);
+            await this.SeedData(context);
 
 
             string testUserId = context.Users.First().Id;

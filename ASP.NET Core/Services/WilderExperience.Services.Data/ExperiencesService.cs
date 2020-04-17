@@ -14,6 +14,12 @@
     {
         private readonly IDeletableEntityRepository<Experience> experienceRepository;
 
+        public bool HasNextPage { get; private set; }
+
+        public int PageNumber { get; set; }
+
+        public int PageSize { get; set; }
+
         public ExperiencesService(IDeletableEntityRepository<Experience> experienceRepository)
         {
             this.experienceRepository = experienceRepository;
@@ -21,35 +27,52 @@
 
         public IEnumerable<T> GetAll<T>()
         {
-            var experiences = this.experienceRepository.All()
-                .To<T>();
+            var experiences = this.experienceRepository.All();
 
-            return experiences;
+            //var count = experiences.Count();
+            //var totalPages = (int)Math.Ceiling(count / (double)this.PageSize);
+            //this.HasNextPage = this.PageNumber < totalPages;
+            //// pagination
+            //experiences = experiences.Skip((this.PageNumber - 1) * this.PageSize).Take(this.PageSize);
+
+            experiences = this.GetExperiencePerPage(experiences);
+
+            return experiences.To<T>();
         }
 
         public IEnumerable<T> GetAllByLocationId<T>(int locationId)
         {
             var experiences = this.experienceRepository.All()
-                .Where(x => x.LocationId == locationId)
-                .To<T>();
+                .Where(x => x.LocationId == locationId);
 
-            return experiences;
+            experiences = this.GetExperiencePerPage(experiences);
+
+            return experiences.To<T>();
         }
 
         public IEnumerable<T> GetAllForUser<T>(string userId)
         {
             var experiences = this.experienceRepository.All()
-                .Where(x => x.AuthorId == userId)
-                .To<T>();
+                .Where(x => x.AuthorId == userId);
 
-            return experiences;
+
+            //var count = experiences.Count();
+            //var totalPages = (int)Math.Ceiling(count / (double)this.PageSize);
+            //this.HasNextPage = this.PageNumber < totalPages;
+            //// pagination
+            //experiences = experiences.Skip((this.PageNumber - 1) * this.PageSize).Take(this.PageSize);
+
+            experiences = this.GetExperiencePerPage(experiences);
+
+            return experiences.To<T>();
         }
 
         public IEnumerable<Experience> GetAllByUserIdddd(string id)
         {
             var experiences = this.experienceRepository.All()
-                .Where(x => x.AuthorId == id)
-                .ToList();
+                .Where(x => x.AuthorId == id);
+
+            experiences = this.GetExperiencePerPage(experiences);
 
             return experiences;
         }
@@ -131,6 +154,17 @@
                 .FirstOrDefault();
 
             return locationId;
+        }
+
+        private IQueryable<Experience> GetExperiencePerPage(IQueryable<Experience> experiences)
+        {
+            var count = experiences.Count();
+            var totalPages = (int)Math.Ceiling(count / (double)this.PageSize);
+            this.HasNextPage = this.PageNumber < totalPages;
+            // pagination
+            experiences = experiences.Skip((this.PageNumber - 1) * this.PageSize).Take(this.PageSize);
+
+            return experiences;
         }
     }
 }

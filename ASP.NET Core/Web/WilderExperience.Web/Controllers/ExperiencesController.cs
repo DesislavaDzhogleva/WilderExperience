@@ -30,20 +30,30 @@
         }
 
         [Authorize]
-        public IActionResult MyExperiences()
+        public IActionResult MyExperiences(int? pageNumber)
         {
+            this.experiencesService.PageNumber = pageNumber ?? 1;
+            this.experiencesService.PageSize = GlobalConstants.PageSize;
+
             var user = this.userManager.GetUserAsync(this.User);
             var experiences = this.experiencesService.GetAllForUser<ExperienceViewModel>(user.Result.Id);
+
             this.ViewData["Username"] = user.Result.UserName;
+
+            this.ViewBag.PageNumber = pageNumber ?? 1;
+            this.ViewBag.HasNextPage = this.experiencesService.HasNextPage;
             return this.View(experiences);
         }
 
-        public IActionResult List(int locationId, string status = "")
+        public IActionResult List(int locationId, int? pageNumber, string status = "")
         {
             if (locationId == 0)
             {
                 return this.NotFound();
             }
+
+            this.experiencesService.PageNumber = pageNumber ?? 1;
+            this.experiencesService.PageSize = GlobalConstants.PageSize;
 
             var experiencesViewModel = this.experiencesService.GetAllByLocationId<ExperiencesListViewModel>(locationId);
             var experienceList = new ExperiencesEnumerableViewModel
@@ -55,10 +65,14 @@
             var locationName = this.locationService.GetNameById(locationId);
 
             this.ViewData["locationName"] = locationName;
+            this.ViewBag.LocationId = locationId;
+            this.ViewBag.PageNumber = pageNumber ?? 1;
+            this.ViewBag.HasNextPage = this.experiencesService.HasNextPage;
 
             if (status.Equals("success"))
             {
-                ViewBag.Messages = new[] {
+                this.ViewBag.Messages = new[]
+                {
                 new AlertViewModel("success", "Success!", "The experience was added successfully!"),
                 };
             }
@@ -88,7 +102,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                ViewBag.Messages = new[] {
+                this.ViewBag.Messages = new[] {
                     new AlertViewModel("danger", "Warning!", "You have entered invalid data!"),
                 };
                 return this.View(input);

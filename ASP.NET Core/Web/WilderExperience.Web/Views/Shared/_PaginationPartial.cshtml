@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "_PaginationPartial";
+}
+
+<a asp-action="List" asp-route-locationId="@ViewBag.LocationId"
+   asp-route-pageNumber="@(ViewBag.PageNumber - 1)"
+   class="btn @(ViewBag.PageNumber > 1 ? "btn-primary" : "btn-default disabled")">
+    Previous
+</a>
+<a asp-action="List" asp-route-locationId="@ViewBag.LocationId"
+   asp-route-pageNumber="@(ViewBag.PageNumber + 1)"
+   class="btn @(ViewBag.HasNextPage ? "btn-primary" : "btn-default disabled")">
+    Next
+</a>
+

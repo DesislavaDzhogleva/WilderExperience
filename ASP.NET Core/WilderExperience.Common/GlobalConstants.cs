@@ -11,5 +11,7 @@
         public const string AdminUsername = "Admin";
 
         public const string CurrentContry = "Bulgaria";
+
+        public const int PageSize = 4;
     }
 }

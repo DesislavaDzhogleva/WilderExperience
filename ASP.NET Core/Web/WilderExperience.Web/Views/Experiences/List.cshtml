@@ -4,8 +4,8 @@
     ViewData["Title"] = "List";
 }
 
-    <h1 class="title fancy-title w-100 text-center">@this.ViewData["locationName"]</h1>
-    <a class="btn btn-outline-default btn-round mt-2 " asp-action="Create" asp-route-locationId="@Model.LocationId">Add Experience</a>
+<h1 class="title fancy-title w-100 text-center">@this.ViewData["locationName"]</h1>
+<a class="btn btn-outline-default btn-round mt-2 " asp-action="Create" asp-route-locationId="@Model.LocationId">Add Experience</a>
 
 @if (Model.List.Any() == false)
 {
@@ -54,5 +54,8 @@ else
         </div>
     </div>
 }
+
+
+    @Html.Partial("_PaginationPartial")
 
 

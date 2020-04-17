@@ -1,6 +1,7 @@
 ﻿namespace WilderExperience.Services.Data
 {
     using Microsoft.AspNetCore.Identity;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -14,6 +15,12 @@
     {
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly UserManager<ApplicationUser> userManager;
+
+        public bool HasNextPage { get; private set; }
+
+        public int PageNumber { get; set; }
+
+        public int PageSize { get; set; }
 
         public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository, UserManager<ApplicationUser> userManager)
         {
@@ -33,10 +40,12 @@
 
         public IEnumerable<T> GetAll<T>()
         {
-            var users = this.usersRepository.AllWithDeleted()
-                .To<T>();
+            var users = this.usersRepository.AllWithDeleted();
 
-            return users;
+            users = this.GetUsersPerPage(users);
+                
+
+            return users.To<T>(); ;
         }
 
         public async Task<int> EditAsync(UsersEditViewModel model)
@@ -71,6 +80,17 @@
         {
             this.usersRepository.Delete(user);
             await this.usersRepository.SaveChangesAsync();
+        }
+
+        private IQueryable<ApplicationUser> GetUsersPerPage(IQueryable<ApplicationUser> users)
+        {
+            var count = users.Count();
+            var totalPages = (int)Math.Ceiling(count / (double)this.PageSize);
+            this.HasNextPage = this.PageNumber < totalPages;
+            // pagination
+            users = users.Skip((this.PageNumber - 1) * this.PageSize).Take(this.PageSize);
+
+            return users;
         }
     }
 }
