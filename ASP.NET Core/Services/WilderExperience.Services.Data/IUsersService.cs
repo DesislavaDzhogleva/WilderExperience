@@ -9,7 +9,7 @@
 
     public interface IUsersService
     {
-        IQueryable<T> GetAll<T>();
+        IQueryable<T> GetAll<T>(string orderBy = "CreatedOn", string orderDir = "Desc");
 
         Task<int> EditAsync(UsersEditViewModel input);
 

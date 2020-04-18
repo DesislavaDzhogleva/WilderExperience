@@ -31,10 +31,41 @@
 
             return post;
         }
-
-        public IQueryable<T> GetAll<T>()
+        private IQueryable<ApplicationUser> ApplyOrder(IQueryable<ApplicationUser> input, string orderBy = "CreatedOn", string orderDir = "Desc")
         {
-            return this.usersRepository.AllWithDeleted().To<T>();
+            if (orderDir == "Asc")
+            {
+                switch (orderBy)
+                {
+                    case "Id": input = input.OrderBy(x => x.Id); break;
+                    case "FirstName": input = input.OrderBy(x => x.FirstName); break;
+                    case "LastName": input = input.OrderBy(x => x.LastName); break;
+                    case "UserName": input = input.OrderBy(x => x.UserName); break;
+                    case "Email": input = input.OrderBy(x => x.Email); break;
+                    case "DeletedOn": input = input.OrderBy(x => x.DeletedOn); break;
+                    default: input = input.OrderBy(x => x.CreatedOn); break;
+                }
+            }
+            else
+            {
+                switch (orderBy)
+                {
+                    case "Id": input = input.OrderByDescending(x => x.Id); break;
+                    case "FirstName": input = input.OrderByDescending(x => x.FirstName); break;
+                    case "LastName": input = input.OrderByDescending(x => x.LastName); break;
+                    case "UserName": input = input.OrderByDescending(x => x.UserName); break;
+                    case "Email": input = input.OrderByDescending(x => x.Email); break;
+                    case "DeletedOn": input = input.OrderByDescending(x => x.DeletedOn); break;
+                    default: input = input.OrderByDescending(x => x.CreatedOn); break;
+                }
+            }
+            return input;
+        }
+        public IQueryable<T> GetAll<T>(string orderBy = "CreatedOn", string orderDir = "Desc")
+        {
+            var users = this.usersRepository.AllWithDeleted();
+            users = this.ApplyOrder(users, orderBy, orderDir);
+            return users.To<T>();
         }
 
         public async Task<int> EditAsync(UsersEditViewModel model)

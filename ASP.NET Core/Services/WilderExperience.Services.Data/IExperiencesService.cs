@@ -8,12 +8,12 @@
 
     public interface IExperiencesService
     {
-        IQueryable<T> GetAll<T>(string orderBy = "created_on", string orderDir = "desc");
+        IQueryable<T> GetAll<T>(string orderBy = "CreatedOn", string orderDir = "Desc");
         IQueryable<T> GetTop<T>();
 
         IQueryable<T> GetAllByLocationId<T>(int locationId);
 
-        IQueryable<T> GetAllForUser<T>(string userId, string orderBy = "created_on", string orderDir = "desc");
+        IQueryable<T> GetAllForUser<T>(string userId, string orderBy = "CreatedOn", string orderDir = "Desc");
 
         T GetById<T>(int id);
 
