@@ -26,31 +26,25 @@
             this.experienceRepository = experienceRepository;
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public IQueryable<T> GetAll<T>()
         {
-            var experiences = this.experienceRepository.All();
-            experiences = this.GetExperiencePerPage(experiences);
-            return experiences.To<T>();
+            return this.experienceRepository.All().To<T>();
+        }
+        public IQueryable<T> GetTop<T>()
+        {
+            return this.experienceRepository.All().DefaultIfEmpty().OrderBy(x => x.Ratings.Average(x => x.RatingNumber)).To<T>();
         }
 
-        public IEnumerable<T> GetAllByLocationId<T>(int locationId)
+        public IQueryable<T> GetAllByLocationId<T>(int locationId)
         {
-            var experiences = this.experienceRepository.All()
-                .Where(x => x.LocationId == locationId);
-
-            experiences = this.GetExperiencePerPage(experiences);
-
-            return experiences.To<T>();
+            return this.experienceRepository.All()
+                .Where(x => x.LocationId == locationId).To<T>();
         }
 
-        public IEnumerable<T> GetAllForUser<T>(string userId)
+        public IQueryable<T> GetAllForUser<T>(string userId)
         {
-            var experiences = this.experienceRepository.All()
-                .Where(x => x.AuthorId == userId);
-
-            experiences = this.GetExperiencePerPage(experiences);
-
-            return experiences.To<T>();
+            return this.experienceRepository.All()
+                .Where(x => x.AuthorId == userId).To<T>();
         }
 
         public T GetById<T>(int id)
@@ -152,16 +146,5 @@
             return locationId;
         }
 
-        //TODO: TEST
-        private IQueryable<Experience> GetExperiencePerPage(IQueryable<Experience> experiences)
-        {
-            var count = experiences.Count();
-            var totalPages = (int)Math.Ceiling(count / (double)this.PageSize);
-            this.HasNextPage = this.PageNumber < totalPages;
-            // pagination
-            experiences = experiences.Skip((this.PageNumber - 1) * this.PageSize).Take(this.PageSize);
-
-            return experiences;
-        }
     }
 }

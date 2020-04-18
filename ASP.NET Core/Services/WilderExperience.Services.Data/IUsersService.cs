@@ -1,14 +1,15 @@
 ﻿namespace WilderExperience.Services.Data
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using WilderExperience.Data.Models;
     using WilderExperience.Web.ViewModels.Administration.Users;
 
-    public interface IUsersService : IPaginatableService
+    public interface IUsersService
     {
-        IEnumerable<T> GetAll<T>();
+        IQueryable<T> GetAll<T>();
 
         Task<int> EditAsync(UsersEditViewModel input);
 

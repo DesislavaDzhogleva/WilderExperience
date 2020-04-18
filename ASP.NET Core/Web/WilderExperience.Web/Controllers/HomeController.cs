@@ -1,15 +1,27 @@
 ﻿namespace WilderExperience.Web.Controllers
 {
     using System.Diagnostics;
-
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using WilderExperience.Common;
+    using WilderExperience.Services.Data;
+    using WilderExperience.Web.Infrastructure;
     using WilderExperience.Web.ViewModels;
+    using WilderExperience.Web.ViewModels.Experiences;
 
     public class HomeController : BaseController
     {
-        public IActionResult Index()
+        private readonly IExperiencesService experienceService;
+
+        public HomeController(IExperiencesService experienceService)
         {
-            return this.View();
+            this.experienceService = experienceService;
+        }
+        public async Task<IActionResult> Index(int? pageNumber)
+        {
+            var experiences = this.experienceService.GetTop<ExperiencesListViewModel>();
+            return this.View(await PaginatedList<ExperiencesListViewModel>.CreateAsync(experiences.AsNoTracking(), pageNumber ?? 1, GlobalConstants.PageSize));
         }
 
         public IActionResult Privacy()

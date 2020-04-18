@@ -1,13 +1,11 @@
-﻿@model WilderExperience.Web.ViewModels.Experiences.ExperiencesEnumerableViewModel
-
-@{
+﻿@{
     ViewData["Title"] = "List";
 }
 
 <h1 class="title fancy-title w-100 text-center">@this.ViewData["locationName"]</h1>
-<a class="btn btn-outline-default btn-round mt-2 " asp-action="Create" asp-route-locationId="@Model.LocationId">Add Experience</a>
+<a class="btn btn-outline-default btn-round mt-2 mb-2 " asp-action="Create" asp-route-locationId="@this.ViewData["locationId"]">Add Experience</a>
 
-@if (Model.List.Any() == false)
+@if (Model.Count == 0)
 {
     <div>
         <h1 class="title">No Experiences For This Location Yet!</h1>
@@ -17,7 +15,7 @@ else
 {
     <div class="container">
         <div class="row">
-            @foreach (var item in Model.List)
+            @foreach (var item in Model)
             {
                 <div class="col-md-6 experience-list">
                     <div class="card card-blog text-center">
@@ -41,6 +39,17 @@ else
                                 <h3 class="card-title">
                                     <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
                                 </h3>
+
+                                <p class="averageRating bg-success p-2 m-2 col-1 m-auto">
+                                    @if (item.AverageRating > 0)
+                                    {
+                                        <span class="">@item.AverageRating</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="">N.A.</span>
+                                    }
+                                </p>
                                 <p class="card-description">
                                     @item.ShortDescription
                                 </p>
@@ -53,9 +62,9 @@ else
             }
         </div>
     </div>
+    @Html.Partial("_PaginationPartial")
 }
 
 
-    @Html.Partial("_PaginationPartial")
 
 

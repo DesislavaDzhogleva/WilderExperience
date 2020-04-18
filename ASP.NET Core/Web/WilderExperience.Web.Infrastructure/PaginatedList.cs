@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
-namespace WilderExperience.Web.Helpers
+namespace WilderExperience.Web.Infrastructure
 {
     public class PaginatedList<T> : List<T>
     {
         public int PageIndex { get; private set; }
-
         public int TotalPages { get; private set; }
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
@@ -24,7 +24,7 @@ namespace WilderExperience.Web.Helpers
         {
             get
             {
-                return this.PageIndex > 1;
+                return (this.PageIndex > 1);
             }
         }
 
@@ -32,7 +32,7 @@ namespace WilderExperience.Web.Helpers
         {
             get
             {
-                return this.PageIndex < this.TotalPages;
+                return (this.PageIndex < this.TotalPages);
             }
         }
 

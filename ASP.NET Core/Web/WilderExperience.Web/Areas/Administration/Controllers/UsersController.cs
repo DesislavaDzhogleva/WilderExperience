@@ -5,10 +5,11 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using WilderExperience.Common;
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Data;
-    using WilderExperience.Web.Helpers;
+    using WilderExperience.Web.Infrastructure;
     using WilderExperience.Web.ViewModels.Administration.Experiences;
     using WilderExperience.Web.ViewModels.Administration.Users;
     using WilderExperience.Web.ViewModels.Shared;
@@ -26,17 +27,11 @@
             this.experiencesService = experiencesService;
         }
 
-        public IActionResult List(int? pageNumber)
+        public async Task<IActionResult> ListAsync(int? pageNumber)
         {
-            this.usersService.PageNumber = pageNumber ?? 1;
-            this.usersService.PageSize = GlobalConstants.PageSize;
 
             var users = this.usersService.GetAll<UsersListViewModel>();
-
-            this.ViewBag.PageNumber = pageNumber ?? 1;
-            this.ViewBag.HasNextPage = this.usersService.HasNextPage;
-
-            return this.View(users);
+            return this.View(await PaginatedList<UsersListViewModel>.CreateAsync(users.AsNoTracking(), pageNumber ?? 1, GlobalConstants.PageSize));
         }
 
         public IActionResult Add()

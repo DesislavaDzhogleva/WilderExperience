@@ -1,16 +1,19 @@
-﻿
+﻿@using WilderExperience.Web.Infrastructure;
 @{
     ViewData["Title"] = "_PaginationPartial";
 }
-
-<a asp-action="List" asp-route-locationId="@ViewBag.LocationId"
-   asp-route-pageNumber="@(ViewBag.PageNumber - 1)"
-   class="btn @(ViewBag.PageNumber > 1 ? "btn-primary" : "btn-default disabled")">
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "btn-default disabled" : "btn-primary";
+    var nextDisabled = !Model.HasNextPage ? "btn-default disabled" : "btn-primary";
+}
+<a
+   asp-all-route-data="@Context.GetQueryParameters().WithRoute("pageNumber",""+(Model.PageIndex-1));"
+   class="btn @prevDisabled">
     Previous
 </a>
-<a asp-action="List" asp-route-locationId="@ViewBag.LocationId"
-   asp-route-pageNumber="@(ViewBag.PageNumber + 1)"
-   class="btn @(ViewBag.HasNextPage ? "btn-primary" : "btn-default disabled")">
+<a
+   asp-all-route-data="@Context.GetQueryParameters().WithRoute("pageNumber",""+(Model.PageIndex+1));"
+   class="btn @nextDisabled">
     Next
 </a>
 

@@ -16,12 +16,6 @@
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public bool HasNextPage { get; private set; }
-
-        public int PageNumber { get; set; }
-
-        public int PageSize { get; set; }
-
         public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository, UserManager<ApplicationUser> userManager)
         {
             this.usersRepository = usersRepository;
@@ -38,13 +32,9 @@
             return post;
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public IQueryable<T> GetAll<T>()
         {
-            var users = this.usersRepository.AllWithDeleted();
-
-            users = this.GetUsersPerPage(users);
-
-            return users.To<T>();
+            return this.usersRepository.AllWithDeleted().To<T>();
         }
 
         public async Task<int> EditAsync(UsersEditViewModel model)
@@ -81,15 +71,5 @@
             await this.usersRepository.SaveChangesAsync();
         }
 
-        private IQueryable<ApplicationUser> GetUsersPerPage(IQueryable<ApplicationUser> users)
-        {
-            var count = users.Count();
-            var totalPages = (int)Math.Ceiling(count / (double)this.PageSize);
-            this.HasNextPage = this.PageNumber < totalPages;
-            // pagination
-            users = users.Skip((this.PageNumber - 1) * this.PageSize).Take(this.PageSize);
-
-            return users;
-        }
     }
 }

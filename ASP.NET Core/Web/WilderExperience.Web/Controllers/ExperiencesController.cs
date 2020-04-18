@@ -6,9 +6,11 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using WilderExperience.Common;
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Data;
+    using WilderExperience.Web.Infrastructure;
     using WilderExperience.Web.ViewModels.Experiences;
     using WilderExperience.Web.ViewModels.Shared;
 
@@ -30,44 +32,35 @@
         }
 
         [Authorize]
-        public IActionResult MyExperiences(int? pageNumber)
+        public async Task<IActionResult> MyExperiencesAsync(int? pageNumber)
         {
-            this.experiencesService.PageNumber = pageNumber ?? 1;
-            this.experiencesService.PageSize = GlobalConstants.PageSize;
 
             var user = this.userManager.GetUserAsync(this.User);
             var experiences = this.experiencesService.GetAllForUser<ExperienceViewModel>(user.Result.Id);
 
             this.ViewData["Username"] = user.Result.UserName;
 
-            this.ViewBag.PageNumber = pageNumber ?? 1;
-            this.ViewBag.HasNextPage = this.experiencesService.HasNextPage;
-            return this.View(experiences);
+            return this.View(await PaginatedList<ExperienceViewModel>.CreateAsync(experiences.AsNoTracking(), pageNumber ?? 1, GlobalConstants.PageSize));
         }
 
-        public IActionResult List(int locationId, int? pageNumber, string status = "")
+        public async Task<IActionResult> ListAsync(int locationId, int? pageNumber, string status = "")
         {
             if (locationId == 0)
             {
                 return this.NotFound();
             }
 
-            this.experiencesService.PageNumber = pageNumber ?? 1;
-            this.experiencesService.PageSize = GlobalConstants.PageSize;
-
-            var experiencesViewModel = this.experiencesService.GetAllByLocationId<ExperiencesListViewModel>(locationId);
-            var experienceList = new ExperiencesEnumerableViewModel
+            var experiences = this.experiencesService.GetAllByLocationId<ExperiencesListViewModel>(locationId);
+            /*var experienceList = new ExperiencesEnumerableViewModel
             {
                 List = experiencesViewModel,
                 LocationId = locationId,
-            };
+            };*/
 
             var locationName = this.locationService.GetNameById(locationId);
 
             this.ViewData["locationName"] = locationName;
-            this.ViewBag.LocationId = locationId;
-            this.ViewBag.PageNumber = pageNumber ?? 1;
-            this.ViewBag.HasNextPage = this.experiencesService.HasNextPage;
+            this.ViewData["locationId"] = locationId;
 
             if (status.Equals("success"))
             {
@@ -76,8 +69,7 @@
                 new AlertViewModel("success", "Success!", "The experience was added successfully!"),
                 };
             }
-
-            return this.View(experienceList);
+            return this.View(await PaginatedList<ExperiencesListViewModel>.CreateAsync(experiences.AsNoTracking(), pageNumber ?? 1, GlobalConstants.PageSize));
         }
 
         [Authorize]
@@ -129,8 +121,12 @@
                 {
                     var experienceViewModel = this.experiencesService.GetById<ExperienceDetailsViewModel>(id);
 
+                    experienceViewModel.IsUserAlreadyRated = false;
                     var user = await this.userManager.GetUserAsync(this.User);
-                    experienceViewModel.IsUserAlreadyRated = await this.ratingService.IsUserRated(id, user.Id);
+                    if (user != null) 
+                    {
+                        experienceViewModel.IsUserAlreadyRated = await this.ratingService.IsUserRated(id, user.Id);
+                    }
                     experienceViewModel.AverageRating = this.ratingService.GetRating(id);
 
                     return this.View(experienceViewModel);
