@@ -32,11 +32,11 @@
         }
 
         [Authorize]
-        public async Task<IActionResult> MyExperiencesAsync(int? pageNumber)
+        public async Task<IActionResult> MyExperiencesAsync(int? pageNumber, string orderBy = "CreatedOn", string orderDir = "Desc")
         {
 
             var user = this.userManager.GetUserAsync(this.User);
-            var experiences = this.experiencesService.GetAllForUser<ExperienceViewModel>(user.Result.Id);
+            var experiences = this.experiencesService.GetAllForUser<ExperienceViewModel>(user.Result.Id, orderBy, orderDir);
 
             this.ViewData["Username"] = user.Result.UserName;
 

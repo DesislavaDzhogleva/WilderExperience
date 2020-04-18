@@ -1,0 +1,8 @@
+﻿@model WilderExperience.Web.ViewModels.Shared.SortingLinkViewModel
+@using WilderExperience.Web.Infrastructure;
+<a asp-all-route-data="@Context.GetQueryParameters().WithRoute("orderBy",Model.Field).WithRoute("orderDir",(Context.GetQueryParameters().CheckValue("orderBy",Model.Field) && Context.GetQueryParameters().CheckValue("orderDir","Asc")) ? "Desc" : "Asc" );">
+    Location
+    <span class="@((Context.GetQueryParameters().CheckValue("orderBy",Model.Field)) ? "" : "d-none")">
+        <span class="fa @((Context.GetQueryParameters().ContainsKey("orderDir") == true && Context.GetQueryParameters()["orderDir"] == "Asc") ? "fa-arrow-up" : "fa-arrow-down")"></span>
+    </span>
+</a>

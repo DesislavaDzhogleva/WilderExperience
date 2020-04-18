@@ -17,10 +17,10 @@
             this.experiencesService = experiencesService;
         }
 
-        public async Task<IActionResult> ListAsync(int? pageNumber)
+        public async Task<IActionResult> ListAsync(int? pageNumber, string orderBy = "CreatedOn", string orderDir = "Desc")
         {
 
-            var experiences = this.experiencesService.GetAll<ExperienceViewModel>();
+            var experiences = this.experiencesService.GetAll<ExperienceViewModel>(orderBy, orderDir);
             return this.View(await PaginatedList<ExperienceViewModel>.CreateAsync(experiences.AsNoTracking(), pageNumber ?? 1, GlobalConstants.PageSize));
         }
     }

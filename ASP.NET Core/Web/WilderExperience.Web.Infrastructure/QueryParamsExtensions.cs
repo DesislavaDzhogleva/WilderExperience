@@ -37,5 +37,11 @@ namespace WilderExperience.Web.Infrastructure
 
             return this;
         }
+
+        public bool CheckValue(string routeParam, string routeValue)
+        {
+            return this.ContainsKey(routeParam) == true && this[routeParam] == routeValue;
+
+        }
     }
 }
