@@ -1,5 +1,6 @@
 ﻿namespace WilderExperience.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -17,18 +18,18 @@
             this.commentsRepository = commentsRepository;
         }
 
-        public Comment GetOriginalById(int id)
+        public async Task DeleteAsync(int id)
         {
-            var post = this.commentsRepository.All()
+            var comment = this.commentsRepository.All()
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
 
-            return post;
-        }
+            if (comment == null)
+            {
+                throw new ArgumentNullException("Comment not found");
+            }
 
-        public async Task DeleteAsync(Comment input)
-        {
-            this.commentsRepository.Delete(input);
+            this.commentsRepository.Delete(comment);
             await this.commentsRepository.SaveChangesAsync();
         }
 
@@ -72,6 +73,12 @@
         {
             return this.commentsRepository.All()
                 .Where(x => x.Id == id).Count() == 1;
+        }
+
+        public bool IsAuthoredBy(int commentId, string id)
+        {
+            return this.commentsRepository.All()
+                .Where(x => x.Id == commentId && x.UserId == id).Count() == 1;
         }
     }
 }

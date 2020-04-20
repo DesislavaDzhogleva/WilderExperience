@@ -16,14 +16,14 @@
             }*/
             <li class="nav-item">
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary mb-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-outline-secondary mb-0 dropdown-toggle nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Welcome @this.User.Identity.Name
                     </button>
-                    <div class="dropdown-menu ml-1 bg-transparent" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu ml-1 nav-link bg-transparent" aria-labelledby="dropdownMenuButton">
 
-                        <a class="dropdown-item bg-transparent text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
+                        <a class="dropdown-item bg-transparent" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
 
-                        <a class="dropdown-item bg-transparent text-white" onclick="document.getElementById('logoutForm').submit();" href="#">Logout</a>
+                        <a class="dropdown-item bg-transparent" onclick="document.getElementById('logoutForm').submit();" href="#">Logout</a>
 
 
                         <form id="logoutForm" class="d-none" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">

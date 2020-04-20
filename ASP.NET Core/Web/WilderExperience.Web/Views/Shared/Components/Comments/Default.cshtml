@@ -53,6 +53,7 @@
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                             <form asp-controller="Comments" asp-action="Delete" method="post">
                                                 <input type="hidden" name="id" value="@comment.Id" />
+                                                <input type="hidden" name="experienceId" value="@comment.ExperienceId" />
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
                                         </div>

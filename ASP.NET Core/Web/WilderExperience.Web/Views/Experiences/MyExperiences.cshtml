@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<WilderExperience.Web.ViewModels.Shared.ExperienceViewModel>
+@using WilderExperience.Web.ViewModels.Shared
 @{
     ViewData["Title"] = "MyExperiences";
 }
@@ -16,9 +17,18 @@ else
     <table class="table">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">Location</th>
-                <th scope="col">Experience Title</th>
-                <th scope="col">Date Of Visit</th>
+                <th scope="col">
+                    @Html.Partial("_SortingLinkPartial", new SortingLinkViewModel { Field = "Location" })
+                </th>
+                <th scope="col">
+                    @Html.Partial("_SortingLinkPartial", new SortingLinkViewModel { Field = "Title" })
+                </th>
+                <th scope="col">
+                    @Html.Partial("_SortingLinkPartial", new SortingLinkViewModel { Field = "Rating" })
+                </th>
+                <th scope="col">
+                    @Html.Partial("_SortingLinkPartial", new SortingLinkViewModel { Field = "CreatedOn" })
+                </th>
                 <th scope="col">Modify</th>
             </tr>
         </thead>

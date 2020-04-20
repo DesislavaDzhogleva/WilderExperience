@@ -53,6 +53,7 @@
                     : content;
             }
         }
+
         [NotMapped]
         public string LocationName { get; set; }
 

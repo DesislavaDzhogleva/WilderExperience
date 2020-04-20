@@ -11,12 +11,11 @@
 
         Task<int> AddComment(CommentViewModel input);
 
-        Comment GetOriginalById(int id);
-
-        Task DeleteAsync(Comment input);
+        Task DeleteAsync(int id);
 
         T GetById<T>(int id);
 
         bool Exists(int id);
+        bool IsAuthoredBy(int commentId, string id);
     }
 }

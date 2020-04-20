@@ -52,7 +52,6 @@ namespace WilderExperience.Services.Data
         }
         public async Task<bool> Rate(int experienceId, string userId, int score)
         {
-
             var rated = false;
 
             bool isUserAlreadyRated = await this.IsUserRated(experienceId, userId);

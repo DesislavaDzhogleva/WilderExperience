@@ -63,8 +63,10 @@
                         break;
                 }
             }
+
             return input;
         }
+
         public IQueryable<T> GetAll<T>(string orderBy = "CreatedOn", string orderDir = "Desc")
         {
             var experiences = this.experienceRepository.All();
@@ -75,7 +77,10 @@
 
         public IQueryable<T> GetTop<T>()
         {
-            return this.experienceRepository.All().DefaultIfEmpty().OrderBy(x => x.Ratings.Average(x => x.RatingNumber)).To<T>();
+            return this.experienceRepository.All()
+                .Where(x => x.Ratings.Count != 0)
+                .OrderBy(x => x.Ratings.Average(x => x.RatingNumber))
+                .To<T>();
         }
 
         public IQueryable<T> GetAllByLocationId<T>(int locationId)

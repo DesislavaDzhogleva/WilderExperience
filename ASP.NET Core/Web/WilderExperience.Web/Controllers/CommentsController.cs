@@ -40,28 +40,45 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, int experienceId)
         {
             if (id == 0)
             {
                 return this.NotFound();
             }
 
-            var comment = this.commentsService.GetOriginalById((int)id);
-            if (comment == null)
+            var exists = this.commentsService.Exists((int)id);
+
+            if (exists)
             {
-                return this.NotFound();
+                bool isAllowed = await this.IsAllowedToAccess((int)id);
+                if (isAllowed)
+                {
+                    await this.commentsService.DeleteAsync((int)id);
+                    return this.Redirect($"/Experiences/Details?id={experienceId}");
+                }
+                else
+                {
+                    return this.Forbid();
+                }
             }
 
+            return this.NotFound();
+        }
+
+        private async Task<bool> IsAllowedToAccess(int commentId)
+        {
             var user = await this.userManager.GetUserAsync(this.User);
             bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
-            if (comment.UserId != user.Id && !isAdmin)
+
+            var isAuthor = this.commentsService.IsAuthoredBy(commentId, user.Id);
+
+            if (!isAuthor && !isAdmin)
             {
-                return this.Unauthorized();
+                return false;
             }
 
-            await this.commentsService.DeleteAsync(comment);
-            return this.Redirect($"/Experiences/Details?id={comment.ExperienceId}");
+            return true;
         }
     }
 }

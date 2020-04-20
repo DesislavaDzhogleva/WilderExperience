@@ -25,6 +25,7 @@
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(WildLocationCreateViewModel input)
         {
             await this.wildLocationService.AddAsync(input);
