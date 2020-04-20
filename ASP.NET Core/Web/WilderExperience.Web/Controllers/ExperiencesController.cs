@@ -72,6 +72,21 @@
         }
 
         [Authorize]
+        public async Task<IActionResult> AddToFavourites(int id)
+        {
+            if(id != 0)
+            {
+                var exists = this.experiencesService.Exists(id);
+                if (exists)
+                {
+                    var user = this.userManager.GetUserId(this.User);
+                }
+            }
+
+            return this.NotFound();
+        }
+
+        [Authorize]
         public async Task<IActionResult> CreateAsync(int locationId)
         {
             if (locationId == 0)
@@ -169,7 +184,11 @@
         {
             if (!this.ModelState.IsValid)
             {
+                this.ViewBag.Messages = new[] {
+                    new AlertViewModel("danger", "Warning!", "You have entered invalid data!"),
+                };
                 return this.View(input);
+
             }
 
             var exists = this.experiencesService.Exists(input.Id);

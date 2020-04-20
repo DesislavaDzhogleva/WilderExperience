@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20200414115518_ImageModelAddAuthor.Designer.cs" />
     <Compile Remove="Migrations\20200414115841_ImageModelAddAuthor.cs" />
     <Compile Remove="Migrations\20200414115841_ImageModelAddAuthor.Designer.cs" />
+    <Compile Remove="Migrations\20200420125525_AddedUserFavourite.cs" />
+    <Compile Remove="Migrations\20200420125525_AddedUserFavourite.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

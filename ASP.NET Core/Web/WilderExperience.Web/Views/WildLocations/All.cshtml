@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "All";
 }
-    @section bodyFull
+@section bodyFull
     {
     <div class="row">
         <div class="col-12 mt-3">
@@ -9,13 +9,19 @@
             <div id="map" class="w-100" style="height:600px;"></div>
         </div>
     </div>
+}
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
     }
+}
 
-
-
-    @section scripts
+@section scripts
         {
-        <script>
+    <script>
                 // TODO: sanitize
                 var getUrl = window.location;
                 window.baseUrl = getUrl.protocol + "//" + getUrl.host;
@@ -79,14 +85,25 @@
                             map: map,
                             icon: iconBase + 'grn-stars.png',
                             infoWindow: new google.maps.InfoWindow({
-                                content: "You are here"
+                                content: `
+                                <p>You are here</p>
+                                <form method="post" action="/WildLocations/Add">
+                                    <div class="form-group">
+                                        <input type="hidden" id="RequestVerificationToken" name="__RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
+                                        <input type="hidden" name="Lat" value="${userPosition.coords.latitude}" />
+                                        <input type="hidden" name="Lng" value="${userPosition.coords.longitude}" />
+                                        <input type="text" class="form-control" id="locationName" name="Name" placeholder="Location Name">
+                                     </div>
+                                    <input type='submit' class='btn btn-primary' value='Add Location'>
+                                </form>
+`
                             })
                         });
-                        
+
                         userMarker.infoWindow.open(userMarker.map, userMarker);
-                        /*userMarker.addListener('click', function () {
+                        userMarker.addListener('click', function () {
                             this.infoWindow.open(this.map, this);
-                        });*/
+                        });
                     }
 
 
@@ -103,6 +120,7 @@
                                 content: `
                                 <form method="post" action="/WildLocations/Add">
                                     <div class="form-group">
+                                        <input type="hidden" id="RequestVerificationToken" name="__RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
                                         <input type="hidden" name="Lat" value="${event.latLng.lat()}" />
                                         <input type="hidden" name="Lng" value="${event.latLng.lng()}" />
                                         <input type="text" class="form-control" id="locationName" name="Name" placeholder="Location Name">
@@ -113,21 +131,21 @@
                             })
                         });
                         window.newMarker.infoWindow.open(window.newMarker.map, window.newMarker);
-                        /*newMarker.addListener('click', function () {
+                        newMarker.addListener('click', function () {
                             this.infoWindow.open(this.map, this);
-                        });*/
+                        });
                     });
 
 
 
                 }
-        </script>
-        <!--Load the API from the specified URL
-        * The async attribute allows the browser to render the page while the API loads
-        * The key parameter will contain your own API key (which is not needed for this tutorial)
-        * The callback parameter executes the initMap() function
-        -->
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKBk4NjJerK43vFHvrqtPdG9LW0GR-ORc&callback=initMap">
-        </script>
-    }
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKBk4NjJerK43vFHvrqtPdG9LW0GR-ORc&callback=initMap">
+    </script>
+}

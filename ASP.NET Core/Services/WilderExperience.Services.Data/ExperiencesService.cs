@@ -10,6 +10,7 @@
     using WilderExperience.Data.Models.Enums;
     using WilderExperience.Services.Mapping;
     using WilderExperience.Web.ViewModels.Experiences;
+    using WilderExperience.Web.ViewModels.UserFavourites;
 
     public class ExperiencesService : IExperiencesService
     {
@@ -109,6 +110,25 @@
             return experience;
         }
 
+        /*public Task AddToFavouritesAsync(UserFavouriteViewModel input)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException("Incorrect Data");
+            }
+
+            var experience = this.experienceRepository.All()
+                .Where(x => x.Id == input.ExperienceId)
+                .FirstOrDefault();
+
+            if (experience == null)
+            {
+                throw new ArgumentNullException("Experience does not exist");
+            }
+
+            
+        }*/
+
         public async Task<int> CreateAsync(ExperienceCreateViewModel input)
         {
             if (input == null)
@@ -198,5 +218,9 @@
             return locationId;
         }
 
+        public Task AddToFavouritesAsync(int Id, string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

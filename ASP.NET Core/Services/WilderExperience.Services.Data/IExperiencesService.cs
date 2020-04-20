@@ -18,6 +18,8 @@
 
         T GetById<T>(int id);
 
+        Task AddToFavouritesAsync(int Id, string userId);
+
         Task<int> CreateAsync(ExperienceCreateViewModel input);
 
         Task<int> EditAsync(ExperienceEditViewModel input);

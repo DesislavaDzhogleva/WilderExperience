@@ -36,6 +36,8 @@
 
         public DbSet<ExperienceImage> ExperienceImages { get; set; }
 
+        public DbSet<UserFavourite> UsersFavourites { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
