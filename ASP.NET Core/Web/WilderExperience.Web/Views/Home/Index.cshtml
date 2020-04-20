@@ -1,136 +1,136 @@
-﻿@using WilderExperience.Common
-@{
-    this.ViewData["Title"] = "Home Page";
-}
-<h1 class="title fancy-title w-100 text-center">Top Destinations</h1>
+﻿@model IEnumerable<WilderExperience.Web.ViewModels.Experiences.ExperiencesListViewModel>
+    @{
+        this.ViewData["Title"] = "Home Page";
+    }
+    <h1 class="title fancy-title w-100 text-center">Top Destinations</h1>
 
-<div class="masonry mt-4">
-    @foreach (var item in Model)
-    {
-        @if (item.Image != null)
+    <div class="masonry mt-4">
+        @foreach (var item in Model)
         {
-            <div class="brick">
-                <img src="~/uploads/experiences/@item.Image.Name" alt="@item.Title" title="@item.Title">
-                <a class="overlay" asp-controller="Experiences" asp-action="Details" asp-route-id="@item.Id">
-                    <h3 class="title">@item.Title</h3>
+            @if (item.Image != null)
+            {
+                <div class="brick">
+                    <img src="~/uploads/experiences/@item.Image.Name" alt="@item.Title" title="@item.Title">
+                    <a class="overlay" asp-controller="Experiences" asp-action="Details" asp-route-id="@item.Id">
+                        <h3 class="title">@item.Title</h3>
+                        <div class="description">
+                            <p>
+                                @item.Summary
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+
+
+        @*<div class="brick">
+                <img src="https://w3bits.com/files/img/cherry-plant.jpg" alt="Cherry plant" title="Cherry plant">
+                <a class="overlay" href="#">
+                    <h3 class="title">A Glorious City</h3>
                     <div class="description">
                         <p>
-                            @item.Summary
+                            Lorem ipsum dolor sit amet, <br>
+                            consectetur adipisicing elit.
+                        </p>
+                    </div>
+                </a>
+
+            </div>
+            <div class="brick">
+                <img src="https://w3bits.com/files/img/oranges-pomegranates.jpg" alt="Oranges and Pomegranates" title="Oranges and Pomegranates">
+                <a class="overlay" href="#">
+                    <h3 class="title">A Glorious City</h3>
+                    <div class="description">
+                        <p>
+                            Lorem ipsum dolor sit amet, <br>
+                            consectetur adipisicing elit.
                         </p>
                     </div>
                 </a>
             </div>
-        }
-    }
-
-
-    <div class="brick">
-        <img src="https://w3bits.com/files/img/cherry-plant.jpg" alt="Cherry plant" title="Cherry plant">
-        <a class="overlay" href="#">
-            <h3 class="title">A Glorious City</h3>
-            <div class="description">
-                <p>
-                    Lorem ipsum dolor sit amet, <br>
-                    consectetur adipisicing elit.
-                </p>
+            <div class="brick">
+                <img src="https://w3bits.com/files/img/strawberry.jpg" alt="Strawberry" title="Strawberry">
+                <a class="overlay" href="#">
+                    <h3 class="title">A Glorious City</h3>
+                    <div class="description">
+                        <p>
+                            Lorem ipsum dolor sit amet, <br>
+                            consectetur adipisicing elit.
+                        </p>
+                    </div>
+                </a>
             </div>
-        </a>
-
-    </div>
-    <div class="brick">
-        <img src="https://w3bits.com/files/img/oranges-pomegranates.jpg" alt="Oranges and Pomegranates" title="Oranges and Pomegranates">
-        <a class="overlay" href="#">
-            <h3 class="title">A Glorious City</h3>
-            <div class="description">
-                <p>
-                    Lorem ipsum dolor sit amet, <br>
-                    consectetur adipisicing elit.
-                </p>
+            <div class="brick">
+                <img src="https://w3bits.com/files/img/blueberries.jpg" alt="Blueberries" title="Blueberries">
+                <a class="overlay" href="#">
+                    <h3 class="title">A Glorious City</h3>
+                    <div class="description">
+                        <p>
+                            Lorem ipsum dolor sit amet, <br>
+                            consectetur adipisicing elit.
+                        </p>
+                    </div>
+                </a>
             </div>
-        </a>
-    </div>
-    <div class="brick">
-        <img src="https://w3bits.com/files/img/strawberry.jpg" alt="Strawberry" title="Strawberry">
-        <a class="overlay" href="#">
-            <h3 class="title">A Glorious City</h3>
-            <div class="description">
-                <p>
-                    Lorem ipsum dolor sit amet, <br>
-                    consectetur adipisicing elit.
-                </p>
+            <div class="brick">
+                <img src="https://w3bits.com/files/img/pears.jpg" alt="Pears" title="Pears">
+                <a class="overlay" href="#">
+                    <h3 class="title">A Glorious City</h3>
+                    <div class="description">
+                        <p>
+                            Lorem ipsum dolor sit amet, <br>
+                            consectetur adipisicing elit.
+                        </p>
+                    </div>
+                </a>
             </div>
-        </a>
-    </div>
-    <div class="brick">
-        <img src="https://w3bits.com/files/img/blueberries.jpg" alt="Blueberries" title="Blueberries">
-        <a class="overlay" href="#">
-            <h3 class="title">A Glorious City</h3>
-            <div class="description">
-                <p>
-                    Lorem ipsum dolor sit amet, <br>
-                    consectetur adipisicing elit.
-                </p>
+            <div class="brick">
+                <img src="https://w3bits.com/files/img/easter-eggs.jpg" alt="Easter-eggs" title="Easter-eggs">
+                <a class="overlay" href="#">
+                    <h3 class="title">A Glorious City</h3>
+                    <div class="description">
+                        <p>
+                            Lorem ipsum dolor sit amet, <br>
+                            consectetur adipisicing elit.
+                        </p>
+                    </div>
+                </a>
             </div>
-        </a>
-    </div>
-    <div class="brick">
-        <img src="https://w3bits.com/files/img/pears.jpg" alt="Pears" title="Pears">
-        <a class="overlay" href="#">
-            <h3 class="title">A Glorious City</h3>
-            <div class="description">
-                <p>
-                    Lorem ipsum dolor sit amet, <br>
-                    consectetur adipisicing elit.
-                </p>
+            <div class="brick">
+                <img src="https://w3bits.com/files/img/lemons.jpg" alt="Lemons" title="Lemons">
+                <a class="overlay" href="#">
+                    <h3 class="title">A Glorious City</h3>
+                    <div class="description">
+                        <p>
+                            Lorem ipsum dolor sit amet, <br>
+                            consectetur adipisicing elit.
+                        </p>
+                    </div>
+                </a>
             </div>
-        </a>
-    </div>
-    <div class="brick">
-        <img src="https://w3bits.com/files/img/easter-eggs.jpg" alt="Easter-eggs" title="Easter-eggs">
-        <a class="overlay" href="#">
-            <h3 class="title">A Glorious City</h3>
-            <div class="description">
-                <p>
-                    Lorem ipsum dolor sit amet, <br>
-                    consectetur adipisicing elit.
-                </p>
+            <div class="brick">
+                <img src="https://w3bits.com/files/img/cherries.jpg" alt="Cherries" title="Cherries">
+                <a class="overlay" href="#">
+                    <h3 class="title">A Glorious City</h3>
+                    <div class="description">
+                        <p>
+                            Lorem ipsum dolor sit amet, <br>
+                            consectetur adipisicing elit.
+                        </p>
+                    </div>
+                </a>
             </div>
-        </a>
+            <div class="brick">
+                <img src="https://w3bits.com/files/img/grapes.jpg" alt="Grapes" title="Grapes">
+                <a class="overlay" href="#">
+                    <h3 class="title">A Glorious City</h3>
+                    <div class="description">
+                        <p>
+                            Lorem ipsum dolor sit amet, <br>
+                            consectetur adipisicing elit.
+                        </p>
+                    </div>
+                </a>
+            </div>*@
     </div>
-    <div class="brick">
-        <img src="https://w3bits.com/files/img/lemons.jpg" alt="Lemons" title="Lemons">
-        <a class="overlay" href="#">
-            <h3 class="title">A Glorious City</h3>
-            <div class="description">
-                <p>
-                    Lorem ipsum dolor sit amet, <br>
-                    consectetur adipisicing elit.
-                </p>
-            </div>
-        </a>
-    </div>
-    <div class="brick">
-        <img src="https://w3bits.com/files/img/cherries.jpg" alt="Cherries" title="Cherries">
-        <a class="overlay" href="#">
-            <h3 class="title">A Glorious City</h3>
-            <div class="description">
-                <p>
-                    Lorem ipsum dolor sit amet, <br>
-                    consectetur adipisicing elit.
-                </p>
-            </div>
-        </a>
-    </div>
-    <div class="brick">
-        <img src="https://w3bits.com/files/img/grapes.jpg" alt="Grapes" title="Grapes">
-        <a class="overlay" href="#">
-            <h3 class="title">A Glorious City</h3>
-            <div class="description">
-                <p>
-                    Lorem ipsum dolor sit amet, <br>
-                    consectetur adipisicing elit.
-                </p>
-            </div>
-        </a>
-    </div>
-</div>

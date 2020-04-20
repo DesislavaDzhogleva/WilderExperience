@@ -13,16 +13,18 @@
     public class HomeController : BaseController
     {
         private readonly IExperiencesService experienceService;
+        private readonly IRatingService ratingService;
 
-        public HomeController(IExperiencesService experienceService)
+        public HomeController(IExperiencesService experienceService, IRatingService ratingService)
         {
             this.experienceService = experienceService;
+            this.ratingService = ratingService;
         }
 
-        public async Task<IActionResult> Index(int? pageNumber)
+        public async Task<IActionResult> Index()
         {
             var experiences = this.experienceService.GetTop<ExperiencesListViewModel>();
-            return this.View(await PaginatedList<ExperiencesListViewModel>.CreateAsync(experiences.AsNoTracking(), pageNumber ?? 1, GlobalConstants.PageSize));
+            return this.View(experiences);
         }
 
         public IActionResult Privacy()

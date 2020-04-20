@@ -125,7 +125,7 @@
                     
                     if (user != null) 
                     {
-                        experienceViewModel.IsUserAlreadyRated = await this.ratingService.IsUserRated(id, user.Id);
+                        experienceViewModel.IsUserAlreadyRated = await this.ratingService.HasUserRated(id, user.Id);
                     }
 
                     experienceViewModel.AverageRating = this.ratingService.GetRating(id);

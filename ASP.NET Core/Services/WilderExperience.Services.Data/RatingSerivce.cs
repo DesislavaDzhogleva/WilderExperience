@@ -16,14 +16,13 @@ namespace WilderExperience.Services.Data
             this.ratingRepository = ratingRepository;
         }
 
-        public IEnumerable<T> GetTop10<T>(double rating = 0)
+        public IQueryable<T> GetTop10<T>(double rating = 0)
         {
             var topExperiences = this.ratingRepository.All()
                 .Where(x => x.RatingNumber > rating)
                 .OrderByDescending(x => x.RatingNumber)
                 .To<T>()
-                .Take(10)
-                .ToList();
+                .Take(10);
 
             return topExperiences;
         }
@@ -43,18 +42,20 @@ namespace WilderExperience.Services.Data
             return rate;
         }
 
-        public async Task<bool> IsUserRated(int experienceId, string userId)
+        public async Task<bool> HasUserRated(int experienceId, string userId)
         {
             var rate = this.ratingRepository.All()
             .Where(x => x.ExperienceId == experienceId && x.UserId == userId)
             .FirstOrDefault();
+
             return !(rate == null);
         }
+
         public async Task<bool> Rate(int experienceId, string userId, int score)
         {
             var rated = false;
 
-            bool isUserAlreadyRated = await this.IsUserRated(experienceId, userId);
+            bool isUserAlreadyRated = await this.HasUserRated(experienceId, userId);
 
             if (isUserAlreadyRated == false)
             {
