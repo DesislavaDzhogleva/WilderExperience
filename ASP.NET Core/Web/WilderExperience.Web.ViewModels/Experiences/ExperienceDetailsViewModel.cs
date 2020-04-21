@@ -16,6 +16,8 @@
     {
         public int Id { get; set; }
 
+        public string AuthorId { get; set; }
+
         [Required]
         public string Title { get; set; }
 
@@ -43,6 +45,11 @@
 
         [NotMapped]
         public bool IsUserAlreadyRated { get; set; }
+
+        public ICollection<UserFavourite> UserFavourites { get; set; }
+
+        [NotMapped]
+        public bool UserHasAddedToFavourite { get; set; }
 
         [Required]
         public string AuthorUserName { get; set; }

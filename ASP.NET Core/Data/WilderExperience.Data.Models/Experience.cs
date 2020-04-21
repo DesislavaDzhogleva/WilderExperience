@@ -44,5 +44,7 @@
         public ICollection<Rating> Ratings { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
+
+        public ICollection<UserFavourite> UserFavourites { get; set; }
     }
 }

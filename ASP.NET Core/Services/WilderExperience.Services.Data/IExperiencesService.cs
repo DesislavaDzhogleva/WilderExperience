@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using WilderExperience.Data.Models;
     using WilderExperience.Web.ViewModels.Experiences;
+    using WilderExperience.Web.ViewModels.UserFavourites;
 
     public interface IExperiencesService
     {
@@ -17,8 +18,6 @@
         IQueryable<T> GetAllForUser<T>(string userId, string orderBy = "CreatedOn", string orderDir = "Desc");
 
         T GetById<T>(int id);
-
-        Task AddToFavouritesAsync(int Id, string userId);
 
         Task<int> CreateAsync(ExperienceCreateViewModel input);
 

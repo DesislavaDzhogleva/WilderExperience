@@ -35,9 +35,6 @@
             var repository = new EfDeletableEntityRepository<Experience>(context);
             var service = new ExperiencesService(repository);
 
-            service.PageNumber = 1;
-            service.PageSize = 4;
-
             var count = service.GetAll<ExperienceViewModel>().Count();
 
             Assert.True(count == 2, "Create method does not work correctly");
@@ -50,9 +47,6 @@
 
             var repository = new EfDeletableEntityRepository<Experience>(context);
             var service = new ExperiencesService(repository);
-
-            service.PageNumber = 1;
-            service.PageSize = 4;
 
             var count = service.GetAll<ExperienceViewModel>().Count();
 
@@ -69,8 +63,6 @@
             var service = new ExperiencesService(repository);
 
             int testLocationId = context.Locations.First().Id;
-            service.PageNumber = 1;
-            service.PageSize = 4;
             var count = service.GetAllByLocationId<ExperienceViewModel>(testLocationId).Count();
 
             Assert.True(count == 2, "GetAllByLocation method does not work correctly");
@@ -86,9 +78,6 @@
 
             var repository = new EfDeletableEntityRepository<Experience>(context);
             var service = new ExperiencesService(repository);
-
-            service.PageNumber = 1;
-            service.PageSize = 4;
             var count = service.GetAllByLocationId<ExperienceViewModel>(locationId).Count();
 
             Assert.True(count == 0, "GetAllByLocation method does not work correctly");
@@ -104,8 +93,6 @@
             var repository = new EfDeletableEntityRepository<Experience>(context);
             var service = new ExperiencesService(repository);
 
-            service.PageNumber = 1;
-            service.PageSize = 4;
             var count = service.GetAllForUser<ExperienceViewModel>(testUserId).Count();
             var expectedCount = 2;
 
@@ -123,8 +110,6 @@
             var repository = new EfDeletableEntityRepository<Experience>(context);
             var service = new ExperiencesService(repository);
 
-            service.PageNumber = 1;
-            service.PageSize = 4;
             var count = service.GetAllForUser<ExperienceViewModel>(userId).Count();
             var expectedCount = 0;
 
@@ -143,8 +128,6 @@
             var repository = new EfDeletableEntityRepository<Experience>(context);
             var service = new ExperiencesService(repository);
 
-            service.PageNumber = 1;
-            service.PageSize = 4;
             var experienceId = 1;
             var model = service.GetById<ExperienceViewModel>(experienceId);
 
@@ -167,8 +150,6 @@
             var repository = new EfDeletableEntityRepository<Experience>(context);
             var service = new ExperiencesService(repository);
 
-            service.PageNumber = 1;
-            service.PageSize = 4;
             var model = service.GetById<ExperienceViewModel>(id);
 
             var expectedExperience = repository.All().Where(x => x.Id == id).FirstOrDefault();
@@ -199,20 +180,6 @@
             Assert.True(resultId == 3, "Create method does not work correctly");
         }
 
-        [Fact]
-        public async Task CreateAsync_WithInvalidInput_ShouldThrowException()
-        {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
-
-            string testUserId = context.Users.First().Id;
-            int testLocationId = context.Locations.First().Id;
-
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            Task act() => service.CreateAsync(null);
-            await Assert.ThrowsAsync<ArgumentNullException>(act);
-        }
 
         [Fact]
         public async Task EditAsync_ShouldReturnCorrectValue()
@@ -236,7 +203,6 @@
             Assert.True(input.Title == expectedTitle, "Edit method does not work correctly");
         }
 
-        [Fact]
         public async Task EditAsync_WithNullInput_ShouldThrowException()
         {
             var context = WilderExperienceContextInMemoryFactory.InitializeContext();
@@ -249,7 +215,6 @@
             await Assert.ThrowsAsync<ArgumentNullException>(act);
         }
 
-        [Fact]
         public async Task EditAsync_ShouldThrowException()
         {
             var context = WilderExperienceContextInMemoryFactory.InitializeContext();
@@ -289,9 +254,6 @@
             Assert.True(deletedExperinece.IsDeleted == true, "Delete method does not work correctly");
         }
 
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(0)]
         public async Task DeleteAsync_WithInvalidInput_ShouldThrowException(int id)
         {
             var context = WilderExperienceContextInMemoryFactory.InitializeContext();

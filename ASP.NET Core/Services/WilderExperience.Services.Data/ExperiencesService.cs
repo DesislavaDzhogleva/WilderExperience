@@ -16,12 +16,6 @@
     {
         private readonly IDeletableEntityRepository<Experience> experienceRepository;
 
-        public bool HasNextPage { get; private set; }
-
-        public int PageNumber { get; set; }
-
-        public int PageSize { get; set; }
-
         public ExperiencesService(IDeletableEntityRepository<Experience> experienceRepository)
         {
             this.experienceRepository = experienceRepository;
@@ -110,32 +104,10 @@
             return experience;
         }
 
-        /*public Task AddToFavouritesAsync(UserFavouriteViewModel input)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException("Incorrect Data");
-            }
-
-            var experience = this.experienceRepository.All()
-                .Where(x => x.Id == input.ExperienceId)
-                .FirstOrDefault();
-
-            if (experience == null)
-            {
-                throw new ArgumentNullException("Experience does not exist");
-            }
-
-            
-        }*/
+        
 
         public async Task<int> CreateAsync(ExperienceCreateViewModel input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException("Incorrect Data");
-            }
-
             var experience = new Experience()
             {
                 Title = input.Title,
@@ -155,19 +127,9 @@
 
         public async Task<int> EditAsync(ExperienceEditViewModel input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException("Incorrect input");
-            }
-
             var experience = this.experienceRepository.All()
                 .Where(x => x.Id == input.Id)
                 .FirstOrDefault();
-
-            if (experience == null)
-            {
-                throw new ArgumentNullException("Experience does not exist");
-            }
 
             experience.DateOfVisit = input.DateOfVisit;
             experience.Title = input.Title;
@@ -187,11 +149,7 @@
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
 
-            if (experience == null)
-            {
-                throw new ArgumentNullException("Experience does not exist");
-            }
-
+            
             this.experienceRepository.Delete(experience);
             await this.experienceRepository.SaveChangesAsync();
         }
@@ -218,9 +176,5 @@
             return locationId;
         }
 
-        public Task AddToFavouritesAsync(int Id, string userId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

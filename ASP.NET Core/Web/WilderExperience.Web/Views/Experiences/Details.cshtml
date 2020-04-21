@@ -43,7 +43,14 @@
                     <a class="btn btn-outline-default btn-round" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 
                 }
-                <a class="btn btn-outline-default btn-round" asp-controller="Images" asp-action="Add" asp-route-experienceId="@Model.Id">Add to favourites <span class="fa fa-heart text-danger"></span></a>
+                @if (Model.UserHasAddedToFavourite)
+                {
+                    <a class="btn btn-outline-default btn-round" asp-controller="Experiences" asp-action="RemoveFromFavourites" asp-route-experienceId="@Model.Id">Remove From Favourites<span class="fa fa-heart text-danger"></span></a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-default btn-round" asp-controller="Experiences" asp-action="AddToFavourites" asp-route-experienceId="@Model.Id">Add to favourites <span class="fa fa-heart text-danger"></span></a>
+                }
 
             </div>
             <h2 class="card-title"><small>By @Model.AuthorUserName</small></h2>
