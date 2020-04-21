@@ -18,21 +18,6 @@
             this.commentsRepository = commentsRepository;
         }
 
-        public async Task DeleteAsync(int id)
-        {
-            var comment = this.commentsRepository.All()
-                .Where(x => x.Id == id)
-                .FirstOrDefault();
-
-            if (comment == null)
-            {
-                throw new ArgumentNullException("Comment not found");
-            }
-
-            this.commentsRepository.Delete(comment);
-            await this.commentsRepository.SaveChangesAsync();
-        }
-
         public IEnumerable<T> GetAll<T>(int experienceId)
         {
             var comments = this.commentsRepository.All()
@@ -57,6 +42,16 @@
             await this.commentsRepository.SaveChangesAsync();
 
             return comment.Id;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var comment = this.commentsRepository.All()
+                .Where(x => x.Id == id)
+                .FirstOrDefault();
+
+            this.commentsRepository.Delete(comment);
+            await this.commentsRepository.SaveChangesAsync();
         }
 
         public T GetById<T>(int id)
