@@ -29,6 +29,7 @@
                 {
                     return 0;
                 }
+
                 return this.Ratings.Average(x => x.RatingNumber);
             }
         }

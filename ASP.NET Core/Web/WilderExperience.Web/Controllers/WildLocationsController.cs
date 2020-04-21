@@ -26,6 +26,8 @@
                     new AlertViewModel("danger", "Warning!", "Name is required"),
                 };
             }
+            
+
 
             var locations = this.wildLocationService.GetAll<WildLocationListViewModel>();
             return this.View(locations);

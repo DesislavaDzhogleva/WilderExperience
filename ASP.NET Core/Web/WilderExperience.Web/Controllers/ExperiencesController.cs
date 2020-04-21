@@ -13,6 +13,7 @@
     using WilderExperience.Web.Infrastructure;
     using WilderExperience.Web.ViewModels.Experiences;
     using WilderExperience.Web.ViewModels.Shared;
+    using WilderExperience.Web.ViewModels.UserFavourites;
 
     public class ExperiencesController : BaseController
     {
@@ -34,6 +35,16 @@
         }
 
         [Authorize]
+        public async Task<IActionResult> MyFavourites(int? pageNumber, string orderBy = "CreatedOn", string orderDir = "Desc")
+        {
+            var user = this.userManager.GetUserAsync(this.User);
+            var favourites = this.experiencesService.GetFavouritesForUsers<ExperiencesListViewModel>(user.Result.Id);
+
+            this.ViewData["Username"] = user.Result.UserName;
+            return this.View(await PaginatedList<ExperiencesListViewModel>.CreateAsync(favourites.AsNoTracking(), pageNumber ?? 1, GlobalConstants.PageSize));
+        }
+
+        [Authorize]
         public async Task<IActionResult> MyExperiencesAsync(int? pageNumber, string orderBy = "CreatedOn", string orderDir = "Desc")
         {
             var user = this.userManager.GetUserAsync(this.User);
@@ -52,11 +63,6 @@
             }
 
             var experiences = this.experiencesService.GetAllByLocationId<ExperiencesListViewModel>(locationId);
-            /*var experienceList = new ExperiencesEnumerableViewModel
-            {
-                List = experiencesViewModel,
-                LocationId = locationId,
-            };*/
 
             var locationName = this.locationService.GetNameById(locationId);
 
@@ -85,7 +91,7 @@
                 {
                     var user = await this.userManager.GetUserAsync(this.User);
                     await this.userFavouritesService.AddToFavouritesAsync(experienceId, user.Id);
-                    return this.Redirect($"Details/{experienceId}&status=success");
+                    return this.Redirect($"Details/{experienceId}?status=success");
                 }
             }
 
@@ -103,7 +109,7 @@
                     var user = await this.userManager.GetUserAsync(this.User);
 
                     await this.userFavouritesService.RemoveFromFavourites(experienceId, user.Id);
-                    return this.Redirect($"Details/{experienceId}&status=success");
+                    return this.Redirect($"Details/{experienceId}?status=success");
                 }
             }
 

@@ -67,6 +67,7 @@
             services.AddTransient<IImagesService, ImagesService>();
             services.AddTransient<ICommentsService, CommentsService>();
             services.AddTransient<IRatingService, RatingSerivce>();
+            services.AddTransient<IUserFavouritesService, UserFavouritesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

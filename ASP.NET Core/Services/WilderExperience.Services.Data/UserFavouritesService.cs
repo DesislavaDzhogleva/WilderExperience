@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WilderExperience.Data.Common.Repositories;
 using WilderExperience.Data.Models;
+using WilderExperience.Services.Mapping;
 
 namespace WilderExperience.Services.Data
 {
@@ -35,7 +36,18 @@ namespace WilderExperience.Services.Data
                 .Where(x => x.ExperienceId == experienceId && x.UserId == userId)
                 .FirstOrDefault();
 
+            this.userFavouriteRepository.Delete(model);
             await this.userFavouriteRepository.SaveChangesAsync();
         }
+
+        public IQueryable<T> GetFavouritesForUsers<T>(string userId)
+        {
+            var experience = this.userFavouriteRepository.All()
+                .Where(x => x.UserId == userId)
+                .To<T>();
+
+            return experience;
+        }
+
     }
 }

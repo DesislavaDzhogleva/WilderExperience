@@ -13,6 +13,7 @@
     {
         public int Id { get; set; }
 
+
         [Required]
         [StringLength(60, MinimumLength = 3)]
         public string Title { get; set; }
@@ -27,6 +28,7 @@
         public ICollection<RatingViewModel> Ratings { get; set; }
 
         public DateTime CreatedOn { get; set; }
+
         public double AverageRating
         {
             get
@@ -35,6 +37,7 @@
                 {
                     return 0;
                 }
+
                 return this.Ratings.Average(x => x.RatingNumber);
             }
         }

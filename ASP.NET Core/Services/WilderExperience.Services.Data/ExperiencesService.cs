@@ -94,6 +94,17 @@
             return experiences.To<T>();
         }
 
+        public IQueryable<T> GetFavouritesForUsers<T>(string userId, string orderBy = "CreatedOn", string orderDir = "Desc")
+        {
+            var experiences = this.experienceRepository.All()
+                .Where(x => x.UserFavourites.Any(y => y.UserId == userId));
+
+
+            experiences = this.ApplyOrder(experiences, orderBy, orderDir);
+
+            return experiences.To<T>();
+        }
+
         public T GetById<T>(int id)
         {
             var experience = this.experienceRepository.All()
@@ -103,8 +114,6 @@
 
             return experience;
         }
-
-        
 
         public async Task<int> CreateAsync(ExperienceCreateViewModel input)
         {
