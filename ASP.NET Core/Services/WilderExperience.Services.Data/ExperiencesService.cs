@@ -20,47 +20,6 @@
         {
             this.experienceRepository = experienceRepository;
         }
-        private IQueryable<Experience> ApplyOrder(IQueryable<Experience> input, string orderBy = "CreatedOn", string orderDir = "desc")
-        {
-            if (orderDir == "Asc")
-            {
-                switch (orderBy)
-                {
-                    case "Location":
-                        input = input.OrderBy(x => x.Location.Name);
-                        break;
-                    case "Rating":
-                        input = input.DefaultIfEmpty().OrderBy(x => x.Ratings.Average(x => x.RatingNumber));
-                        break;
-                    case "Title":
-                        input = input.OrderBy(x => x.Title);
-                        break;
-                    default:
-                        input = input.OrderBy(x => x.CreatedOn);
-                        break;
-                }
-            }
-            else
-            {
-                switch (orderBy)
-                {
-                    case "Location":
-                        input = input.OrderByDescending(x => x.Location.Name);
-                        break;
-                    case "Rating":
-                        input = input.DefaultIfEmpty().OrderByDescending(x => x.Ratings.Average(x => x.RatingNumber));
-                        break;
-                    case "Title":
-                        input = input.OrderByDescending(x => x.Title);
-                        break;
-                    default:
-                        input = input.OrderByDescending(x => x.CreatedOn);
-                        break;
-                }
-            }
-
-            return input;
-        }
 
         public IQueryable<T> GetAll<T>(string orderBy = "CreatedOn", string orderDir = "Desc")
         {
@@ -68,7 +27,6 @@
             experiences = this.ApplyOrder(experiences, orderBy, orderDir);
             return experiences.To<T>();
         }
-
 
         public IQueryable<T> GetTop<T>()
         {
@@ -98,7 +56,6 @@
         {
             var experiences = this.experienceRepository.All()
                 .Where(x => x.UserFavourites.Any(y => y.UserId == userId));
-
 
             experiences = this.ApplyOrder(experiences, orderBy, orderDir);
 
@@ -158,7 +115,6 @@
                 .Where(x => x.Id == id)
                 .FirstOrDefault();
 
-            
             this.experienceRepository.Delete(experience);
             await this.experienceRepository.SaveChangesAsync();
         }
@@ -183,6 +139,48 @@
                 .FirstOrDefault();
 
             return locationId;
+        }
+
+        private IQueryable<Experience> ApplyOrder(IQueryable<Experience> input, string orderBy = "CreatedOn", string orderDir = "desc")
+        {
+            if (orderDir == "Asc")
+            {
+                switch (orderBy)
+                {
+                    case "Location":
+                        input = input.OrderBy(x => x.Location.Name);
+                        break;
+                    case "Rating":
+                        input = input.DefaultIfEmpty().OrderBy(x => x.Ratings.Average(x => x.RatingNumber));
+                        break;
+                    case "Title":
+                        input = input.OrderBy(x => x.Title);
+                        break;
+                    default:
+                        input = input.OrderBy(x => x.CreatedOn);
+                        break;
+                }
+            }
+            else
+            {
+                switch (orderBy)
+                {
+                    case "Location":
+                        input = input.OrderByDescending(x => x.Location.Name);
+                        break;
+                    case "Rating":
+                        input = input.DefaultIfEmpty().OrderByDescending(x => x.Ratings.Average(x => x.RatingNumber));
+                        break;
+                    case "Title":
+                        input = input.OrderByDescending(x => x.Title);
+                        break;
+                    default:
+                        input = input.OrderByDescending(x => x.CreatedOn);
+                        break;
+                }
+            }
+
+            return input;
         }
 
     }

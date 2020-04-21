@@ -41,6 +41,31 @@
         }
 
         [Fact]
+        public async Task GetAll_ApplyOrder_ShouldReturnCorrectOrder()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+
+            var experienceFirst = service.GetAll<ExperienceViewModel>(orderBy: "Title", orderDir: "Asc").FirstOrDefault();
+            var expectedFirst = repository.All()
+                .OrderBy(x => x.Title)
+                .FirstOrDefault();
+
+
+            var experienceSecond = service.GetAll<ExperienceViewModel>(orderBy: "Title", orderDir: "Asc").Skip(1).FirstOrDefault();
+            var expectedSecond = repository.All()
+               .OrderBy(x => x.Title)
+               .Skip(1)
+               .FirstOrDefault();
+
+            Assert.True(experienceFirst.Title == expectedFirst.Title, "GetAll method does not work correctly");
+            Assert.True(experienceSecond.Title == expectedSecond.Title, "GetAll method does not work correctly 2");
+        }
+
+        [Fact]
         public void GetAll_WithNoData_ShouldWorkCorrectly()
         {
             var context = WilderExperienceContextInMemoryFactory.InitializeContext();
@@ -49,6 +74,31 @@
             var service = new ExperiencesService(repository);
 
             var count = service.GetAll<ExperienceViewModel>().Count();
+
+            Assert.True(count == 0, "Create method does not work correctly");
+        }
+
+        [Fact]
+        public async Task GetTop_ShouldWorkCorrectly()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+            var count = service.GetTop<ExperienceViewModel>().Count();
+
+            Assert.True(count == 1, "Create method does not work correctly");
+        }
+
+        [Fact]
+        public async Task GetTop_WithNoData_ShouldWorkCorrectly()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+            var count = service.GetTop<ExperienceViewModel>().Count();
 
             Assert.True(count == 0, "Create method does not work correctly");
         }
@@ -117,6 +167,29 @@
 
             Assert.True(count == expectedCount, "GetAllForUser method does not work correctly");
             Assert.True(result == null, "GetAllForUser method does not work correctly");
+        }
+
+        [Fact]
+        public async Task GetFavouritesForUsers_ShouldWorkCorrectly()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+
+            var repository = new EfDeletableEntityRepository<Experience>(context);
+            var service = new ExperiencesService(repository);
+
+            var userId = context.Users.First().Id;
+
+            var count = service.GetFavouritesForUsers<ExperienceViewModel>(userId).Count();
+            var expectedCount = 1;
+
+            var result = service.GetFavouritesForUsers<ExperienceViewModel>(userId).FirstOrDefault();
+            var expectedResult = repository.All().Where(x => x.UserFavourites.Any(y => y.UserId == userId)).FirstOrDefault();
+
+            Assert.True(count == expectedCount, "GetFavouritesForUsers method does not work correctly");
+            Assert.Equal(result.Id, expectedResult.Id);
+            Assert.Equal(result.LocationId.ToString(), expectedResult.LocationId.ToString());
+            Assert.Equal(result.Title, expectedResult.Title);
         }
 
         [Fact]
@@ -373,7 +446,6 @@
             };
             context.Users.Add(user);
 
-
             var location = new Location()
             {
                 Name = "Perushtica",
@@ -395,7 +467,6 @@
             context.Experiences.Add(experience);
             await context.SaveChangesAsync();
 
-
             var experience2 = new Experience()
             {
                 Title = "Second",
@@ -405,6 +476,25 @@
             };
 
             context.Experiences.Add(experience2);
+            await context.SaveChangesAsync();
+
+            var userFavourites = new UserFavourite()
+            {
+                UserId = context.Users.First().Id,
+                ExperienceId = context.Experiences.First().Id,
+            };
+
+            context.UsersFavourites.Add(userFavourites);
+            await context.SaveChangesAsync();
+
+            var rating = new Rating()
+            {
+                ExperienceId = context.Experiences.First().Id,
+                UserId = context.Users.First().Id,
+                RatingNumber = 5,
+            };
+
+            context.Ratings.Add(rating);
             await context.SaveChangesAsync();
         }
     }
