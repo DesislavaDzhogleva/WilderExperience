@@ -94,8 +94,20 @@
         }
 
         // Applies configurations
+        //private void ConfigureUserIdentityRelations(ModelBuilder builder)
+        //     => builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly)
+
         private void ConfigureUserIdentityRelations(ModelBuilder builder)
-             => builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+        {
+            builder.Entity<Location>(location =>
+            {
+                location.HasIndex(x => x.Name)
+                .IsUnique();
+            });
+            builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+
+            
+        }
 
         private void ApplyAuditInfoRules()
         {

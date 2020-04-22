@@ -20,7 +20,7 @@
         private readonly IUsersService usersService;
         private readonly IExperiencesService experiencesService;
 
-        public UsersController( UserManager<ApplicationUser> userManager, IUsersService usersService, IExperiencesService experiencesService)
+        public UsersController ( UserManager<ApplicationUser> userManager, IUsersService usersService, IExperiencesService experiencesService)
         {
             this.userManager = userManager;
             this.usersService = usersService;

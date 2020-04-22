@@ -36,6 +36,7 @@
                               new UserToRolesSeeder(this.configuration),
                               new SettingsSeeder(),
                               new LocationSeeder(),
+                              new ExperiencesSeeder(),
                           };
 
             foreach (var seeder in seeders)

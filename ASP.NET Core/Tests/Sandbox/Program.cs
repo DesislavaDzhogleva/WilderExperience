@@ -17,6 +17,7 @@
     using WilderExperience.Data.Repositories;
     using WilderExperience.Data.Seeding;
     using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Services.Messaging;
 
     public static class Program
