@@ -1,16 +1,13 @@
 ﻿namespace WilderExperience.Services.Data
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using WilderExperience.Data.Common.Repositories;
     using WilderExperience.Data.Models;
-    using WilderExperience.Data.Models.Enums;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Services.Mapping;
     using WilderExperience.Web.ViewModels.Experiences;
-    using WilderExperience.Web.ViewModels.UserFavourites;
 
     public class ExperiencesService : IExperiencesService
     {

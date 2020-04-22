@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.SqlClient;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -11,6 +10,7 @@
     using Microsoft.AspNetCore.Http;
     using WilderExperience.Data.Common.Repositories;
     using WilderExperience.Data.Models;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Services.Mapping;
     using WilderExperience.Web.ViewModels.Images;
 

@@ -7,6 +7,7 @@
     using WilderExperience.Data.Common.Repositories;
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.ViewModels.Settings;
 
     public class SettingsController : BaseController

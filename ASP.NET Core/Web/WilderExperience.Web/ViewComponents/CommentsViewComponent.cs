@@ -5,6 +5,7 @@
 
     using Microsoft.AspNetCore.Mvc;
     using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.ViewModels.Comments;
 
     [ViewComponent(Name ="Comments")]

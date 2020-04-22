@@ -7,7 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using WilderExperience.Common;
     using WilderExperience.Data.Models;
-    using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.ViewModels.Comments;
 
     public class CommentsController : BaseController

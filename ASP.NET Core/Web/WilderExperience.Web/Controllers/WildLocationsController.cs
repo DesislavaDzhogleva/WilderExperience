@@ -1,9 +1,10 @@
 ﻿namespace WilderExperience.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
-    using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.ViewModels.Locations;
     using WilderExperience.Web.ViewModels.Shared;
     using WilderExperience.Web.ViewModels.WildLocations;

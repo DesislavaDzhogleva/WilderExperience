@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WilderExperience.Data.Common.Repositories;
-using WilderExperience.Data.Models;
-using WilderExperience.Services.Mapping;
-
-namespace WilderExperience.Services.Data
+﻿namespace WilderExperience.Services.Data
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using WilderExperience.Data.Common.Repositories;
+    using WilderExperience.Data.Models;
+    using WilderExperience.Services.Data.Interfaces;
+    using WilderExperience.Services.Mapping;
+
     public class UserFavouritesService : IUserFavouritesService
     {
         private readonly IRepository<UserFavourite> userFavouriteRepository;

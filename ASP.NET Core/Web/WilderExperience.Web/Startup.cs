@@ -16,6 +16,7 @@
     using WilderExperience.Data.Repositories;
     using WilderExperience.Data.Seeding;
     using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Services.Mapping;
     using WilderExperience.Services.Messaging;
     using WilderExperience.Web.ViewModels;

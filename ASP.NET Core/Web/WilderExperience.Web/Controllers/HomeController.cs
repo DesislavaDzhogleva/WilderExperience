@@ -2,11 +2,9 @@
 {
     using System.Diagnostics;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using WilderExperience.Common;
-    using WilderExperience.Services.Data;
-    using WilderExperience.Web.Infrastructure;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.ViewModels;
     using WilderExperience.Web.ViewModels.Experiences;
 

@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using System.Threading.Tasks;
     using WilderExperience.Common;
-    using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.Infrastructure;
     using WilderExperience.Web.ViewModels.Shared;
 

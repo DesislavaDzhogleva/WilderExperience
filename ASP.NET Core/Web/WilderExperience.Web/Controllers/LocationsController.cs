@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using WilderExperience.Services.Data;
-using WilderExperience.Web.ViewModels.Locations;
-
-namespace WilderExperience.Web.Controllers
+﻿namespace WilderExperience.Web.Controllers
 {
+    using System.Linq;
+
+    using Microsoft.AspNetCore.Mvc;
+    using WilderExperience.Services.Data.Interfaces;
+    using WilderExperience.Web.ViewModels.Locations;
+
     public class LocationsController : Controller
     {
         private readonly ILocationsService locationsService;

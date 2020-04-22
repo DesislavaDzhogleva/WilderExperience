@@ -1,4 +1,4 @@
-﻿namespace WilderExperience.Services.Data
+﻿namespace WilderExperience.Services.Data.Interfaces
 {
     using System.Collections.Generic;
     using System.Linq;

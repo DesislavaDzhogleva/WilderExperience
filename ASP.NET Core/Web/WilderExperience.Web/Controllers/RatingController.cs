@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using WilderExperience.Data.Models;
     using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
 
     public class RatingController : BaseController
     {

@@ -1,7 +1,7 @@
 ﻿namespace WilderExperience.Web.Areas.Administration.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.ViewModels.Administration.Dashboard;
 
     public class DashboardController : AdministrationController

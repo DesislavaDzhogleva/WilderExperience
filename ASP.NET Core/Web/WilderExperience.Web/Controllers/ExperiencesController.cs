@@ -1,19 +1,18 @@
 ﻿namespace WilderExperience.Web.Controllers
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
     using WilderExperience.Common;
     using WilderExperience.Data.Models;
-    using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.Infrastructure;
     using WilderExperience.Web.ViewModels.Experiences;
     using WilderExperience.Web.ViewModels.Shared;
-    using WilderExperience.Web.ViewModels.UserFavourites;
 
     public class ExperiencesController : BaseController
     {

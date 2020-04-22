@@ -1,13 +1,12 @@
 ﻿namespace WilderExperience.Services.Data
 {
-    using Microsoft.AspNetCore.Identity;
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using WilderExperience.Common;
+
+    using Microsoft.AspNetCore.Identity;
     using WilderExperience.Data.Common.Repositories;
     using WilderExperience.Data.Models;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Services.Mapping;
     using WilderExperience.Web.ViewModels.Administration.Users;
 

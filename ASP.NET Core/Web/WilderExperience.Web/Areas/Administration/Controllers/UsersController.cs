@@ -8,7 +8,7 @@
     using Microsoft.EntityFrameworkCore;
     using WilderExperience.Common;
     using WilderExperience.Data.Models;
-    using WilderExperience.Services.Data;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.Infrastructure;
     using WilderExperience.Web.ViewModels.Administration.Experiences;
     using WilderExperience.Web.ViewModels.Administration.Users;

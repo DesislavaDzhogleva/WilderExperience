@@ -5,6 +5,7 @@
 
     using WilderExperience.Data.Common.Repositories;
     using WilderExperience.Data.Models;
+    using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Services.Mapping;
 
     public class SettingsService : ISettingsService
