@@ -1,7 +1,12 @@
 ﻿namespace WilderExperience.Services.Data.Tests
 {
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Internal;
+    using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
     using System.Threading.Tasks;
     using WilderExperience.Data;
     using WilderExperience.Data.Models;
@@ -82,6 +87,33 @@
             var model = service.GetById<ImagesViewModel>(id);
 
             Assert.Null(model);
+        }
+
+        [Fact]
+        public async Task AddImagesAsync_ShouldWorkCorrectly()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+
+            var repository = new EfDeletableEntityRepository<ExperienceImage>(context);
+            var service = new ImagesService(repository);
+
+            List<IFormFile> images = new List<IFormFile>();
+            images.Add(new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "dummy.jpg"));
+            ImagesAddViewModel m = new ImagesAddViewModel
+            {
+                ExperienceId = context.Experiences.First().Id,
+                Images = images,
+                UserId = context.Users.First().Id,
+            }; 
+
+            System.IO.Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "uploads"));
+            System.IO.Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "uploads", "experiences"));
+
+            var experienceId = await service.AddImagesAsync(m, Path.GetTempPath());
+
+            var filesCount = service.GetAllByExperienceId<ImagesViewModel>(experienceId).Count();
+            Assert.True(filesCount == 2, "Add Image method does not work correctly");
         }
 
         //[Fact]
