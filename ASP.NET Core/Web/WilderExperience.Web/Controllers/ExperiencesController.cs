@@ -168,8 +168,8 @@
         {
             if (status == "success")
             {
-                this.ViewBag.Messages = new[] {
-                    new AlertViewModel("success", "Success!", "Operation is successfull!"),
+                this.ViewBag.Messages = new[]{
+                    new AlertViewModel("success", "Success!", "Succesfully made changes!"),
                 };
             }
 
@@ -243,7 +243,7 @@
                 if (isAllowed)
                 {
                     var experienceId = await this.experiencesService.EditAsync(input);
-                    return this.Redirect($"/Experiences/Details/{experienceId}");
+                    return this.Redirect($"/Experiences/Details/{experienceId}?status=success");
                 }
                 else
                 {

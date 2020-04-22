@@ -76,7 +76,7 @@
                 await this.imagesService.AddImagesAsync(input.NewImageVM, path);
             }
 
-            return this.Redirect($"/Experiences/Details?Id={input.ExperienceId}");
+            return this.Redirect($"/Experiences/Details?Id={input.ExperienceId}&status=success");
         }
 
         [HttpPost]
@@ -97,7 +97,7 @@
                     if (isAllowed)
                     {
                         await this.imagesService.DeleteAsync(id);
-                        return this.Redirect($"/Experiences/Details?Id={image.ExperienceId}");
+                        return this.Redirect($"/Experiences/Details?Id={image.ExperienceId}&status=success");
                     }
                     else
                     {

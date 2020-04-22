@@ -10,10 +10,12 @@
     public interface IExperiencesService
     {
         IQueryable<T> GetAll<T>(string orderBy = "CreatedOn", string orderDir = "Desc");
+
         IQueryable<T> GetFavouritesForUsers<T>(string userId, string orderBy = "CreatedOn", string orderDir = "Desc");
+
         IQueryable<T> GetTop<T>();
 
-        IQueryable<T> GetAllByLocationId<T>(int locationId);
+        IQueryable<T> GetAllByLocationId<T>(int locationId, string orderBy = "CreatedOn", string orderDir = "Desc");
 
         IQueryable<T> GetAllForUser<T>(string userId, string orderBy = "CreatedOn", string orderDir = "Desc");
 

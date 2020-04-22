@@ -29,14 +29,18 @@
         {
             return this.experienceRepository.All()
                 .Where(x => x.Ratings.Count != 0)
-                .OrderBy(x => x.Ratings.Average(x => x.RatingNumber))
+                .OrderByDescending(x => x.Ratings.Average(x => x.RatingNumber))
                 .To<T>();
         }
 
-        public IQueryable<T> GetAllByLocationId<T>(int locationId)
+        public IQueryable<T> GetAllByLocationId<T>(int locationId, string orderBy = "CreatedOn", string orderDir = "Desc")
         {
-            return this.experienceRepository.All()
-                .Where(x => x.LocationId == locationId).To<T>();
+            var experiences = this.experienceRepository.All()
+                .Where(x => x.LocationId == locationId);
+
+            experiences = this.ApplyOrder(experiences, orderBy, orderDir);
+
+            return experiences.To<T>();
         }
 
         public IQueryable<T> GetAllForUser<T>(string userId, string orderBy = "CreatedOn", string orderDir = "Desc")
