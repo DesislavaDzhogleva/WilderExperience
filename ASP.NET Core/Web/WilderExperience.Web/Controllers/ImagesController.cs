@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using WilderExperience.Common;
@@ -15,12 +16,14 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IImagesService imagesService;
         private readonly IExperiencesService experiencesService;
+        private readonly IWebHostEnvironment env;
 
-        public ImagesController(UserManager<ApplicationUser> userManager, IImagesService imagesService, IExperiencesService experiencesService)
+        public ImagesController(UserManager<ApplicationUser> userManager, IImagesService imagesService, IExperiencesService experiencesService, IWebHostEnvironment env)
         {
             this.userManager = userManager;
             this.imagesService = imagesService;
             this.experiencesService = experiencesService;
+            this.env = env;
         }
 
         [Authorize]
@@ -68,8 +71,9 @@
 
             if (input.NewImageVM != null)
             {
+                var path = this.env.WebRootPath;
                 input.NewImageVM.ExperienceId = input.ExperienceId;
-                await this.imagesService.AddImagesAsync(input.NewImageVM);
+                await this.imagesService.AddImagesAsync(input.NewImageVM, path);
             }
 
             return this.Redirect($"/Experiences/Details?Id={input.ExperienceId}");

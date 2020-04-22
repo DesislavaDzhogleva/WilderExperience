@@ -4,6 +4,7 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
     using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Web.ViewModels.Locations;
     using WilderExperience.Web.ViewModels.Shared;
@@ -12,23 +13,24 @@
     public class WildLocationsController : BaseController
     {
         private readonly IWildLocationService wildLocationService;
+        private readonly IConfiguration configuration;
 
-        public WildLocationsController(IWildLocationService wildLocationService)
+        public WildLocationsController(IWildLocationService wildLocationService, IConfiguration configuration)
         {
             this.wildLocationService = wildLocationService;
+            this.configuration = configuration;
         }
 
         [Authorize]
         public IActionResult All(string status = "")
         {
+            this.ViewBag.googleMapsAPI = this.configuration["googleMapsAPI"];
             if (status == "error")
             {
                 this.ViewBag.Messages = new[]{
                     new AlertViewModel("danger", "Warning!", "Name is required"),
                 };
             }
-            
-
 
             var locations = this.wildLocationService.GetAll<WildLocationListViewModel>();
             return this.View(locations);

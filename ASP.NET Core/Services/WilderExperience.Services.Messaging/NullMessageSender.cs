@@ -5,6 +5,7 @@
 
     public class NullMessageSender : IEmailSender
     {
+        public void Init(string apiKey) { }
         public Task SendEmailAsync(
             string from,
             string fromName,

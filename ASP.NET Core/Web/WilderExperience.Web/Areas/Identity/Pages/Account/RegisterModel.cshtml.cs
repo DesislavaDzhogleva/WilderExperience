@@ -14,6 +14,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using WilderExperience.Common;
     using WilderExperience.Data.Models;
@@ -26,17 +27,20 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
+        private readonly IConfiguration configuration;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration configuration)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.configuration = configuration;
         }
 
         [BindProperty]
@@ -108,6 +112,8 @@
                         pageHandler: null,
                         values: new { area = "Identity", userId = user.Id, code = code },
                         protocol: this.Request.Scheme);
+
+                    this.emailSender.Init(this.configuration["sendGridAPI"]);
                     await this.emailSender.SendEmailAsync("support@wilderexperience.com", "Support", this.Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 

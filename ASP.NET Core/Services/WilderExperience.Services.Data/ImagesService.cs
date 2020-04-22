@@ -17,12 +17,10 @@
     public class ImagesService : IImagesService
     {
         private readonly IDeletableEntityRepository<ExperienceImage> imageRepository;
-        private readonly IHostingEnvironment environment;
 
-        public ImagesService(IDeletableEntityRepository<ExperienceImage> imageRepository, IHostingEnvironment environment)
+        public ImagesService(IDeletableEntityRepository<ExperienceImage> imageRepository)
         {
             this.imageRepository = imageRepository;
-            this.environment = environment;
         }
 
         public IEnumerable<T> GetAllByExperienceId<T>(int experienceId)
@@ -44,9 +42,9 @@
             return image;
         }
 
-        public async Task<int> AddImagesAsync(ImagesAddViewModel input)
+        public async Task<int> AddImagesAsync(ImagesAddViewModel input, string path)
         {
-            var fileNames = this.UploadImages(input.Images);
+            var fileNames = this.UploadImages(input.Images, path);
 
             foreach (var file in fileNames)
             {
@@ -73,15 +71,6 @@
             await this.imageRepository.SaveChangesAsync();
         }
 
-        public ExperienceImage GetOriginalById(int id)
-        {
-            var image = this.imageRepository.All()
-               .Where(x => x.Id == id)
-               .FirstOrDefault();
-
-            return image;
-        }
-
         public bool Exists(int id)
         {
             return this.imageRepository.All()
@@ -94,7 +83,7 @@
                 .Where(x => x.Id == id && x.UserId == loggedUserId).Count() == 1;
         }
 
-        private HashSet<string> UploadImages(ICollection<IFormFile> images)
+        private HashSet<string> UploadImages(ICollection<IFormFile> images, string path)
         {
             var outputImages = new HashSet<string>();
 
@@ -104,7 +93,7 @@
                 {
                     var uniqueFileName = this.GetUniqueFileName(image.FileName);
                     outputImages.Add(uniqueFileName);
-                    var uploads = Path.Combine(this.environment.WebRootPath, "uploads", "experiences");
+                    var uploads = Path.Combine(path, "uploads", "experiences");
                     var filePath = Path.Combine(uploads, uniqueFileName);
                     image.CopyTo(new FileStream(filePath, FileMode.Create));
                 }

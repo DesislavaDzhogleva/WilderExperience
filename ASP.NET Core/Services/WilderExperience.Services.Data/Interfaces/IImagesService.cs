@@ -7,15 +7,13 @@
 
     public interface IImagesService
     {
-        Task<int> AddImagesAsync(ImagesAddViewModel input);
-
         IEnumerable<T> GetAllByExperienceId<T>(int experienceId);
 
         T GetById<T>(int id);
 
-        Task DeleteAsync(int id);
+        Task<int> AddImagesAsync(ImagesAddViewModel input, string path);
 
-        ExperienceImage GetOriginalById(int id);
+        Task DeleteAsync(int id);
 
         bool Exists(int experienceId);
 

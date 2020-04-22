@@ -41,7 +41,7 @@ else
                                     <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
                                 </h3>
 
-                                <p class="averageRating bg-success p-2 m-2 col-1 m-auto">
+                                <p class="averageRating bg-success d-inline-flex p-2">
                                     @if (item.AverageRating > 0)
                                     {
                                         <span class="">@item.AverageRating</span>

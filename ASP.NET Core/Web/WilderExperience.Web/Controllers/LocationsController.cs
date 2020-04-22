@@ -22,7 +22,7 @@
                 return null;
             }
 
-            var result = this.locationsService.Search<LocationsSearchViewModel>(term);
+            var result = this.locationsService.Search<LocationViewModel>(term);
             return this.Json(result.ToList());
         }
     }

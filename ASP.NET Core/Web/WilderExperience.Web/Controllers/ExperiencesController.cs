@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -22,8 +23,9 @@
         private readonly IExperiencesService experiencesService;
         private readonly IImagesService imagesService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IWebHostEnvironment env;
 
-        public ExperiencesController(IUserFavouritesService userFavouritesService,IRatingService ratingService, ILocationsService locationService, IExperiencesService experiencesService, IImagesService imagesService, UserManager<ApplicationUser> userManager)
+        public ExperiencesController(IUserFavouritesService userFavouritesService,IRatingService ratingService, ILocationsService locationService, IExperiencesService experiencesService, IImagesService imagesService, UserManager<ApplicationUser> userManager, IWebHostEnvironment env)
         {
             this.userFavouritesService = userFavouritesService;
             this.ratingService = ratingService;
@@ -31,6 +33,7 @@
             this.experiencesService = experiencesService;
             this.imagesService = imagesService;
             this.userManager = userManager;
+            this.env = env;
         }
 
         [Authorize]
@@ -62,8 +65,13 @@
             }
 
             var experiences = this.experiencesService.GetAllByLocationId<ExperiencesListViewModel>(locationId);
-
+            
             var locationName = this.locationService.GetNameById(locationId);
+
+            if (locationName == null)
+            {
+                return this.NotFound();
+            }
 
             this.ViewData["locationName"] = locationName;
             this.ViewData["locationId"] = locationId;
@@ -149,7 +157,8 @@
             if (input.Images != null)
             {
                 input.Images.ExperienceId = experienceId;
-                await this.imagesService.AddImagesAsync(input.Images);
+                var path = this.env.WebRootPath;
+                await this.imagesService.AddImagesAsync(input.Images, path);
             }
 
             return this.Redirect($"/Experiences/List?locationId={input.LocationId}&status=success");

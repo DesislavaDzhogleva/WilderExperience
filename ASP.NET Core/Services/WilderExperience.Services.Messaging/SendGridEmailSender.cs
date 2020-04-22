@@ -10,13 +10,13 @@
 
     public class SendGridEmailSender : IEmailSender
     {
-        private readonly SendGridClient client;
+        private SendGridClient client;
 
-        public SendGridEmailSender()
+        public SendGridEmailSender(){}
+        public void Init(string apiKey)
         {
-            this.client = new SendGridClient("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");
+            this.client = new SendGridClient(apiKey);
         }
-
         public async Task SendEmailAsync(string from, string fromName, string to, string subject, string htmlContent, IEnumerable<EmailAttachment> attachments = null)
         {
             if (string.IsNullOrWhiteSpace(subject) && string.IsNullOrWhiteSpace(htmlContent))

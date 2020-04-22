@@ -7,7 +7,7 @@ using WilderExperience.Services.Mapping;
 
 namespace WilderExperience.Web.ViewModels.Locations
 {
-    public class LocationsSearchViewModel : IMapFrom<Location>
+    public class LocationViewModel : IMapFrom<Location>
     {
         public int Id { get; set; }
 

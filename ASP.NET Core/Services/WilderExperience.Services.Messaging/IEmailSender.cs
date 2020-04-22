@@ -5,6 +5,7 @@
 
     public interface IEmailSender
     {
+        void Init(string apiKey);
         Task SendEmailAsync(
             string from,
             string fromName,
