@@ -69,6 +69,38 @@
             Assert.True(actualId == 0);
         }
 
+        [Fact]
+        public async Task GetNameById_ShouldWorkCorrectly()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+            var repository = new EfDeletableEntityRepository<Location>(context);
+            var service = new LocationsService(repository);
+
+            var firstLocation = context.Locations.First();
+            var expectedName = firstLocation.Name;
+            var id = firstLocation.Id;
+
+            var actualName = service.GetNameById(id);
+            Assert.True(expectedName == actualName);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(1000)]
+        public async Task GetNameById_WithInvalidData_ShouldWorkCorrectly(int id)
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            await this.SeedData(context);
+            var repository = new EfDeletableEntityRepository<Location>(context);
+            var service = new LocationsService(repository);
+
+
+            var name = service.GetNameById(id);
+            Assert.Null(name);
+        }
+
         private async Task SeedData(ApplicationDbContext context)
         {
             var user = new ApplicationUser()

@@ -8,24 +8,13 @@
     using WilderExperience.Services.Data.Interfaces;
     using WilderExperience.Services.Mapping;
 
-    public class RatingSerivce : IRatingService
+    public class RatingsSerivce : IRatingService
     {
         private readonly IDeletableEntityRepository<Rating> ratingRepository;
 
-        public RatingSerivce(IDeletableEntityRepository<Rating> ratingRepository)
+        public RatingsSerivce(IDeletableEntityRepository<Rating> ratingRepository)
         {
             this.ratingRepository = ratingRepository;
-        }
-
-        public IQueryable<T> GetTop10<T>(double rating = 0)
-        {
-            var topExperiences = this.ratingRepository.All()
-                .Where(x => x.RatingNumber > rating)
-                .OrderByDescending(x => x.RatingNumber)
-                .To<T>()
-                .Take(10);
-
-            return topExperiences;
         }
 
         public double GetRating(int experienceId)

@@ -12,6 +12,5 @@
 
         double GetRating(int experienceId);
 
-        IQueryable<T> GetTop10<T>(double rating = 0);
     }
 }

@@ -68,7 +68,7 @@
             services.AddTransient<IExperiencesService, ExperiencesService>();
             services.AddTransient<IImagesService, ImagesService>();
             services.AddTransient<ICommentsService, CommentsService>();
-            services.AddTransient<IRatingService, RatingSerivce>();
+            services.AddTransient<IRatingService, RatingsSerivce>();
             services.AddTransient<IUserFavouritesService, UserFavouritesService>();
         }
 

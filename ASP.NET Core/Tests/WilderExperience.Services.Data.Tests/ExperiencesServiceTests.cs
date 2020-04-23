@@ -1,14 +1,11 @@
 ﻿namespace WilderExperience.Services.Data.Tests
 {
-    using Microsoft.EntityFrameworkCore;
-    using Moq;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
+
     using WilderExperience.Data;
-    using WilderExperience.Data.Common.Repositories;
     using WilderExperience.Data.Models;
     using WilderExperience.Data.Repositories;
     using WilderExperience.Services.Data.Tests.Common;
@@ -19,44 +16,39 @@
 
     public class ExperiencesServiceTests
     {
+        private EfDeletableEntityRepository<Experience> experienceRepository;
+        private ExperiencesService experienceService;
+        private ApplicationDbContext context;
+
         public ExperiencesServiceTests()
         {
-            AutoMapperConfig.RegisterMappings(
-                typeof(Experience).GetTypeInfo().Assembly,
-                typeof(ExperienceViewModel).GetTypeInfo().Assembly);
+            this.InitializeMapper();
+            this.context = this.InitializeContext();
+            this.InitializeServices();
         }
 
         [Fact]
         public async Task GetAll_ShouldReturnCorrectCountAsync()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-
-            var count = service.GetAll<ExperienceViewModel>().Count();
-
+            var count = this.experienceService.GetAll<ExperienceViewModel>().Count();
             Assert.True(count == 2, "Create method does not work correctly");
         }
 
         [Fact]
         public async Task GetAll_ApplyOrder_ShouldReturnCorrectOrder()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-
-            var experienceFirst = service.GetAll<ExperienceViewModel>(orderBy: "Title", orderDir: "Asc").FirstOrDefault();
-            var expectedFirst = repository.All()
+            var experienceFirst = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "Title", orderDir: "Asc").FirstOrDefault();
+            var expectedFirst = this.experienceRepository.All()
                 .OrderBy(x => x.Title)
                 .FirstOrDefault();
 
 
-            var experienceSecond = service.GetAll<ExperienceViewModel>(orderBy: "Title", orderDir: "Asc").Skip(1).FirstOrDefault();
-            var expectedSecond = repository.All()
+            var experienceSecond = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "Title", orderDir: "Asc").Skip(1).FirstOrDefault();
+            var expectedSecond = this.experienceRepository.All()
                .OrderBy(x => x.Title)
                .Skip(1)
                .FirstOrDefault();
@@ -68,12 +60,7 @@
         [Fact]
         public void GetAll_WithNoData_ShouldWorkCorrectly()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-
-            var count = service.GetAll<ExperienceViewModel>().Count();
+            var count = this.experienceService.GetAll<ExperienceViewModel>().Count();
 
             Assert.True(count == 0, "Create method does not work correctly");
         }
@@ -81,39 +68,27 @@
         [Fact]
         public async Task GetTop_ShouldWorkCorrectly()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            var count = service.GetTop<ExperienceViewModel>().Count();
+            var count = this.experienceService.GetTop<ExperienceViewModel>().Count();
 
             Assert.True(count == 1, "Create method does not work correctly");
         }
 
         [Fact]
-        public async Task GetTop_WithNoData_ShouldWorkCorrectly()
+        public void GetTop_WithNoData_ShouldWorkCorrectly()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            var count = service.GetTop<ExperienceViewModel>().Count();
-
+            var count = this.experienceService.GetTop<ExperienceViewModel>().Count();
             Assert.True(count == 0, "Create method does not work correctly");
         }
 
         [Fact]
         public async Task GetAllByLocationId_ShouldReturnCorrectCountAsync()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-
-            int testLocationId = context.Locations.First().Id;
-            var count = service.GetAllByLocationId<ExperienceViewModel>(testLocationId).Count();
+            int testLocationId = this.context.Locations.First().Id;
+            var count = this.experienceService.GetAllByLocationId<ExperienceViewModel>(testLocationId).Count();
 
             Assert.True(count == 2, "GetAllByLocation method does not work correctly");
         }
@@ -124,11 +99,7 @@
         [InlineData(-1)]
         public void GetAllByLocationId_WithInvalidLocation_ShouldWorkCorrectly(int locationId)
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            var count = service.GetAllByLocationId<ExperienceViewModel>(locationId).Count();
+            var count = this.experienceService.GetAllByLocationId<ExperienceViewModel>(locationId).Count();
 
             Assert.True(count == 0, "GetAllByLocation method does not work correctly");
         }
@@ -136,14 +107,10 @@
         [Fact]
         public async Task GetAllForUser_ShouldWorkCorrectlyAsync()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
-            string testUserId = context.Users.First().Id;
+            await this.SeedData(this.context);
+            string testUserId = this.context.Users.First().Id;
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-
-            var count = service.GetAllForUser<ExperienceViewModel>(testUserId).Count();
+            var count = this.experienceService.GetAllForUser<ExperienceViewModel>(testUserId).Count();
             var expectedCount = 2;
 
             Assert.True(count == expectedCount, "GetAllForUser method does not work correctly");
@@ -154,16 +121,12 @@
         [InlineData(null)]
         public async Task GetAllForUser_WithInvalidData_ShouldWorkCorrectlyAsync(string userId)
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-
-            var count = service.GetAllForUser<ExperienceViewModel>(userId).Count();
+            var count = this.experienceService.GetAllForUser<ExperienceViewModel>(userId).Count();
             var expectedCount = 0;
 
-            var result = service.GetAllForUser<ExperienceViewModel>(userId).FirstOrDefault();
+            var result = this.experienceService.GetAllForUser<ExperienceViewModel>(userId).FirstOrDefault();
 
             Assert.True(count == expectedCount, "GetAllForUser method does not work correctly");
             Assert.True(result == null, "GetAllForUser method does not work correctly");
@@ -172,19 +135,15 @@
         [Fact]
         public async Task GetFavouritesForUsers_ShouldWorkCorrectly()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
+            var userId = this.context.Users.First().Id;
 
-            var userId = context.Users.First().Id;
-
-            var count = service.GetFavouritesForUsers<ExperienceViewModel>(userId).Count();
+            var count = this.experienceService.GetFavouritesForUsers<ExperienceViewModel>(userId).Count();
             var expectedCount = 1;
 
-            var result = service.GetFavouritesForUsers<ExperienceViewModel>(userId).FirstOrDefault();
-            var expectedResult = repository.All().Where(x => x.UserFavourites.Any(y => y.UserId == userId)).FirstOrDefault();
+            var result = this.experienceService.GetFavouritesForUsers<ExperienceViewModel>(userId).FirstOrDefault();
+            var expectedResult = this.experienceRepository.All().Where(x => x.UserFavourites.Any(y => y.UserId == userId)).FirstOrDefault();
 
             Assert.True(count == expectedCount, "GetFavouritesForUsers method does not work correctly");
             Assert.Equal(result.Id, expectedResult.Id);
@@ -195,16 +154,12 @@
         [Fact]
         public async Task GetById_ShouldWorkCorrectly()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
-
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
+            await this.SeedData(this.context);
 
             var experienceId = 1;
-            var model = service.GetById<ExperienceViewModel>(experienceId);
+            var model = this.experienceService.GetById<ExperienceViewModel>(experienceId);
 
-            var expectedExperience = repository.All().Where(x => x.Id == experienceId).FirstOrDefault();
+            var expectedExperience = this.experienceRepository.All().Where(x => x.Id == experienceId).FirstOrDefault();
 
             Assert.Equal(expectedExperience.Title, model.Title);
             Assert.Equal(expectedExperience.LocationId.ToString(), model.LocationId.ToString());
@@ -217,15 +172,11 @@
         [InlineData(1000)]
         public async Task GetById_WithInvalidData_ShouldWorkCorrectly(int id)
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
+            var model = this.experienceService.GetById<ExperienceViewModel>(id);
 
-            var model = service.GetById<ExperienceViewModel>(id);
-
-            var expectedExperience = repository.All().Where(x => x.Id == id).FirstOrDefault();
+            var expectedExperience = this.experienceRepository.All().Where(x => x.Id == id).FirstOrDefault();
 
             Assert.True(model == null);
         }
@@ -233,11 +184,10 @@
         [Fact]
         public async Task CreateAsync_WithCorrectInput_ShouldReturnEntity()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            string testUserId = context.Users.First().Id;
-            int testLocationId = context.Locations.First().Id;
+            string testUserId = this.context.Users.First().Id;
+            int testLocationId = this.context.Locations.First().Id;
 
             var input = new ExperienceCreateViewModel()
             {
@@ -247,9 +197,7 @@
                 LocationId = testLocationId,
             };
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            var resultId = await service.CreateAsync(input);
+            var resultId = await this.experienceService.CreateAsync(input);
             Assert.True(resultId == 3, "Create method does not work correctly");
         }
 
@@ -257,8 +205,7 @@
         [Fact]
         public async Task EditAsync_ShouldReturnCorrectValue()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
             var expectedTitle = "New Title";
 
@@ -269,9 +216,7 @@
                 Description = "Description of test",
             };
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            var resultId = await service.EditAsync(input);
+            var resultId = await this.experienceService.EditAsync(input);
             Assert.True(resultId == 1, "Edit method does not work correctly");
             Assert.True(input.Title == expectedTitle, "Edit method does not work correctly");
         }
@@ -313,27 +258,20 @@
         [Fact]
         public async Task DeleteAsync_ShouldWorkCorrectly()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
             var id = 1;
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            await service.DeleteAsync(id);
+            await this.experienceService.DeleteAsync(id);
 
-            var deletedExperinece = repository.AllWithDeleted().Where(x => x.Id == id).FirstOrDefault();
+            var deletedExperinece = this.experienceRepository.AllWithDeleted().Where(x => x.Id == id).FirstOrDefault();
 
             Assert.True(deletedExperinece.IsDeleted == true, "Delete method does not work correctly");
         }
 
         public async Task DeleteAsync_WithInvalidInput_ShouldThrowException(int id)
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            Task act() => service.DeleteAsync(id);
+            Task act() => this.experienceService.DeleteAsync(id);
 
             await Assert.ThrowsAsync<ArgumentNullException>(act);
         }
@@ -341,14 +279,11 @@
         [Fact]
         public async Task Exist_ShouldWorkCorrectly()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            int testExperienceId = context.Experiences.First().Id;
+            int testExperienceId = this.context.Experiences.First().Id;
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            var actual = service.Exists(testExperienceId);
+            var actual = this.experienceService.Exists(testExperienceId);
 
             Assert.True(actual);
         }
@@ -357,13 +292,9 @@
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public async Task Exist_WithInvalidId_ShouldWorkCorrectly(int id)
+        public void Exist_WithInvalidId_ShouldWorkCorrectly(int id)
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            var actual = service.Exists(id);
+            var actual = this.experienceService.Exists(id);
 
             Assert.True(actual == false);
         }
@@ -371,15 +302,12 @@
         [Fact]
         public async Task IsAuthorBy_ShouldWorkCorrectly()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            int testExperienceId = context.Experiences.First().Id;
-            string author = context.Experiences.First().AuthorId;
+            int testExperienceId = this.context.Experiences.First().Id;
+            string author = this.context.Experiences.First().AuthorId;
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            var actual = service.IsAuthoredBy(testExperienceId, author);
+            var actual = this.experienceService.IsAuthoredBy(testExperienceId, author);
 
             Assert.True(actual);
         }
@@ -389,30 +317,21 @@
         [InlineData(1, null)]
         public async Task IsAuthorBy_WithInvalidData_ShouldWorkCorrectly(int experienceId, string authorId)
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-            var actual = service.IsAuthoredBy(experienceId, authorId);
-
+            var actual = this.experienceService.IsAuthoredBy(experienceId, authorId);
             Assert.True(actual == false);
         }
 
         [Fact]
         public async Task GetLocationId_ReturnsCorrectValue()
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-            var experience = context.Experiences.First();
+            var experience = this.context.Experiences.First();
             var expectedLocationId = experience.LocationId;
 
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-
-            var actualLocationId = service.GetLocationId(experience.Id);
-
+            var actualLocationId = this.experienceService.GetLocationId(experience.Id);
             Assert.True(actualLocationId == expectedLocationId);
         }
 
@@ -421,15 +340,9 @@
         [InlineData(-1)]
         public async Task GetLocationId_WithInvalidData_ReturnsCorrectValue(int id)
         {
-            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
-            await this.SeedData(context);
+            await this.SeedData(this.context);
 
-
-            var repository = new EfDeletableEntityRepository<Experience>(context);
-            var service = new ExperiencesService(repository);
-
-            var actualLocationId = service.GetLocationId(id);
-
+            var actualLocationId = this.experienceService.GetLocationId(id);
             Assert.True(actualLocationId == 0);
         }
 
@@ -437,10 +350,10 @@
         {
             var user = new ApplicationUser()
             {
-                FirstName = "Kaplata",
-                LastName = "Jormanov",
-                UserName = "Kaplata69",
-                Email = "kaplata69@abv.bg",
+                FirstName = "Desislava",
+                LastName = "Dzhogleva",
+                UserName = "desi99",
+                Email = "desi99@abv.bg",
                 EmailConfirmed = true,
                 PasswordHash = "someRandomHash",
             };
@@ -496,6 +409,25 @@
 
             context.Ratings.Add(rating);
             await context.SaveChangesAsync();
+        }
+
+        private void InitializeServices()
+        {
+            this.experienceRepository = new EfDeletableEntityRepository<Experience>(this.context);
+            this.experienceService = new ExperiencesService(this.experienceRepository);
+        }
+
+        private ApplicationDbContext InitializeContext()
+        {
+            var context = WilderExperienceContextInMemoryFactory.InitializeContext();
+            return context;
+        }
+
+        private void InitializeMapper()
+        {
+            AutoMapperConfig.RegisterMappings(
+                typeof(Experience).GetTypeInfo().Assembly,
+                typeof(ExperienceViewModel).GetTypeInfo().Assembly);
         }
     }
 }
