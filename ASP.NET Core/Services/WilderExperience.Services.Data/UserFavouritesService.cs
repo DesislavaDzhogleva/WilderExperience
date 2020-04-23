@@ -17,6 +17,15 @@
             this.userFavouriteRepository = userFavouriteRepository;
         }
 
+        public IQueryable<T> GetFavouritesForUsers<T>(string userId)
+        {
+            var experience = this.userFavouriteRepository.All()
+                .Where(x => x.UserId == userId)
+                .To<T>();
+
+            return experience;
+        }
+
         public async Task AddToFavouritesAsync(int experienceId, string userId)
         {
             var userFavourite = new UserFavourite()
@@ -29,24 +38,22 @@
             await this.userFavouriteRepository.SaveChangesAsync();
         }
 
-        public async Task RemoveFromFavourites(int experienceId, string userId)
+        public async Task<bool> RemoveFromFavourites(int experienceId, string userId)
         {
+
             var model = this.userFavouriteRepository.All()
                 .Where(x => x.ExperienceId == experienceId && x.UserId == userId)
                 .FirstOrDefault();
 
+            if (model == null)
+            {
+                return false;
+            }
+
             this.userFavouriteRepository.Delete(model);
-            await this.userFavouriteRepository.SaveChangesAsync();
+            var result = await this.userFavouriteRepository.SaveChangesAsync();
+
+            return result == 1;
         }
-
-        public IQueryable<T> GetFavouritesForUsers<T>(string userId)
-        {
-            var experience = this.userFavouriteRepository.All()
-                .Where(x => x.UserId == userId)
-                .To<T>();
-
-            return experience;
-        }
-
     }
 }

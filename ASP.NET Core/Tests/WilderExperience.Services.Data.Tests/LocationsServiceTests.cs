@@ -89,7 +89,8 @@
         [InlineData(0)]
         [InlineData(-1)]
         [InlineData(1000)]
-        public async Task GetNameById_WithInvalidData_ShouldWorkCorrectly(int id)
+        [InlineData(null)]
+        public async Task GetNameById_WithInvalidData_ShouldWorkCorrectly(int? id)
         {
             var context = WilderExperienceContextInMemoryFactory.InitializeContext();
             await this.SeedData(context);

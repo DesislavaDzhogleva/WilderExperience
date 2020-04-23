@@ -10,7 +10,7 @@
     {
         Task AddToFavouritesAsync(int experienceId, string userId);
 
-        Task RemoveFromFavourites(int experienceId, string userId);
+        Task<bool> RemoveFromFavourites(int experienceId, string userId);
 
         IQueryable<T> GetFavouritesForUsers<T>(string userId);
     }

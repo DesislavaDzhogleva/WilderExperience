@@ -16,19 +16,6 @@
             this.server = server;
         }
 
-        [Theory]
-        [InlineData("/")]
-        public async Task Get_ReturnsSuccessAndCorrectType(string url)
-        {
-            var client = this.server.CreateClient();
-
-            var response = await client.GetAsync(url);
-
-            response.EnsureSuccessStatusCode();
-            Assert.Equal("text/html; charset=utf-8",
-            response.Content.Headers.ContentType.ToString());
-        }
-
         [Fact(Skip = "Example test. Disabled for CI.")]
         public async Task IndexPageShouldReturnStatusCode200WithTitle()
         {

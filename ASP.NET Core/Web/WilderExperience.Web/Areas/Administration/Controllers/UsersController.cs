@@ -29,7 +29,6 @@
 
         public async Task<IActionResult> ListAsync(int? pageNumber, string orderBy = "CreatedOn", string orderDir = "Desc")
         {
-
             var users = this.usersService.GetAll<UsersListViewModel>(orderBy, orderDir);
             return this.View(await PaginatedList<UsersListViewModel>.CreateAsync(users.AsNoTracking(), pageNumber ?? 1, GlobalConstants.PageSize));
         }
@@ -87,7 +86,7 @@
 
             if (!isUser)
             {
-                this.Unauthorized();
+                this.Forbid();
             }
 
             await this.usersService.EditAsync(input);
@@ -129,7 +128,7 @@
                 await this.experiencesService.DeleteAsync(experience.Id);
             }
 
-            await this.usersService.DeleteAsync(user);
+            var result = await this.usersService.DeleteAsync(id);
 
             return this.RedirectToAction("List");
         }

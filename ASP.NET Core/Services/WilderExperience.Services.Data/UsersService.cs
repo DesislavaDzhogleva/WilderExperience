@@ -13,12 +13,17 @@
     public class UsersService : IUsersService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
-        private readonly UserManager<ApplicationUser> userManager;
 
-        public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository, UserManager<ApplicationUser> userManager)
+        public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository)
         {
             this.usersRepository = usersRepository;
-            this.userManager = userManager;
+        }
+
+        public IQueryable<T> GetAll<T>(string orderBy = "CreatedOn", string orderDir = "Desc")
+        {
+            var users = this.usersRepository.AllWithDeleted();
+            users = this.ApplyOrder(users, orderBy, orderDir);
+            return users.To<T>();
         }
 
         public T GetById<T>(string id)
@@ -62,27 +67,6 @@
             }
             return input;
         }
-        public IQueryable<T> GetAll<T>(string orderBy = "CreatedOn", string orderDir = "Desc")
-        {
-            var users = this.usersRepository.AllWithDeleted();
-            users = this.ApplyOrder(users, orderBy, orderDir);
-            return users.To<T>();
-        }
-
-        public async Task<int> EditAsync(UsersEditViewModel model)
-        {
-            ApplicationUser user = await this.usersRepository.GetByIdWithDeletedAsync(model.Id);
-
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.UserName = model.UserName;
-            user.Email = model.Email;
-
-            this.usersRepository.Update(user);
-            var result = await this.usersRepository.SaveChangesAsync();
-
-            return result;
-        }
 
         public ApplicationUser AddUser(UsersAddViewModel input)
         {
@@ -97,10 +81,41 @@
             return user;
         }
 
-        public async Task DeleteAsync(ApplicationUser user)
+        public async Task<bool> EditAsync(UsersEditViewModel model)
         {
+            ApplicationUser user = await this.usersRepository.GetByIdWithDeletedAsync(model.Id);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.UserName = model.UserName;
+            user.Email = model.Email;
+
+            this.usersRepository.Update(user);
+            var result = await this.usersRepository.SaveChangesAsync();
+
+            return result == 1;
+        }
+
+
+        public async Task<bool> DeleteAsync(string id)
+        {
+            var user = this.usersRepository.All()
+               .Where(x => x.Id == id)
+               .FirstOrDefault();
+
+            if (user == null)
+            {
+                return false;
+            }
+
             this.usersRepository.Delete(user);
-            await this.usersRepository.SaveChangesAsync();
+            var result = await this.usersRepository.SaveChangesAsync();
+            return result == 1;
         }
 
     }

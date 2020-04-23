@@ -37,7 +37,7 @@
         }
 
         [Fact]
-        public async Task GetAll_ApplyOrder_ShouldReturnCorrectOrder()
+        public async Task GetAll_ApplyOrderByTitle_ShouldReturnCorrectOrder()
         {
             await this.SeedData(this.context);
 
@@ -51,6 +51,27 @@
             var expectedSecond = this.experienceRepository.All()
                .OrderBy(x => x.Title)
                .Skip(1)
+               .FirstOrDefault();
+
+            Assert.True(experienceFirst.Title == expectedFirst.Title, "GetAll method does not work correctly");
+            Assert.True(experienceSecond.Title == expectedSecond.Title, "GetAll method does not work correctly 2");
+        }
+
+        [Fact]
+        public async Task GetAll_ApplyOrder_ShouldReturnCorrectOrderDesc()
+        {
+            await this.SeedData(this.context);
+
+            var experienceFirst = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "Title", orderDir: "Desc").FirstOrDefault();
+            var expectedFirst = this.experienceRepository.All()
+                .OrderBy(x => x.Title)
+                .Skip(1)
+                .FirstOrDefault();
+
+
+            var experienceSecond = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "Title", orderDir: "Desc").Skip(1).FirstOrDefault();
+            var expectedSecond = this.experienceRepository.All()
+               .OrderBy(x => x.Title)
                .FirstOrDefault();
 
             Assert.True(experienceFirst.Title == expectedFirst.Title, "GetAll method does not work correctly");
@@ -165,6 +186,7 @@
             Assert.Equal(expectedExperience.LocationId.ToString(), model.LocationId.ToString());
             Assert.Equal(expectedExperience.DateOfVisit.ToString(), model.DateOfVisit.ToString());
         }
+
 
         [Theory]
         [InlineData(-1)]
@@ -335,6 +357,28 @@
             Assert.True(actualLocationId == expectedLocationId);
         }
 
+        [Fact]
+        public async Task ApplyOrder_ShouldWorkCorrectly()
+        {
+            await this.SeedData(this.context);
+
+            var result1 = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "Location", orderDir: "Desc").Count();
+            var result2 = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "Location", orderDir: "Asc").Count();
+            var result3 = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "Rating", orderDir: "Asc").Count();
+            var result4 = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "Rating", orderDir: "Desc").Count();
+            var result7 = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "CreatedOn", orderDir: "Asc").Count();
+            var result8 = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "CreatedOn", orderDir: "Desc").Count();
+
+            var expectedCount = 2;
+
+            Assert.True(result1 == expectedCount);
+            Assert.True(result2 == expectedCount);
+            Assert.True(result3 == expectedCount);
+            Assert.True(result4 == expectedCount);
+            Assert.True(result7 == expectedCount);
+            Assert.True(result8 == expectedCount);
+        }
+
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
@@ -410,6 +454,8 @@
             context.Ratings.Add(rating);
             await context.SaveChangesAsync();
         }
+
+       
 
         private void InitializeServices()
         {

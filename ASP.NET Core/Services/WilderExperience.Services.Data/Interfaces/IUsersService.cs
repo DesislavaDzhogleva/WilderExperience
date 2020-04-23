@@ -11,12 +11,12 @@
     {
         IQueryable<T> GetAll<T>(string orderBy = "CreatedOn", string orderDir = "Desc");
 
-        Task<int> EditAsync(UsersEditViewModel input);
+        Task<bool> EditAsync(UsersEditViewModel input);
 
         T GetById<T>(string id);
 
         ApplicationUser AddUser(UsersAddViewModel input);
 
-        Task DeleteAsync(ApplicationUser user);
+        Task<bool> DeleteAsync(string id);
     }
 }

@@ -115,8 +115,15 @@
                 {
                     var user = await this.userManager.GetUserAsync(this.User);
 
-                    await this.userFavouritesService.RemoveFromFavourites(experienceId, user.Id);
-                    return this.Redirect($"Details/{experienceId}?status=success");
+                    var removed = await this.userFavouritesService.RemoveFromFavourites(experienceId, user.Id);
+                    if (removed)
+                    {
+                        return this.Redirect($"Details/{experienceId}?status=success");
+                    }
+                    else
+                    {
+                        return this.Redirect($"Details/{experienceId}?status=error");
+                    }
                 }
             }
 
@@ -170,6 +177,12 @@
             {
                 this.ViewBag.Messages = new[]{
                     new AlertViewModel("success", "Success!", "Succesfully made changes!"),
+                };
+            }
+            else if (status == "error")
+            {
+                this.ViewBag.Messages = new[]{
+                    new AlertViewModel("error", "Error!", "Changes were not made!"),
                 };
             }
 
