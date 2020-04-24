@@ -44,6 +44,7 @@
                     : content;
             }
         }
+
         public string Summary
         {
             get

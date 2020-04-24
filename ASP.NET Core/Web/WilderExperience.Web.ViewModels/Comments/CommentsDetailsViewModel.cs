@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class CommentDetailsViewModel
+    public class CommentsDetailsViewModel
     {
         public int ExperienceId { get; set; }
 

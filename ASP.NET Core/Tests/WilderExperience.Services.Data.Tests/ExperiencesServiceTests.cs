@@ -46,7 +46,6 @@
                 .OrderBy(x => x.Title)
                 .FirstOrDefault();
 
-
             var experienceSecond = this.experienceService.GetAll<ExperienceViewModel>(orderBy: "Title", orderDir: "Asc").Skip(1).FirstOrDefault();
             var expectedSecond = this.experienceRepository.All()
                .OrderBy(x => x.Title)

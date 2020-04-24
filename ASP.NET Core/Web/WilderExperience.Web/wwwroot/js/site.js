@@ -3,22 +3,6 @@
 
 // Write your JavaScript code.
 
-//$(function () {
-//    let nav = $(".navbar");
-//    $(window).scroll(function () {
-//        var scroll = $(window).scrollTop();
-
-//        if (scroll >= nav.height()) {
-//            nav.addClass('nav-scrolled').addClass('fixed-top');
-//        } else {
-//            nav.removeClass('nav-scrolled').removeClass('fixed-top');
-//        }
-//    });
-//});
-
-//$(function () {
-//    $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
-//});
 ClassicEditor
     .create(document.querySelector('#editor'), {height:400})
     .catch(error => {
@@ -38,6 +22,7 @@ $(document).ready(function () {
         if ($(this).hasClass("ajax-submit-btn-collapsable")) {
             form.toggle();
         }
+
         $.post(form.attr("action"), form.serialize(), function (data) {
             $(data).insertAfter(form);
         });
@@ -73,8 +58,9 @@ $(document).ready(function () {
         $(this).children().each(function () {
             $(this).find("span").addClass("fa-star-o").removeClass("fa-star").removeClass("text-warning");
         });
-        console.log("a");
     });
+
+
     $(".newRating a").mouseover(function () {
         let dataScore = parseInt($(this).attr("data-score"));
         $(this).parent().children().each(function () {

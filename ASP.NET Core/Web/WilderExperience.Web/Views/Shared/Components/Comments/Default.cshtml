@@ -32,12 +32,12 @@
                         <button class="btn btn-info btn-link pull-right " data-toggle="collapse" data-target="#collapseExample@(comment.Id)" aria-expanded="false" aria-controls="collapseExample@(comment.Id)"> <i class="fa fa-reply"></i> Reply</button>
                         @if (this.User.Identity.Name == comment.AuthorUsername || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
                         {
-                            <button type="button" class="btn btn-danger btn-link pull-right " data-toggle="modal" data-target="#deleteModal">
+                            <button type="button" class="btn btn-danger btn-link pull-right " data-toggle="modal" data-target="#deleteModal@(comment.Id)">
                                 &times; Delete
                             </button>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="deleteModal@(comment.Id)" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">

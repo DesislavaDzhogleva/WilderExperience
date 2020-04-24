@@ -20,7 +20,6 @@
         }
 
 
-
         public async Task<int> AddAsync(WildLocationCreateViewModel input)
         {
             var destination = new Location()
