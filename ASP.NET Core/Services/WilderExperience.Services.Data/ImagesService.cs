@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -44,6 +45,7 @@
 
         public async Task<int> AddImagesAsync(ImagesAddViewModel input, string path)
         {
+
             var fileNames = this.UploadImages(input.Images, path);
 
             foreach (var file in fileNames)
@@ -89,7 +91,7 @@
 
             foreach (var image in images)
             {
-                if (image != null)
+                if (image != null && (image.FileName.EndsWith(".jpg") || image.FileName.EndsWith(".png")))
                 {
                     var uniqueFileName = this.GetUniqueFileName(image.FileName);
                     outputImages.Add(uniqueFileName);
