@@ -97,12 +97,4 @@
 }
 @{await RenderComment(Model.Where(x => x.ParentId == 0).OrderByDescending(x => x.CreatedOn));}
 
-    @*<div class="row">
-            <div class="comments media-area col-12">
-                <h3 class="text-center">Comments</h3>
-                <partial name="_CommentPartial" for="Comments">
-            </div>
-
-        </div>*@
-
 

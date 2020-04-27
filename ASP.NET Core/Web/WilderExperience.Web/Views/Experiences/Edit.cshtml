@@ -37,20 +37,6 @@
                 <input asp-for="DateOfVisit" type="date" class="form-control" />
                 <span asp-validation-for="DateOfVisit" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-            <label asp-for="FileNewImages" class="control-label"></label>
-            <input asp-for="FileNewImages" class="d-block" />
-            <span asp-validation-for="FileNewImages" class="text-danger"></span>
-        </div>*@
-            @*@foreach (var image in Model.Images)
-        {
-            <figure class="col-md-8">
-                <a href="~/uploads/experiences/@image.Name" data-size="1600x1067">
-                    <img alt="picture" src="~/uploads/experiences/@image.Name"
-                         class="img-fluid" />
-                </a>
-            </figure>
-        }*@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

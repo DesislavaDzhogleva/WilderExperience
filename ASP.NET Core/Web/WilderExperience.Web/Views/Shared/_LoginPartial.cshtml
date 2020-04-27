@@ -7,13 +7,6 @@
     <ul class="navbar-nav">
         @if (this.SignInManager.IsSignedIn(this.User))
         {
-
-            /*if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin">Dashboard</a>
-                </li>
-            }*/
             <li class="nav-item">
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary mb-0 dropdown-toggle nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
