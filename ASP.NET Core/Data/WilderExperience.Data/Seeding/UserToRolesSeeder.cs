@@ -50,7 +50,7 @@
 
             user = await userManager.FindByNameAsync(GlobalConstants.AdminUsername);
 
-            await userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            //await userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
         }
 
         private static async Task SeedUserToRoleAsync(UserManager<ApplicationUser> userManager, IConfiguration configuration)
@@ -75,7 +75,7 @@
 
             user = await userManager.FindByNameAsync(GlobalConstants.UserUsername);
 
-            await userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
+            //await userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
         }
 
     }

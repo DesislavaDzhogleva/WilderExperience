@@ -35,7 +35,7 @@
             return destination.Id;
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public IEnumerable<T> GetAllWild<T>()
         {
             var locations = this.locationRepository.All()
                 .Where(x => x.Type == WilderExperience.Data.Models.Enums.Type.Wild)

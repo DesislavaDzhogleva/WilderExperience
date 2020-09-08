@@ -4,20 +4,66 @@
     ViewData["Title"] = "Details";
 }
 
-
-
     <div class="card mb-3">
         <div class="card-body">
-            <h2 class="card-title">
-                <div class="pull-right">
-                    <a class="d-inline btn btn-outline-default btn-round" asp-action="List" asp-route-locationId=@Model.LocationId>Back to List</a>
+            <div class="blog-header">
+                <div class="row justify-content-center">
+                    <div class="col-2">
+                        <div class="blog-btn-favourites">
+                            @if (Model.UserHasAddedToFavourite)
+                            {
+
+                                <a class="btn btn-outline-default btn-round" asp-controller="Experiences" asp-action="RemoveFromFavourites" asp-route-experienceId="@Model.Id">Remove From Favourites<span class="fa fa-heart text-danger"></span></a>
+                            }
+                            else
+                            {
+                                //asp-controller="Experiences" asp-action="AddToFavourites" asp-route-experienceId="@Model.Id
+                                @*Add to favourites*@ @*<span class="fa fa-heart text-danger"></span>*@
+                                <ion-icon name="heart-outline" size="large"></ion-icon>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="blog-heading text-center">
+                            <h1 class="blog-title">@Model.Title</h1>
+                            <div class="blog-author">
+                                <h3 class="card-title">By @Model.AuthorUserName</h3>
+                                @if (Model.ModifiedOn == null)
+                                {
+                                    <span class="card-text">Created On @Model.CreatedOn</span>
+                                }
+                                else
+                                {
+                                    <span class="card-text">Updated On @Model.ModifiedOn</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 btn-positioned text-right">
+                        <a class="d-inline-block btn btn-outline-default btn-round mb-3" asp-action="List" asp-route-locationId=@Model.LocationId>Back to List</a>
+                        <br />
+                        @if (this.User.Identity.Name == Model.AuthorUserName || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
+                        {
+                            <a class="d-inline-block btn btn-outline-default btn-round" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                            <a class="d-inline-block btn btn-outline-default btn-round" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+
+                        }
+
+                    </div>
                 </div>
-                <strong>@Model.Title</strong>
-                <span class="rating pt-3 text-center">
-                    <span class="averageRating bg-success d-inline-flex p-2">
+                <div class="m-2 text-center blog-rating">
+                    <span>
                         @if (Model.AverageRating > 0)
                         {
-                            <span>@Model.AverageRating</span>
+                            if (Model.AverageRating <= 3)
+                            {
+                                <span class="bg-danger p-2">@Model.AverageRating</span>
+                            }
+                            else
+                            {
+                                <span class="bg-success p-2">@Model.AverageRating</span>
+                            }
+
                         }
                         else
                         {
@@ -34,58 +80,32 @@
                             <a asp-controller="Rating" asp-action="Rate" asp-route-experienceId="@Model.Id" asp-route-score="5" data-score="5"><span class="fa w-auto fa-star-o"></span></a>
                         </span>
                     }
-                </span>
-            </h2>
-            <div class="mt-2 mb-2">
+                </div>
+
+                <p class="card-text">@Html.Raw(Model.SanitizedDescription)</p>
+                <hr />
+                @*
+                <h4><strong>Intensity</strong></h4>
+                <p class="card-text">@Model.Intensity</p>
+                <h4><strong>Guide</strong></h4>
+                <p class="card-text">@Model.Guide</p>
+                <h4><strong>Date of visit</strong></h4>
+                <p class="card-text">@Model.DateOfVisit</p>*@
+
+                <div id="lightgallery" class="row">
+                    @foreach (var image in Model.Images)
+                    {
+                        <a href="~/uploads/experiences/@image.Name" class="col-md-3 p-0">
+                            <img src="~/uploads/experiences/@image.Name" class="experience-details-thumb" />
+                        </a>
+                    }
+                </div>
                 @if (this.User.Identity.Name == Model.AuthorUserName || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
                 {
-                    <a class="btn btn-outline-default btn-round" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                    <a class="btn btn-outline-default btn-round" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-
-                }
-                @if (Model.UserHasAddedToFavourite)
-                {
-                    <a class="btn btn-outline-default btn-round" asp-controller="Experiences" asp-action="RemoveFromFavourites" asp-route-experienceId="@Model.Id">Remove From Favourites<span class="fa fa-heart text-danger"></span></a>
-                }
-                else
-                {
-                    <a class="btn btn-outline-default btn-round" asp-controller="Experiences" asp-action="AddToFavourites" asp-route-experienceId="@Model.Id">Add to favourites <span class="fa fa-heart text-danger"></span></a>
+                    <a class="btn btn-outline-default btn-round mt-2 pull-right" asp-controller="Images" asp-action="Add" asp-route-experienceId="@Model.Id">Add Images</a>
                 }
 
             </div>
-            <h2 class="card-title"><small>By @Model.AuthorUserName</small></h2>
-            @if (Model.ModifiedOn == null)
-            {
-                <p class="card-text"><small class="text-muted">Created On @Model.CreatedOn</small></p>
-            }
-            else
-            {
-                <p class="card-text"><small class="text-muted">Updated On @Model.ModifiedOn</small></p>
-            }
-
-            <p class="card-text">@Html.Raw(Model.SanitizedDescription)</p>
-            <hr />
-            <h4><strong>Intensity</strong></h4>
-            <p class="card-text">@Model.Intensity</p>
-            <h4><strong>Guide</strong></h4>
-            <p class="card-text">@Model.Guide</p>
-            <h4><strong>Date of visit</strong></h4>
-            <p class="card-text">@Model.DateOfVisit</p>
-
-            <div id="lightgallery" class="row">
-                @foreach (var image in Model.Images)
-                {
-                    <a href="~/uploads/experiences/@image.Name" class="col-md-3 p-0">
-                        <img src="~/uploads/experiences/@image.Name" class="experience-details-thumb" />
-                    </a>
-                }
-            </div>
-            @if (this.User.Identity.Name == Model.AuthorUserName || this.User.IsInRole(WilderExperience.Common.GlobalConstants.AdministratorRoleName))
-            {
-                <a class="btn btn-outline-default btn-round mt-2 pull-right" asp-controller="Images" asp-action="Add" asp-route-experienceId="@Model.Id">Add Images</a>
-            }
-
-        </div>
 
 
         <div class="row">

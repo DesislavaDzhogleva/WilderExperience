@@ -33,7 +33,7 @@ namespace WilderExperience.Services.Data.Tests
         {
             await this.SeedData(this.context);
 
-            var count = this.wildLocationService.GetAll<WildLocationListViewModel>().Count();
+            var count = this.wildLocationService.GetAllWild<WildLocationListViewModel>().Count();
             Assert.True(count == 2, "GetAll method does not work correctly");
         }
 

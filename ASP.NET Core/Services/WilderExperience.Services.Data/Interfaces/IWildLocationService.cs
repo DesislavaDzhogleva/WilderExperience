@@ -9,6 +9,8 @@
     {
         Task<int> AddAsync(WildLocationCreateViewModel input);
 
+        IEnumerable<T> GetAllWild<T>();
+
         IEnumerable<T> GetAll<T>();
     }
 }

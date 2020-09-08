@@ -17,12 +17,13 @@
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             await this.SeedCitiesAsync(dbContext);
+            dbContext.SaveChanges();
             await this.SeedVillagesAsync(dbContext);
         }
 
         private async Task SeedVillagesAsync(ApplicationDbContext dbContext)
         {
-            var file = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "Data", "WilderExperience.Data", "Seeding", "Data", "Villages.csv");
+            var file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "data", "Villages.csv");
             using (var streamReader = System.IO.File.OpenText(file))
             {
                 List<Location> locations = new List<Location>();
@@ -55,7 +56,7 @@
 
         private async Task SeedCitiesAsync(ApplicationDbContext dbContext)
         {
-            var file = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "Data", "WilderExperience.Data", "Seeding", "Data", "City.json");
+            var file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "data", "City.json");
             using (FileStream fs = File.OpenRead(file))
             {
                 using (StreamReader reader = new StreamReader(fs))

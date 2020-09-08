@@ -7,24 +7,22 @@
     <ul class="navbar-nav">
         @if (this.SignInManager.IsSignedIn(this.User))
         {
-            <li class="nav-item">
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary mb-0 dropdown-toggle nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Welcome @this.User.Identity.Name
-                    </button>
-                    <div class="dropdown-menu ml-1 nav-link bg-transparent" aria-labelledby="dropdownMenuButton">
+        <li class="nav-item">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-large dropdown-toggle nav-link" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Welcome @this.User.Identity.Name
+                </button>
+                <div class="dropdown-menu bg-transparent" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item bg-transparent" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
 
-                        <a class="dropdown-item bg-transparent" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
+                    <a class="dropdown-item bg-transparent" onclick="document.getElementById('logoutForm').submit();" href="#">Logout</a>
 
-                        <a class="dropdown-item bg-transparent" onclick="document.getElementById('logoutForm').submit();" href="#">Logout</a>
-
-
-                        <form id="logoutForm" class="d-none" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
-                            <button type="submit" class="btn p-0 m-0 text-secondary">Logout</button>
-                        </form>
-                    </div>
+                    <form id="logoutForm" class="d-none" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
+                        <button type="submit" class="btn p-0 m-0 text-secondary">Logout</button>
+                    </form>
+                </div>
             </div>
-            </li>
+        </li>
         }
         else
         {

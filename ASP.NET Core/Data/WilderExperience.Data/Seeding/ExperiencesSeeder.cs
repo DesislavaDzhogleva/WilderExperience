@@ -16,7 +16,7 @@
             }
 
             var desc = "";
-            var file = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "Data", "WilderExperience.Data", "Seeding", "Data", "SampleDescription.txt");
+            var file = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "data", "SampleDescription.txt");
             using (FileStream fs = File.OpenRead(file))
             {
                 using (StreamReader reader = new StreamReader(fs))

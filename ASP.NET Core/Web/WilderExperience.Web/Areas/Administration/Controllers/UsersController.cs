@@ -32,7 +32,7 @@
             var users = this.usersService.GetAll<UsersListViewModel>(orderBy, orderDir);
             return this.View(await PaginatedList<UsersListViewModel>.CreateAsync(users.AsNoTracking(), pageNumber ?? 1, GlobalConstants.PageSize));
         }
-
+ 
         public IActionResult Add()
         {
             return this.View();

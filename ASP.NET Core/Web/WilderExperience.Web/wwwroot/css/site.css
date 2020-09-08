@@ -5,8 +5,16 @@ a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
+    font-size: 1.2rem !important;
 }
 
+.nav-link {
+    font-size: 1rem !important;
+}
+
+.container {
+    max-width: 85vw !important;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -71,6 +79,24 @@ body {
     text-shadow: 2px 2px 5px black;
 }
 
+.presentation-title {
+    font-size: 7.5vw !important;
+    margin: 1rem;
+}
+
+.presentation-subtitle {
+    position: absolute;
+   right: 10%;
+   bottom: 5%;
+   font-size: 3vw;
+}
+
+.dropdown-item {
+    font-size: 1rem !important;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
 .title-brand {
     max-width: initial;
 }
@@ -121,6 +147,18 @@ body {
 .wrap-fix{
     width: 500px;
 }
+
+
+/* Blog post */
+.blog-title {
+    margin-top: 0;
+}
+
+.blog-rating {
+    font-size: 1.5rem;
+}
+
+
 
 
 /* Masonry grid */

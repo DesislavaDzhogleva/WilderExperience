@@ -13,15 +13,30 @@
 
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
+    <ApplicationInsightsResourceId>/subscriptions/9a9b6bcf-cbb1-4692-84af-8d91170f5043/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/WilderExperience.Web</ApplicationInsightsResourceId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\data\BigCities.csv" />
+    <Content Remove="wwwroot\data\Cities.csv" />
+    <Content Remove="wwwroot\data\City.json" />
+    <Content Remove="wwwroot\data\ConvertCyrlicToLatin.cs" />
+    <Content Remove="wwwroot\data\JSON.json" />
+    <Content Remove="wwwroot\data\SampleDescription.txt" />
+    <Content Remove="wwwroot\data\Villages.csv" />
+  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="wwwroot\data\ConvertCyrlicToLatin.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="cloudscribe.Web.Common" Version="4.0.1" />
     <PackageReference Include="Geolocation" Version="1.2.1" />
     <PackageReference Include="HtmlSanitizer" Version="5.0.298" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
@@ -67,5 +82,18 @@
 
   <ItemGroup>
     <Folder Include="Views\Comments\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\data\BigCities.csv" />
+    <None Include="wwwroot\data\Cities.csv" />
+    <None Include="wwwroot\data\City.json" />
+    <None Include="wwwroot\data\JSON.json" />
+    <None Include="wwwroot\data\SampleDescription.txt" />
+    <None Include="wwwroot\data\Villages.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 </Project>

@@ -32,7 +32,7 @@
                 };
             }
 
-            var locations = this.wildLocationService.GetAll<WildLocationListViewModel>();
+            var locations = this.wildLocationService.GetAllWild<WildLocationListViewModel>();
             return this.View(locations);
         }
 
