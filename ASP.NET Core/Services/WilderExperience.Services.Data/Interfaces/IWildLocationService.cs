@@ -11,6 +11,6 @@
 
         IEnumerable<T> GetAllWild<T>();
 
-        IEnumerable<T> GetAll<T>();
+        bool Exists(string name);
     }
 }

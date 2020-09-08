@@ -28,7 +28,7 @@
             if (status == "error")
             {
                 this.ViewBag.Messages = new[]{
-                    new AlertViewModel("danger", "Warning!", "Name is required"),
+                    new AlertViewModel("danger", "Warning!", "This location is already added to database"),
                 };
             }
 
@@ -42,6 +42,11 @@
         public async Task<IActionResult> Add(WildLocationCreateViewModel input)
         {
             if (!this.ModelState.IsValid)
+            {
+                return this.Redirect("All?status=error");
+            }
+
+            if (this.wildLocationService.Exists(input.Name))
             {
                 return this.Redirect("All?status=error");
             }

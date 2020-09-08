@@ -43,5 +43,11 @@
 
             return locations;
         }
+
+        public bool Exists(string name)
+        {
+            return this.locationRepository.All()
+                .Where(x => x.Name == name).Count() == 1;
+        }
     }
 }
